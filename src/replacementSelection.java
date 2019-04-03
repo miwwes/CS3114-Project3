@@ -64,6 +64,8 @@ public class replacementSelection {
                         records.removemin(inputBuffer.remove());
                     }
                 }
+                outFile.write(outputBuffer.array());
+                double end = outFile.getFilePointer();
             }
         }
         catch (IOException e) {
