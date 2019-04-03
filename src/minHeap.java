@@ -1,3 +1,4 @@
+import java.nio.ByteBuffer;
 import java.util.*;
 
 
@@ -36,7 +37,7 @@ public class minHeap {
      * @return
      */
     int compareRecords(byte[] rec1, byte[] rec2) {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 8; i < 16; i++) {
             int val = Byte.compare(rec1[i], rec2[i]);
             if (val != 0) {
                 return val;
@@ -153,10 +154,13 @@ public class minHeap {
             return; // Illegal position
         while (!isLeaf(pos)) {
             int j = leftchild(pos);
-            byte a[] = Arrays.copyOfRange(arr, j, j + 16);
-            byte b[] = Arrays.copyOfRange(arr, j + 16, j + 32);
-            if (((j/16) < (n - 1)) && (compareRecords(a, b) >= 0))
-                j += 16; // j is now index of child with lesser value
+            if (rightchild(pos) != -1) {
+                byte a[] = Arrays.copyOfRange(arr, j, j + 16);
+                byte b[] = Arrays.copyOfRange(arr, j + 16, j + 32);
+                
+                if (((j/16) < (n - 1)) && (compareRecords(a, b) >= 0))
+                    j += 16; // j is now index of child with lesser value
+            }
             byte c[] = Arrays.copyOfRange(arr, pos, pos + 16);
             byte d[] = Arrays.copyOfRange(arr, j, j + 16);
             if (compareRecords(c, d) < 0)
@@ -187,19 +191,6 @@ public class minHeap {
     public byte[] getMin() {
         return Arrays.copyOfRange(arr, 0, 16);
     }
-
-
-    // Remove and return element at specified position
-    /*Comparable remove(int pos) {
-        if ((pos < 0) || (pos >= n))
-            return -1; // Illegal arr position
-        if (pos == (n - 1))
-            n--; // Last element, no work to be done
-        else {
-            swap(arr, pos, --n); // Swap with last value
-            update(pos);
-        }
-    }*/
 
 
     // Modify the value at the given position
