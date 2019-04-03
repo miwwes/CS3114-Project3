@@ -1,6 +1,4 @@
-/**
- * 
- */
+import java.util.*;
 
 /**
  * @author juliam8
@@ -21,5 +19,12 @@
  *
  */
 public class multiwayMerge {
+    
+    multiwayMerge(LinkedList<Integer> locations) {
+        runLocations = locations;
+    }
+    
+    
+    LinkedList<Integer> runLocations;
 
 }

@@ -22,7 +22,7 @@ public class minHeap {
 
 
     // Return current number of records in the arr
-    int arrsize() {
+    int heapSize() {
         return n;
     }
     
@@ -174,6 +174,14 @@ public class minHeap {
         if (n != 0) // Not on last element
             siftdown(0); // Put new arr root val in correct place
         return Arrays.copyOfRange(arr, n, n + 16);
+    }
+    
+    // return maximum value
+    /**
+     * @return
+     */
+    byte[] getMin() {
+        return Arrays.copyOfRange(arr, 0, 16);
     }
 
 
