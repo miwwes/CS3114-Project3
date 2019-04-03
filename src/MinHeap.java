@@ -125,8 +125,8 @@ public class MinHeap {
             int j = leftchild(pos);
             byte a[] = Arrays.copyOfRange(arr, j, j + 16);
             byte b[] = Arrays.copyOfRange(arr, j + 16, j + 32);
-            if ((j < (n - 1)) && (compareRecords(a, b) >= 0))
-                j += 16; // j is now index of child with greater value
+            if (((j/16) < (n - 1)) && (compareRecords(a, b) >= 0))
+                j += 16; // j is now index of child with lesser value
             byte c[] = Arrays.copyOfRange(arr, pos, pos + 16);
             byte d[] = Arrays.copyOfRange(arr, j, j + 16);
             if (compareRecords(c, d) < 0)
