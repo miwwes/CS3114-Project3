@@ -44,7 +44,7 @@ public class replacementSelection {
     public void selection() {
         // first place the root into the output buffer
         // set first 16 bytes to min of heap
-        outputBuffer[0] = records.getMin();
+        //outputBuffer[0] = records.getMin();
         while (records.heapSize() > 0) {
             
         }
