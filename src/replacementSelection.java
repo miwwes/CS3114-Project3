@@ -28,8 +28,11 @@ public class replacementSelection {
      */
     public void execute() {
         try {
-            while (inFile.read(inputBuffer) != -1) {
-                //read in the data into an array and heapify it!
+            byte[] heapArray = new byte[HEAP_SIZE];
+            inFile.read(heapArray);
+            records = new minHeap(heapArray, 4096);
+        
+            while(inFile.read(inputBuffer) != -1) {
                 
             }
         }
@@ -44,6 +47,8 @@ public class replacementSelection {
     public void selection() {
         // first place the root into the output buffer
         // set first 16 bytes to min of heap
+
+        System.arraycopy(records.getMin(), 0, outputBuffer, 0, 16);
         //outputBuffer[0] = records.getMin();
         while (records.heapSize() > 0) {
             
@@ -72,6 +77,9 @@ public class replacementSelection {
      * 
      */
     private static final int BUFFER_SIZE = 8192;
+    private static final int HEAP_SIZE = 8*8192;
+
+    
     
     /**
      * 
