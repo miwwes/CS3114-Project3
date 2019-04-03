@@ -1,8 +1,5 @@
-import java.util.Arrays;
+import java.util.*;
 
-/**
- * 
- */
 
 /**
  * @author jmkuz
@@ -10,21 +7,20 @@ import java.util.Arrays;
  */
 public class MinHeap {
 
-    private byte[] arr; // Pointer to the heap array
-    private final int size = 65536; // Maximum number of records in heap
+    private byte[] arr; // Pointer to the arr array
+    private final int size = 4096; // Maximum number of records in arr
+    private int n; // Number of records now in arr
 
-    private int n; // Number of records now in heap
-
-    // Constructor supporting preloading of heap contents
+    // Constructor supporting preloading of arr contents
     MinHeap(byte[] h, int num){ 
         arr = h;  
         n = num;  
-        buildheap(); 
+        buildarr(); 
     }
 
 
-    // Return current number of records in the heap
-    int heapsize() {
+    // Return current number of records in the arr
+    int arrsize() {
         return n;
     }
     
@@ -74,7 +70,7 @@ public class MinHeap {
     }
 
 
-    // Insert val into heap
+    // Insert val into arr
     void insert(byte[] key) {
         if (n*16 >= size) {
             System.out.println("Heap is full");
@@ -96,7 +92,7 @@ public class MinHeap {
 
 
     /**
-     * @param heap2
+     * @param arr2
      * @param curr
      * @param parent
      */
@@ -115,8 +111,8 @@ public class MinHeap {
     }
 
 
-    // Heapify contents of Heap
-    void buildheap() {
+    // arrify contents of arr
+    void buildarr() {
         for (int i = n / 2 - 1; i >= 0; i--)
             siftdown(i * 16);
     }
@@ -141,22 +137,22 @@ public class MinHeap {
     // Remove and return maximum value
     /*Comparable removemax() {
         if (n == 0)
-            return -1; // Removing from empty heap
-        swap(Heap, 0, --n); // Swap maximum with last value
+            return -1; // Removing from empty arr
+        swap(arr, 0, --n); // Swap maximum with last value
         if (n != 0) // Not on last element
-            siftdown(0); // Put new heap root val in correct place
-        return Heap[n];
+            siftdown(0); // Put new arr root val in correct place
+        return arr[n];
     }*/
 
 
     // Remove and return element at specified position
     /*Comparable remove(int pos) {
         if ((pos < 0) || (pos >= n))
-            return -1; // Illegal heap position
+            return -1; // Illegal arr position
         if (pos == (n - 1))
             n--; // Last element, no work to be done
         else {
-            swap(Heap, pos, --n); // Swap with last value
+            swap(arr, pos, --n); // Swap with last value
             update(pos);
         }
     }*/
@@ -170,7 +166,7 @@ public class MinHeap {
     }
 
 
-    // The value at pos has been changed, restore the heap property
+    // The value at pos has been changed, restore the arr property
     void update(int pos) {
       // If it is a big value, push it up
       byte a[] = Arrays.copyOfRange(arr, pos, pos + 16);
