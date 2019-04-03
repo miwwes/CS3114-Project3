@@ -2,17 +2,19 @@ import java.util.*;
 
 
 /**
- * @author jmkuz
+ * @author juliam8
+ * @author abbym1
+ * @version 2019-04-10
  *
  */
-public class MinHeap {
+public class minHeap {
 
     private byte[] arr; // Pointer to the arr array
     private final int size = 4096; // Maximum number of records in arr
     private int n; // Number of records now in arr
 
     // Constructor supporting preloading of arr contents
-    MinHeap(byte[] h, int num){ 
+    minHeap(byte[] h, int num){ 
         arr = h;  
         n = num;  
         buildHeap(); 
@@ -20,7 +22,7 @@ public class MinHeap {
 
 
     // Return current number of records in the arr
-    int arrsize() {
+    int heapSize() {
         return n;
     }
     
@@ -41,12 +43,20 @@ public class MinHeap {
 
 
     // Return true if pos a leaf position, false otherwise
+    /**
+     * @param pos
+     * @return
+     */
     boolean isLeaf(int pos) {
         return ((pos/16) >= n / 2) && ((pos/16) < n);
     }
 
 
     // Return position for left child of pos
+    /**
+     * @param pos
+     * @return
+     */
     int leftchild(int pos) {
         if ((pos/16) >= n / 2)
             return -1;
@@ -55,6 +65,10 @@ public class MinHeap {
 
 
     // Return position for right child of pos
+    /**
+     * @param pos
+     * @return
+     */
     int rightchild(int pos) {
         if ((pos/16) >= (n - 1) / 2)
             return -1;
@@ -63,6 +77,10 @@ public class MinHeap {
 
 
     // Return position for parent
+    /**
+     * @param pos
+     * @return
+     */
     int parent(int pos) {
         if ((pos/16) <= 0)
             return -1;
@@ -71,12 +89,14 @@ public class MinHeap {
 
 
     // Insert val into arr
+    /**
+     * @param key
+     */
     void insert(byte[] key) {
         if (n*16 >= size) {
             System.out.println("Heap is full");
             return;
         }
-        
         int curr = n*16;
         n++;
         System.arraycopy(key, 0, arr, curr, 16);
@@ -111,6 +131,9 @@ public class MinHeap {
 
 
     // Heapify contents of heap
+    /**
+     * 
+     */
     void buildHeap() {
         for (int i = n / 2 - 1; i >= 0; i--)
             siftdown(i * 16);
@@ -118,6 +141,9 @@ public class MinHeap {
 
 
     // Put element in its correct place
+    /**
+     * @param pos
+     */
     void siftdown(int pos) {
         if ((pos < 0) || ((pos/16) >= n))
             return; // Illegal position
@@ -138,6 +164,9 @@ public class MinHeap {
 
 
     // Remove and return maximum value
+    /**
+     * @return
+     */
     byte[] removemin() {
         if (n == 0)
             return null; // Removing from empty arr
@@ -145,6 +174,14 @@ public class MinHeap {
         if (n != 0) // Not on last element
             siftdown(0); // Put new arr root val in correct place
         return Arrays.copyOfRange(arr, n, n + 16);
+    }
+    
+    // return maximum value
+    /**
+     * @return
+     */
+    byte[] getMin() {
+        return Arrays.copyOfRange(arr, 0, 16);
     }
 
 
@@ -162,6 +199,10 @@ public class MinHeap {
 
 
     // Modify the value at the given position
+    /**
+     * @param pos
+     * @param newVal
+     */
     void modify(int pos, byte[] newVal) {
       if ((pos < 0) || (pos >= n * 16)) return; // Illegal heap position
       System.arraycopy(newVal, 0, arr, pos, 16);
@@ -170,6 +211,9 @@ public class MinHeap {
 
 
     // The value at pos has been changed, restore the arr property
+    /**
+     * @param pos
+     */
     void update(int pos) {
       // If it is a big value, push it up
       byte a[] = Arrays.copyOfRange(arr, pos, pos + 16);

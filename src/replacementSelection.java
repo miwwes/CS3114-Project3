@@ -6,23 +6,31 @@ import java.io.RandomAccessFile;
  */
 
 /**
- * @author amalone46
+ * @author juliam8
+ * @author abbym1
+ * @version 2019-04-10
  *
  */
 public class replacementSelection {
 
-    public replacementSelection(RandomAccessFile raf){
+    /**
+     * @param raf
+     */
+    replacementSelection(RandomAccessFile raf){
         inFile = raf;
         inputBuffer = new byte[BUFFER_SIZE];
         outputBuffer = new byte[BUFFER_SIZE];
     }
     
     
+    /**
+     * Executes the reading of the input file
+     */
     public void execute() {
         try {
             byte[] heapArray = new byte[HEAP_SIZE];
             inFile.read(heapArray);
-            records = new MinHeap(heapArray, 4096);
+            records = new minHeap(heapArray, 4096);
         
             while(inFile.read(inputBuffer) != -1) {
                 
@@ -33,18 +41,76 @@ public class replacementSelection {
         }
     }
     
+    /**
+     * Executes the reading of the input file
+     */
+    public void selection() {
+        // first place the root into the output buffer
+        // set first 16 bytes to min of heap
+        System.arraycopy(records.getMin(), 0, outputBuffer, 0, 16);
+        //outputBuffer[0] = records.getMin();
+        while (records.heapSize() > 0) {
+            
+        }
+    }
+    
+    /**
+     * Called to find the start of each run within the output file
+     * @return the number of bytes in the output buffer
+     */
+    public int addToOutputBuf(byte[] record) {
+        // return the number of bytes in the output buffer
+        return outputBuffer.length;
+    }
+    
+    /**
+     * Called to find the start of each run within the output file
+     * @return the number of bytes in the output buffer
+     */
+    public int getOutputBufLength() {
+        // return the number of bytes in the output buffer
+        return outputBuffer.length;
+    }
+    
+    /**
+     * 
+     */
     private static final int BUFFER_SIZE = 8192;
     private static final int HEAP_SIZE = 8*8192;
 
     
     
-    MinHeap records;
+    /**
+     * 
+     */
+    minHeap records;
+    /**
+     * 
+     */
     byte[] inputBuffer;
+    /**
+     * 
+     */
     byte[] outputBuffer;
     
+    /**
+     * 
+     */
     RandomAccessFile inFile;
+    /**
+     * 
+     */
     RandomAccessFile outFile;
+    /**
+     * 
+     */
     byte numWords = 0;
+    /**
+     * 
+     */
     short wordOffset = 0;
+    /**
+     * 
+     */
     byte wordLength = 0;
 }
