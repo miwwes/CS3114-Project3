@@ -18,6 +18,13 @@ public class buffer {
         writePos = 0;
     }
     
+    public void clear() {
+        size = 0;
+        pos = 0;
+        readPos = 0;
+        writePos = 0;
+    }
+    
     public void loadBlock(byte[] b) {
         byteArray = b;
         size = 0;

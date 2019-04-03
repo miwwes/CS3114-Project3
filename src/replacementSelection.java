@@ -55,6 +55,15 @@ public class replacementSelection {
                 while ( records.heapSize() > 0 ) {
                     if ( outputBuffer.full() ) {
                         outFile.write(outputBuffer.array());
+                        outputBuffer.clear();
+                    }
+                    byte[] minVal = records.getMin();
+                    outputBuffer.insert(minVal);
+                    if (compareRecords(inputBuffer.read(), minVal) > 0 ) {
+                        records.modify(0, inputBuffer.remove());
+                    }
+                    else {
+                        records.removemin(inputBuffer.remove());
                     }
                 }
             }
