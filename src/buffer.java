@@ -14,12 +14,16 @@ public class buffer {
         byteArray = new byte[BUFFER_SIZE];
         size = 0;
         pos = 0;
+        readPos = 0;
+        writePos = 0;
     }
     
     public void loadBlock(byte[] b) {
         byteArray = b;
         size = 0;
         pos = 0;
+        readPos = 0;
+        writePos = 0;
     }
     
     public void insert(byte[] b) {
@@ -40,6 +44,13 @@ public class buffer {
         return last;
     }
     
+    public byte[] read() {
+        if(readPos >= pos)
+            return null;
+        readPos += 16;
+        return Arrays.copyOfRange(byteArray, readPos - 16, readPos);
+    }
+    
     public boolean full() {
         return size * 16 == BUFFER_SIZE;
     }
@@ -47,10 +58,20 @@ public class buffer {
     public boolean empty() {
         return size == 0;
     }
+    
+    public byte[] array() {
+        return byteArray;
+    }
 
+    public int size() {
+        return size;
+    }
+    
     private static final int BUFFER_SIZE = 8192;
 
     private byte[] byteArray;
     private int size;
     private int pos;
+    private int readPos;
+    private int writePos;
 }
