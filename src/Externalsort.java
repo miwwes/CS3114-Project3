@@ -1,4 +1,4 @@
-import java.io.RandomAccessFile;
+import java.io.*;
 
 /**
  * 
@@ -21,6 +21,10 @@ public class Externalsort {
         try {
             RandomAccessFile raf = new RandomAccessFile(args[0], "r");
             replacementSelection rSel = new replacementSelection(raf);
+        }
+        catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
     }

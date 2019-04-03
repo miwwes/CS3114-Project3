@@ -7,16 +7,14 @@
  *
  */
 public class MinHeap {
-
     private Record[] Heap; // Pointer to the heap array
-    private int size; // Maximum size of the heap
+    private final int size = 4096; // Maximum number of records in heap
     private int n; // Number of things now in heap
 
     // Constructor supporting preloading of heap contents
-    MinHeap(Record[] h, int num, int max){ 
+    MinHeap(Record[] h, int num){ 
         Heap = h;  
         n = num;  
-        size = max;  
         buildheap(); 
     }
 
@@ -63,13 +61,26 @@ public class MinHeap {
             System.out.println("Heap is full");
             return;
         }
+        Record myRecord = new Record(key);
         int curr = n++;
-        Heap[curr] = key; // Start at end of heap
-        // Now sift up until curr's parent's key > curr's key
-        while ((curr != 0) && (Heap[curr].compareTo(Heap[parent(curr)]) > 0)) {
-            swap(Heap, curr, parent(curr));
+        Heap[curr] = myRecord; // Start at end of heap
+        // Now sift up until curr's parent's key < curr's key
+        while ((curr != 0) && (Heap[curr].compareTo(Heap[parent(curr)]) < 0)) {
+            swap(curr, parent(curr));
             curr = parent(curr);
         }
+    }
+
+
+    /**
+     * @param heap2
+     * @param curr
+     * @param parent
+     */
+    private void swap(int curr, int parent) {
+        Record temp = Heap[curr];
+        Heap[curr] = Heap[parent];
+        Heap[parent] = temp;   
     }
 
 
@@ -86,29 +97,29 @@ public class MinHeap {
             return; // Illegal position
         while (!isLeaf(pos)) {
             int j = leftchild(pos);
-            if ((j < (n - 1)) && (Heap[j].compareTo(Heap[j + 1]) < 0))
+            if ((j < (n - 1)) && (Heap[j].compareTo(Heap[j + 1]) >= 0))
                 j++; // j is now index of child with greater value
-            if (Heap[pos].compareTo(Heap[j]) >= 0)
+            if (Heap[pos].compareTo(Heap[j]) < 0)
                 return;
-            swap(Heap, pos, j);
+            swap(pos, j);
             pos = j; // Move down
         }
     }
 
 
     // Remove and return maximum value
-    Comparable removemax() {
+    /*Comparable removemax() {
         if (n == 0)
             return -1; // Removing from empty heap
         swap(Heap, 0, --n); // Swap maximum with last value
         if (n != 0) // Not on last element
             siftdown(0); // Put new heap root val in correct place
         return Heap[n];
-    }
+    }*/
 
 
     // Remove and return element at specified position
-    Comparable remove(int pos) {
+    /*Comparable remove(int pos) {
         if ((pos < 0) || (pos >= n))
             return -1; // Illegal heap position
         if (pos == (n - 1))
@@ -117,7 +128,7 @@ public class MinHeap {
             swap(Heap, pos, --n); // Swap with last value
             update(pos);
         }
-    }
+    }*/
 
 
     // Modify the value at the given position
@@ -131,8 +142,8 @@ public class MinHeap {
     // The value at pos has been changed, restore the heap property
     void update(int pos) {
       // If it is a big value, push it up
-      while ((pos > 0) && (Heap[pos].compareTo(Heap[parent(pos)]) > 0)) {
-        swap(Heap, pos, parent(pos));
+      while ((pos > 0) && (Heap[pos].compareTo(Heap[parent(pos)]) < 0)) {
+        swap(pos, parent(pos));
         pos = parent(pos);
       }
       if (n != 0) siftdown(pos); // If it is little, push down
