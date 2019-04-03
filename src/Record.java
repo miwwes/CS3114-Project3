@@ -21,6 +21,21 @@ be used for sorting
     }
     
     /**
+     * Overwritten comparison function for Record
+     * @param myRecord
+     * @return
+     */
+    //@Override
+    public int compareTo(Record myRecord) {
+        if (key < myRecord.getKey()) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
+    }
+    
+    /**
      * @return
      */
     public long getID() {
