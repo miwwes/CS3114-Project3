@@ -141,7 +141,7 @@ public class MinHeap {
     byte[] removemin() {
         if (n == 0)
             return null; // Removing from empty arr
-        swap(0, (n-1) * 16); // Swap maximum with last value
+        swap(0, (--n) * 16); // Swap maximum with last value
         if (n != 0) // Not on last element
             siftdown(0); // Put new arr root val in correct place
         return Arrays.copyOfRange(arr, n, n + 16);
