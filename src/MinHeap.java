@@ -12,7 +12,6 @@ public class MinHeap {
     private final int size = 4096; // Maximum number of records in heap
     private int n; // Number of records now in heap
 
-
     // Constructor supporting preloading of heap contents
     MinHeap(Record[] h, int num){ 
         Heap = h;  
