@@ -12,6 +12,7 @@ public class MinHeap {
 
     private byte[] arr; // Pointer to the heap array
     private final int size = 65536; // Maximum number of records in heap
+
     private int n; // Number of records now in heap
 
     // Constructor supporting preloading of heap contents
@@ -22,7 +23,7 @@ public class MinHeap {
     }
 
 
-    // Return current size of the heap
+    // Return current number of records in the heap
     int heapsize() {
         return n;
     }
@@ -33,7 +34,7 @@ public class MinHeap {
      * @return
      */
     int compareRecords(byte[] rec1, byte[] rec2) {
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 8; i++) {
             int val = Byte.compare(rec1[i], rec2[i]);
             if (val != 0) {
                 return val;
@@ -100,9 +101,17 @@ public class MinHeap {
      * @param parent
      */
     private void swap(int curr, int parent) {
-        Record temp = arr[curr];
-        arr[curr] = arr[parent];
-        arr[parent] = temp;   
+        byte[] temp = Arrays.copyOfRange(arr, curr, curr + 16);
+        int i = curr;
+        int j = parent;
+        for (; i < curr + 16; i++, j++) {
+            arr[i] = arr[j];
+        }
+        i = 0;
+        j = parent; //reset parent value
+        for (; j < parent + 16; j++, i++) {
+            arr[j] = temp[i];
+        }  
     }
 
 
@@ -115,12 +124,12 @@ public class MinHeap {
 
     // Put element in its correct place
     void siftdown(int pos) {
-        if ((pos < 0) || (pos >= n))
+        if ((pos < 0) || ((pos/16) >= n))
             return; // Illegal position
         while (!isLeaf(pos)) {
             int j = leftchild(pos);
             if ((j < (n - 1)) && (arr[j].compareTo(arr[j + 1]) >= 0))
-                j++; // j is now index of child with greater value
+                j += 16; // j is now index of child with greater value
             if (arr[pos].compareTo(arr[j]) < 0)
                 return;
             swap(pos, j);
