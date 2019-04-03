@@ -1,3 +1,5 @@
+import java.io.*;
+
 /**
  * 
  */
@@ -16,6 +18,14 @@ public class Externalsort {
      * @param args
      */
     public static void main(String[] args) {
+        
+        try {
+            RandomAccessFile raf = new RandomAccessFile("1.Data.bin", "r");
+        }
+        catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         // TODO Auto-generated method stub
 
     }

@@ -6,7 +6,7 @@
  * @author jmkuz
  *
  */
-public class MinHeap<Record> {
+public class MinHeap<R> {
 
     private Record[] Heap; // Pointer to the heap array
     private int size; // Maximum size of the heap
@@ -61,8 +61,9 @@ public class MinHeap<Record> {
             System.out.println("Heap is full");
             return;
         }
+        Record myRecord = new Record(key);
         int curr = n++;
-        Heap[curr] = key; // Start at end of heap
+        Heap[curr] = myRecord; // Start at end of heap
         // Now sift up until curr's parent's key > curr's key
         while ((curr != 0) && (Heap[curr].compareTo(Heap[parent(curr)]) > 0)) {
             swap(Heap, curr, parent(curr));
