@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * 
  */
@@ -8,19 +10,19 @@
  */
 public class MinHeap {
 
-    private Record[] Heap; // Pointer to the heap array
+    private byte[] Heap; // Pointer to the heap array
     private final int size = 4096; // Maximum number of records in heap
     private int n; // Number of records now in heap
 
     // Constructor supporting preloading of heap contents
-    MinHeap(Record[] h, int num){ 
+    MinHeap(byte[] h, int num){ 
         Heap = h;  
         n = num;  
         buildheap(); 
     }
 
 
-    // Return current size of the heap
+    // Return current number of records in the heap
     int heapsize() {
         return n;
     }
@@ -31,7 +33,7 @@ public class MinHeap {
      * @return
      */
     int compareRecords(byte[] rec1, byte[] rec2) {
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 8; i++) {
             int val = Byte.compare(rec1[i], rec2[i]);
             if (val != 0) {
                 return val;
@@ -94,9 +96,17 @@ public class MinHeap {
      * @param parent
      */
     private void swap(int curr, int parent) {
-        Record temp = Heap[curr];
-        Heap[curr] = Heap[parent];
-        Heap[parent] = temp;   
+        byte[] temp = Arrays.copyOfRange(Heap, curr, curr + 16);
+        int i = curr;
+        int j = parent;
+        for (; i < curr + 16; i++, j++) {
+            Heap[i] = Heap[j];
+        }
+        i = 0;
+        j = parent; //reset parent value
+        for (; j < parent + 16; j++, i++) {
+            Heap[j] = temp[i];
+        }  
     }
 
 
@@ -109,12 +119,12 @@ public class MinHeap {
 
     // Put element in its correct place
     void siftdown(int pos) {
-        if ((pos < 0) || (pos >= n))
+        if ((pos < 0) || ((pos/16) >= n))
             return; // Illegal position
         while (!isLeaf(pos)) {
             int j = leftchild(pos);
             if ((j < (n - 1)) && (Heap[j].compareTo(Heap[j + 1]) >= 0))
-                j++; // j is now index of child with greater value
+                j += 16; // j is now index of child with greater value
             if (Heap[pos].compareTo(Heap[j]) < 0)
                 return;
             swap(pos, j);
