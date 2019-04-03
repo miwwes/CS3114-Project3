@@ -1,21 +1,18 @@
-import java.util.Arrays;
+import java.util.*;
 
-/**
- * 
- */
 
 /**
  * @author jmkuz
  *
  */
-public class Minarr {
+public class MinHeap {
 
     private byte[] arr; // Pointer to the arr array
     private final int size = 4096; // Maximum number of records in arr
     private int n; // Number of records now in arr
 
     // Constructor supporting preloading of arr contents
-    Minarr(byte[] h, int num){ 
+    MinHeap(byte[] h, int num){ 
         arr = h;  
         n = num;  
         buildarr(); 
@@ -75,15 +72,19 @@ public class Minarr {
 
     // Insert val into arr
     void insert(byte[] key) {
-        if (n >= size) {
-            System.out.println("arr is full");
+        if (n*16 >= size) {
+            System.out.println("Heap is full");
             return;
         }
+        
         Record myRecord = new Record(key);
-        int curr = n++;
-        arr[curr] = myRecord; // Start at end of arr
+        int curr = n*16;
+        n++;
+        System.arraycopy(key, 0, arr, curr, 16);
         // Now sift up until curr's parent's key < curr's key
-        while ((curr != 0) && (arr[curr].compareTo(arr[parent(curr)]) < 0)) {
+        byte a[] = Arrays.copyOfRange(arr, curr, 16);
+        byte b[] = Arrays.copyOfRange(arr, parent(curr), 16);
+        while ((curr != 0) && (compareRecords(a, b) < 0)) {
             swap(curr, parent(curr));
             curr = parent(curr);
         }
