@@ -20,11 +20,13 @@ import java.util.*;
  */
 public class multiwayMerge {
     
-    multiwayMerge(LinkedList<Integer> locations) {
+    multiwayMerge(LinkedList<Integer> locations, minHeap h) {
         runLocations = locations;
+        heap = h;
     }
     
     
-    LinkedList<Integer> runLocations;
+    private LinkedList<Integer> runLocations;
+    private minHeap heap;
 
 }
