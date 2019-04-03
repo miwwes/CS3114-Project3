@@ -8,22 +8,22 @@ import java.util.Arrays;
  * @author jmkuz
  *
  */
-public class MinHeap {
+public class Minarr {
 
-    private byte[] Heap; // Pointer to the heap array
-    private final int size = 4096; // Maximum number of records in heap
-    private int n; // Number of records now in heap
+    private byte[] arr; // Pointer to the arr array
+    private final int size = 4096; // Maximum number of records in arr
+    private int n; // Number of records now in arr
 
-    // Constructor supporting preloading of heap contents
-    MinHeap(byte[] h, int num){ 
-        Heap = h;  
+    // Constructor supporting preloading of arr contents
+    Minarr(byte[] h, int num){ 
+        arr = h;  
         n = num;  
-        buildheap(); 
+        buildarr(); 
     }
 
 
-    // Return current number of records in the heap
-    int heapsize() {
+    // Return current number of records in the arr
+    int arrsize() {
         return n;
     }
     
@@ -73,17 +73,17 @@ public class MinHeap {
     }
 
 
-    // Insert val into heap
+    // Insert val into arr
     void insert(byte[] key) {
         if (n >= size) {
-            System.out.println("Heap is full");
+            System.out.println("arr is full");
             return;
         }
         Record myRecord = new Record(key);
         int curr = n++;
-        Heap[curr] = myRecord; // Start at end of heap
+        arr[curr] = myRecord; // Start at end of arr
         // Now sift up until curr's parent's key < curr's key
-        while ((curr != 0) && (Heap[curr].compareTo(Heap[parent(curr)]) < 0)) {
+        while ((curr != 0) && (arr[curr].compareTo(arr[parent(curr)]) < 0)) {
             swap(curr, parent(curr));
             curr = parent(curr);
         }
@@ -91,27 +91,27 @@ public class MinHeap {
 
 
     /**
-     * @param heap2
+     * @param arr2
      * @param curr
      * @param parent
      */
     private void swap(int curr, int parent) {
-        byte[] temp = Arrays.copyOfRange(Heap, curr, curr + 16);
+        byte[] temp = Arrays.copyOfRange(arr, curr, curr + 16);
         int i = curr;
         int j = parent;
         for (; i < curr + 16; i++, j++) {
-            Heap[i] = Heap[j];
+            arr[i] = arr[j];
         }
         i = 0;
         j = parent; //reset parent value
         for (; j < parent + 16; j++, i++) {
-            Heap[j] = temp[i];
+            arr[j] = temp[i];
         }  
     }
 
 
-    // Heapify contents of Heap
-    void buildheap() {
+    // arrify contents of arr
+    void buildarr() {
         for (int i = n / 2 - 1; i >= 0; i--)
             siftdown(i);
     }
@@ -123,9 +123,9 @@ public class MinHeap {
             return; // Illegal position
         while (!isLeaf(pos)) {
             int j = leftchild(pos);
-            if ((j < (n - 1)) && (Heap[j].compareTo(Heap[j + 1]) >= 0))
+            if ((j < (n - 1)) && (arr[j].compareTo(arr[j + 1]) >= 0))
                 j += 16; // j is now index of child with greater value
-            if (Heap[pos].compareTo(Heap[j]) < 0)
+            if (arr[pos].compareTo(arr[j]) < 0)
                 return;
             swap(pos, j);
             pos = j; // Move down
@@ -136,39 +136,39 @@ public class MinHeap {
     // Remove and return maximum value
     /*Comparable removemax() {
         if (n == 0)
-            return -1; // Removing from empty heap
-        swap(Heap, 0, --n); // Swap maximum with last value
+            return -1; // Removing from empty arr
+        swap(arr, 0, --n); // Swap maximum with last value
         if (n != 0) // Not on last element
-            siftdown(0); // Put new heap root val in correct place
-        return Heap[n];
+            siftdown(0); // Put new arr root val in correct place
+        return arr[n];
     }*/
 
 
     // Remove and return element at specified position
     /*Comparable remove(int pos) {
         if ((pos < 0) || (pos >= n))
-            return -1; // Illegal heap position
+            return -1; // Illegal arr position
         if (pos == (n - 1))
             n--; // Last element, no work to be done
         else {
-            swap(Heap, pos, --n); // Swap with last value
+            swap(arr, pos, --n); // Swap with last value
             update(pos);
         }
     }*/
 
 
     // Modify the value at the given position
-    void modify(int pos, Record newVal) {
-      if ((pos < 0) || (pos >= n)) return; // Illegal heap position
-      Heap[pos] = newVal;
+    void modify(int pos, byte[] newVal) {
+      if ((pos < 0) || (pos >= n)) return; // Illegal arr position
+      arr[pos] = newVal;
       update(pos);
     }
 
 
-    // The value at pos has been changed, restore the heap property
+    // The value at pos has been changed, restore the arr property
     void update(int pos) {
       // If it is a big value, push it up
-      while ((pos > 0) && (Heap[pos].compareTo(Heap[parent(pos)]) < 0)) {
+      while ((pos > 0) && (arr[pos].compareTo(arr[parent(pos)]) < 0)) {
         swap(pos, parent(pos));
         pos = parent(pos);
       }
