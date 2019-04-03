@@ -31,8 +31,8 @@ public class replacementSelection {
         
         
         
-        inputBuffer = new byte[BUFFER_SIZE];
-        outputBuffer = new byte[BUFFER_SIZE];
+        inputBuffer = new buffer();
+        outputBuffer = new buffer();
     }
     
     
@@ -50,10 +50,12 @@ public class replacementSelection {
             long runStart = outFile.getFilePointer();
             long curRunLoc = runStart;
         
-            while ( inFile.read(inputBuffer) != -1 ) {
+            while ( inFile.read(inputBuffer.array()) != -1 ) {
                 
                 while ( records.heapSize() > 0 ) {
-                    
+                    if ( outputBuffer.full() ) {
+                        outFile.write(outputBuffer.array());
+                    }
                 }
             }
         }
@@ -84,11 +86,11 @@ public class replacementSelection {
         // first place the root into the output buffer
         // set first 16 bytes to min of heap
 
-        System.arraycopy(records.getMin(), 0, outputBuffer, 0, 16);
+        //System.arraycopy(records.getMin(), 0, outputBuffer, 0, 16);
         //outputBuffer[0] = records.getMin();
-        while (records.heapSize() > 0) {
+        //while (!outputBuffer.full()) {
             
-        }
+        //}
     }
     
     /**
@@ -97,7 +99,7 @@ public class replacementSelection {
      */
     public int addToOutputBuf(byte[] record) {
         // return the number of bytes in the output buffer
-        return outputBuffer.length;
+        return outputBuffer.size();
     }
     
     /**
@@ -106,7 +108,7 @@ public class replacementSelection {
      */
     public int getOutputBufLength() {
         // return the number of bytes in the output buffer
-        return outputBuffer.length;
+        return outputBuffer.size();
     }
     
     /**
@@ -129,11 +131,11 @@ public class replacementSelection {
     /**
      * 
      */
-    private byte[] inputBuffer;
+    private buffer inputBuffer;
     /**
      * 
      */
-    private byte[] outputBuffer;
+    private buffer outputBuffer;
     
     /**
      * 
