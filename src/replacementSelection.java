@@ -47,6 +47,7 @@ public class replacementSelection {
     public void selection() {
         // first place the root into the output buffer
         // set first 16 bytes to min of heap
+
         System.arraycopy(records.getMin(), 0, outputBuffer, 0, 16);
         //outputBuffer[0] = records.getMin();
         while (records.heapSize() > 0) {

@@ -180,7 +180,7 @@ public class minHeap {
     /**
      * @return
      */
-    byte[] getMin() {
+    public byte[] getMin() {
         return Arrays.copyOfRange(arr, 0, 16);
     }
 
