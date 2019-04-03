@@ -184,6 +184,16 @@ public class minHeap {
         return Arrays.copyOfRange(arr, n, n + 16);
     }
     
+    byte[] removemin(byte[] b) {
+        if (n == 0)
+            return null; // Removing from empty arr
+        swap(0, (--n) * 16); // Swap maximum with last value
+        if (n != 0) // Not on last element
+            siftdown(0); // Put new arr root val in correct place
+        System.arraycopy(b, 0, arr, n, n+16);
+        return Arrays.copyOfRange(arr, n, n + 16);
+    }
+    
     // return maximum value
     /**
      * @return
@@ -198,7 +208,7 @@ public class minHeap {
      * @param pos
      * @param newVal
      */
-    void modify(int pos, byte[] newVal) {
+    public void modify(int pos, byte[] newVal) {
       if ((pos < 0) || (pos >= n * 16)) return; // Illegal heap position
       System.arraycopy(newVal, 0, arr, pos, 16);
       update(pos);
