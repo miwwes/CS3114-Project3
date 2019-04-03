@@ -9,13 +9,15 @@
 public class MinHeap<R> {
 
     private Record[] Heap; // Pointer to the heap array
-    private int size; // Maximum size of the heap
+    private final int size = 4096; // Maximum number of records in heap
     private int n; // Number of things now in heap
 
 
     // Constructor supporting preloading of heap contents
-    MinHeap(Record[] h, int num, int max){ 
-        Heap = h;  n = num;  size = max;  buildheap(); 
+    MinHeap(Record[] h, int num){ 
+        Heap = h;  
+        n = num;  
+        buildheap(); 
     }
 
 
