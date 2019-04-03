@@ -26,6 +26,10 @@ public class minHeap {
         return n;
     }
     
+    int getLastPos() {
+        return n*16 - 16;
+    }
+    
     /**
      * @param rec1
      * @param rec2
