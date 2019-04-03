@@ -83,34 +83,34 @@ public class replacementSelection {
     /**
      * 
      */
-    minHeap records;
+    private minHeap records;
     /**
      * 
      */
-    byte[] inputBuffer;
+    private byte[] inputBuffer;
     /**
      * 
      */
-    byte[] outputBuffer;
+    private byte[] outputBuffer;
     
     /**
      * 
      */
-    RandomAccessFile inFile;
+    private RandomAccessFile inFile;
     /**
      * 
      */
-    RandomAccessFile outFile;
+    private RandomAccessFile outFile;
     /**
      * 
      */
-    byte numWords = 0;
+    private byte numWords = 0;
     /**
      * 
      */
-    short wordOffset = 0;
+    private short wordOffset = 0;
     /**
      * 
      */
-    byte wordLength = 0;
+    private byte wordLength = 0;
 }
