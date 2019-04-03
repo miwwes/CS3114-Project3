@@ -81,8 +81,8 @@ public class MinHeap {
         n++;
         System.arraycopy(key, 0, arr, curr, 16);
         // Now sift up until curr's parent's key < curr's key
-        byte a[] = Arrays.copyOfRange(arr, curr, 16);
-        byte b[] = Arrays.copyOfRange(arr, parent(curr), 16);
+        byte a[] = Arrays.copyOfRange(arr, curr, curr + 16);
+        byte b[] = Arrays.copyOfRange(arr, parent(curr), parent(curr) + 16);
         while ((curr != 0) && (compareRecords(a, b) < 0)) {
             swap(curr, parent(curr));
             curr = parent(curr);
@@ -113,7 +113,7 @@ public class MinHeap {
     // Heapify contents of heap
     void buildHeap() {
         for (int i = n / 2 - 1; i >= 0; i--)
-            siftdown(i);
+            siftdown(i * 16);
     }
 
 
@@ -163,8 +163,8 @@ public class MinHeap {
 
     // Modify the value at the given position
     void modify(int pos, byte[] newVal) {
-      if ((pos < 0) || (pos >= n)) return; // Illegal arr position
-      arr[pos] = newVal;
+      if ((pos < 0) || (pos >= n * 16)) return; // Illegal heap position
+      System.arraycopy(newVal, 0, arr, pos, 16);
       update(pos);
     }
 
@@ -172,7 +172,9 @@ public class MinHeap {
     // The value at pos has been changed, restore the arr property
     void update(int pos) {
       // If it is a big value, push it up
-      while ((pos > 0) && (arr[pos].compareTo(arr[parent(pos)]) < 0)) {
+      byte a[] = Arrays.copyOfRange(arr, pos, pos + 16);
+      byte b[] = Arrays.copyOfRange(arr, parent(pos), parent(pos) + 16);        
+      while ((pos > 0) && (compareRecords(a, b) < 0)) {
         swap(pos, parent(pos));
         pos = parent(pos);
       }
