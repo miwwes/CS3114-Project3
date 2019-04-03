@@ -6,11 +6,11 @@
  * @author jmkuz
  *
  */
-public class MinHeap<R> {
+public class MinHeap {
 
     private Record[] Heap; // Pointer to the heap array
     private final int size = 4096; // Maximum number of records in heap
-    private int n; // Number of things now in heap
+    private int n; // Number of records now in heap
 
 
     // Constructor supporting preloading of heap contents
@@ -25,35 +25,50 @@ public class MinHeap<R> {
     int heapsize() {
         return n;
     }
+    
+    /**
+     * @param rec1
+     * @param rec2
+     * @return
+     */
+    int compareRecords(byte[] rec1, byte[] rec2) {
+        for (int i = 0; i < 16; i++) {
+            int val = Byte.compare(rec1[i], rec2[i]);
+            if (val != 0) {
+                return val;
+            }
+        }
+        return 0;   //byte arrays are equal
+    }
 
 
     // Return true if pos a leaf position, false otherwise
     boolean isLeaf(int pos) {
-        return (pos >= n / 2) && (pos < n);
+        return ((pos/16) >= n / 2) && ((pos/16) < n);
     }
 
 
     // Return position for left child of pos
     int leftchild(int pos) {
-        if (pos >= n / 2)
+        if ((pos/16) >= n / 2)
             return -1;
-        return 2 * pos + 1;
+        return (2 * pos) + 16;
     }
 
 
     // Return position for right child of pos
     int rightchild(int pos) {
-        if (pos >= (n - 1) / 2)
+        if ((pos/16) >= (n - 1) / 2)
             return -1;
-        return 2 * pos + 2;
+        return (2 * pos) + 32;
     }
 
 
     // Return position for parent
     int parent(int pos) {
-        if (pos <= 0)
+        if ((pos/16) <= 0)
             return -1;
-        return (pos - 1) / 2;
+        return (pos - 16) / 2;
     }
 
 
