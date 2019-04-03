@@ -1,3 +1,5 @@
+import java.io.RandomAccessFile;
+
 /**
  * 
  */
@@ -16,7 +18,10 @@ public class Externalsort {
      * @param args
      */
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+        try {
+            RandomAccessFile raf = new RandomAccessFile(args[0], "r");
+            replacementSelection rSel = new replacementSelection(raf);
+        }
 
     }
 

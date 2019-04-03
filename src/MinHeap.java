@@ -6,16 +6,18 @@
  * @author jmkuz
  *
  */
-public class MinHeap<Record> {
+public class MinHeap {
 
     private Record[] Heap; // Pointer to the heap array
     private int size; // Maximum size of the heap
     private int n; // Number of things now in heap
 
-
     // Constructor supporting preloading of heap contents
     MinHeap(Record[] h, int num, int max){ 
-        Heap = h;  n = num;  size = max;  buildheap(); 
+        Heap = h;  
+        n = num;  
+        size = max;  
+        buildheap(); 
     }
 
 
