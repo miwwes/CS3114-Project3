@@ -20,6 +20,10 @@ public class replacementSelection {
     
     public void execute() {
         try {
+            byte[] heapArray = new byte[HEAP_SIZE];
+            inFile.read(heapArray);
+            records = new MinHeap(heapArray, 4096);
+        
             while(inFile.read(inputBuffer) != -1) {
                 
             }
@@ -30,6 +34,9 @@ public class replacementSelection {
     }
     
     private static final int BUFFER_SIZE = 8192;
+    private static final int HEAP_SIZE = 8*8192;
+
+    
     
     MinHeap records;
     byte[] inputBuffer;
