@@ -15,7 +15,7 @@ public class MinHeap {
     MinHeap(byte[] h, int num){ 
         arr = h;  
         n = num;  
-        buildarr(); 
+        buildHeap(); 
     }
 
 
@@ -77,7 +77,6 @@ public class MinHeap {
             return;
         }
         
-        Record myRecord = new Record(key);
         int curr = n*16;
         n++;
         System.arraycopy(key, 0, arr, curr, 16);
@@ -111,8 +110,8 @@ public class MinHeap {
     }
 
 
-    // arrify contents of arr
-    void buildarr() {
+    // Heapify contents of heap
+    void buildHeap() {
         for (int i = n / 2 - 1; i >= 0; i--)
             siftdown(i * 16);
     }
@@ -124,9 +123,13 @@ public class MinHeap {
             return; // Illegal position
         while (!isLeaf(pos)) {
             int j = leftchild(pos);
-            if ((j < (n - 1)) && (arr[j].compareTo(arr[j + 1]) >= 0))
+            byte a[] = Arrays.copyOfRange(arr, j, j + 16);
+            byte b[] = Arrays.copyOfRange(arr, j + 16, j + 32);
+            if ((j < (n - 1)) && (compareRecords(a, b) >= 0))
                 j += 16; // j is now index of child with greater value
-            if (arr[pos].compareTo(arr[j]) < 0)
+            byte c[] = Arrays.copyOfRange(arr, pos, pos + 16);
+            byte d[] = Arrays.copyOfRange(arr, j, j + 16);
+            if (compareRecords(c, d) < 0)
                 return;
             swap(pos, j);
             pos = j; // Move down
@@ -135,14 +138,14 @@ public class MinHeap {
 
 
     // Remove and return maximum value
-    /*Comparable removemax() {
+    byte[] removemin() {
         if (n == 0)
-            return -1; // Removing from empty arr
-        swap(arr, 0, --n); // Swap maximum with last value
+            return null; // Removing from empty arr
+        swap(0, (n-1) * 16); // Swap maximum with last value
         if (n != 0) // Not on last element
             siftdown(0); // Put new arr root val in correct place
-        return arr[n];
-    }*/
+        return Arrays.copyOfRange(arr, n, n + 16);
+    }
 
 
     // Remove and return element at specified position
