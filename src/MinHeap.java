@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * 
  */
@@ -7,13 +9,14 @@
  *
  */
 public class MinHeap {
-    private Record[] Heap; // Pointer to the heap array
-    private final int size = 4096; // Maximum number of records in heap
-    private int n; // Number of things now in heap
+
+    private byte[] arr; // Pointer to the heap array
+    private final int size = 65536; // Maximum number of records in heap
+    private int n; // Number of records now in heap
 
     // Constructor supporting preloading of heap contents
-    MinHeap(Record[] h, int num){ 
-        Heap = h;  
+    MinHeap(byte[] h, int num){ 
+        arr = h;  
         n = num;  
         buildheap(); 
     }
@@ -23,49 +26,68 @@ public class MinHeap {
     int heapsize() {
         return n;
     }
+    
+    /**
+     * @param rec1
+     * @param rec2
+     * @return
+     */
+    int compareRecords(byte[] rec1, byte[] rec2) {
+        for (int i = 0; i < 16; i++) {
+            int val = Byte.compare(rec1[i], rec2[i]);
+            if (val != 0) {
+                return val;
+            }
+        }
+        return 0;   //byte arrays are equal
+    }
 
 
     // Return true if pos a leaf position, false otherwise
     boolean isLeaf(int pos) {
-        return (pos >= n / 2) && (pos < n);
+        return ((pos/16) >= n / 2) && ((pos/16) < n);
     }
 
 
     // Return position for left child of pos
     int leftchild(int pos) {
-        if (pos >= n / 2)
+        if ((pos/16) >= n / 2)
             return -1;
-        return 2 * pos + 1;         
+        return (2 * pos) + 16;
     }
 
 
     // Return position for right child of pos
     int rightchild(int pos) {
-        if (pos >= (n - 1) / 2)
+        if ((pos/16) >= (n - 1) / 2)
             return -1;
-        return 2 * pos + 2;
+        return (2 * pos) + 32;
     }
 
 
     // Return position for parent
     int parent(int pos) {
-        if (pos <= 0)
+        if ((pos/16) <= 0)
             return -1;
-        return (pos - 1) / 2;
+        return (pos - 16) / 2;
     }
 
 
     // Insert val into heap
     void insert(byte[] key) {
-        if (n >= size) {
+        if (n*16 >= size) {
             System.out.println("Heap is full");
             return;
         }
+        
         Record myRecord = new Record(key);
-        int curr = n++;
-        Heap[curr] = myRecord; // Start at end of heap
+        int curr = n*16;
+        n++;
+        System.arraycopy(key, 0, arr, curr, 16);
         // Now sift up until curr's parent's key < curr's key
-        while ((curr != 0) && (Heap[curr].compareTo(Heap[parent(curr)]) < 0)) {
+        byte a[] = Arrays.copyOfRange(arr, curr, 16);
+        byte b[] = Arrays.copyOfRange(arr, parent(curr), 16);
+        while ((curr != 0) && (compareRecords(a, b) < 0)) {
             swap(curr, parent(curr));
             curr = parent(curr);
         }
@@ -78,9 +100,9 @@ public class MinHeap {
      * @param parent
      */
     private void swap(int curr, int parent) {
-        Record temp = Heap[curr];
-        Heap[curr] = Heap[parent];
-        Heap[parent] = temp;   
+        Record temp = arr[curr];
+        arr[curr] = arr[parent];
+        arr[parent] = temp;   
     }
 
 
@@ -97,9 +119,9 @@ public class MinHeap {
             return; // Illegal position
         while (!isLeaf(pos)) {
             int j = leftchild(pos);
-            if ((j < (n - 1)) && (Heap[j].compareTo(Heap[j + 1]) >= 0))
+            if ((j < (n - 1)) && (arr[j].compareTo(arr[j + 1]) >= 0))
                 j++; // j is now index of child with greater value
-            if (Heap[pos].compareTo(Heap[j]) < 0)
+            if (arr[pos].compareTo(arr[j]) < 0)
                 return;
             swap(pos, j);
             pos = j; // Move down
@@ -134,7 +156,7 @@ public class MinHeap {
     // Modify the value at the given position
     void modify(int pos, Record newVal) {
       if ((pos < 0) || (pos >= n)) return; // Illegal heap position
-      Heap[pos] = newVal;
+      arr[pos] = newVal;
       update(pos);
     }
 
@@ -142,7 +164,7 @@ public class MinHeap {
     // The value at pos has been changed, restore the heap property
     void update(int pos) {
       // If it is a big value, push it up
-      while ((pos > 0) && (Heap[pos].compareTo(Heap[parent(pos)]) < 0)) {
+      while ((pos > 0) && (arr[pos].compareTo(arr[parent(pos)]) < 0)) {
         swap(pos, parent(pos));
         pos = parent(pos);
       }
