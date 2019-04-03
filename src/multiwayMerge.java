@@ -61,7 +61,7 @@ public class multiwayMerge {
       }
     
     
-    private LinkedList<Integer> runLocations;
+    private LinkedList<runNode> runLocations;
     private minHeap heap;
 
 }

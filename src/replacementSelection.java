@@ -29,8 +29,6 @@ public class replacementSelection {
             e.printStackTrace();
         }
         
-        
-        
         inputBuffer = new buffer();
         outputBuffer = new buffer();
     }
