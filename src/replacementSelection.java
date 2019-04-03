@@ -20,25 +20,9 @@ public class replacementSelection {
     
     public void execute() {
         try {
-            numWords = inFile.readByte();
-            
-            for (int pos = 0; pos < numWords; pos++) {
-             // Get the offset of the first word:
-             wordOffset = inFile.readShort();
-             // Save offset to return for next offset:
-             long offsetOfNextOffset = inFile.getFilePointer();
-             // Go to that position.
-             inFile.seek(wordOffset);
-             // Get the length of the word:
-             wordLength = inFile.readByte();
-             // Get the word (in ASCII):
-             byte Word[] = new byte[wordLength];
-             inFile.read(Word);
-             // Make Java happy:
-             String sWord = new String(Word);
-             inFile.seek(offsetOfNextOffset);
+            while(inFile.read(inputBuffer) != -1) {
+                
             }
-            inFile.close();
         }
         catch (IOException e) {
             System.err.println("IO error: " + e);

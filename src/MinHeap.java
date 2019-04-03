@@ -35,7 +35,7 @@ public class MinHeap {
     int leftchild(int pos) {
         if (pos >= n / 2)
             return -1;
-        return 2 * pos + 1;
+        return 2 * pos + 1;         
     }
 
 
