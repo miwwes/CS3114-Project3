@@ -6,11 +6,16 @@ import java.io.RandomAccessFile;
  */
 
 /**
- * @author amalone46
+ * @author juliam8
+ * @author abbym1
+ * @version 2019-04-10
  *
  */
 public class replacementSelection {
 
+    /**
+     * @param raf
+     */
     public replacementSelection(RandomAccessFile raf){
         inFile = raf;
         inputBuffer = new byte[BUFFER_SIZE];
@@ -18,9 +23,12 @@ public class replacementSelection {
     }
     
     
+    /**
+     * 
+     */
     public void execute() {
         try {
-            while(inFile.read(inputBuffer) != -1) {
+            while (inFile.read(inputBuffer) != -1) {
                 
             }
         }
@@ -29,15 +37,51 @@ public class replacementSelection {
         }
     }
     
+    /**
+     * Called to find the start of each run within the output file
+     * @return the number of bytes in the output buffer
+     */
+    public int getOutputBufLength() {
+        // return the number of bytes in the output buffer
+        return outputBuffer.length;
+    }
+    
+    /**
+     * 
+     */
     private static final int BUFFER_SIZE = 8192;
     
-    MinHeap records;
+    /**
+     * 
+     */
+    minHeap records;
+    /**
+     * 
+     */
     byte[] inputBuffer;
+    /**
+     * 
+     */
     byte[] outputBuffer;
     
+    /**
+     * 
+     */
     RandomAccessFile inFile;
+    /**
+     * 
+     */
     RandomAccessFile outFile;
+    /**
+     * 
+     */
     byte numWords = 0;
+    /**
+     * 
+     */
     short wordOffset = 0;
+    /**
+     * 
+     */
     byte wordLength = 0;
 }
