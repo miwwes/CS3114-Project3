@@ -29,14 +29,15 @@ public class multiwayMerge {
     static int recordLength = 16;
     
     
-    multiwayMerge(LinkedList<runNode> locations, minHeap h, 
-                    RandomAccessFile outFile, RandomAccessFile inFile, buffer outBuf) {
-        this.runs = locations;
-        this.heap = h;
-        this.readFile = outFile;
-        this.printFile = inFile;
+    //multiwayMerge(LinkedList<runNode> locations, minHeap h, 
+    //                RandomAccessFile outFile, RandomAccessFile inFile, buffer outBuf) {
+    multiwayMerge(sortContainer c){
+        this.runs = c.l;
+        this.heap = c.h;
+        this.readFile = c.runs;
+        this.printFile = c.in;
         this.numberOfRuns = runs.size();
-        this.outputBuffer = outBuf;
+        this.outputBuffer = c.ob;
     }
     
     public void execute() throws IOException {
