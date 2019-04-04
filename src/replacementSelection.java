@@ -52,7 +52,7 @@ public class replacementSelection {
             
             // initialize helper variables
             long runStart = outFile.getFilePointer();
-            int numRuns = 1;
+            int numRuns = 0;
             int addCount = 0;
         
             while ( canRead() ) { 
@@ -84,6 +84,7 @@ public class replacementSelection {
                     byte[] minVal = recordHeap.getMin();
                     outBuffer.insert(minVal);
                     
+                    //breaks here
                     if (comparerecordHeap(inBuffer.read(), minVal) > 0 ) {
                         recordHeap.modify(0, inBuffer.remove());
                     }
