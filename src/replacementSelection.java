@@ -65,7 +65,7 @@ public class replacementSelection {
                     }
                 }
                 outFile.write(outputBuffer.array());
-                double end = outFile.getFilePointer();
+                long end = outFile.getFilePointer();
             }
         }
         catch (IOException e) {

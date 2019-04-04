@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.RandomAccessFile;
 import java.util.*;
 
 /**
@@ -20,48 +23,24 @@ import java.util.*;
  */
 public class multiwayMerge {
     
-    multiwayMerge(LinkedList<Integer> locations, minHeap h) {
+    static double THRESHOLD = 0.1;
+    
+    multiwayMerge(LinkedList<runNode> locations, minHeap h) {
         runLocations = locations;
         heap = h;
+        File newFile = new File("output2.bin");
+        try {
+            outFile = new RandomAccessFile(newFile, "rw");
+        }
+        catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
-    
-    void mergesortOpt(Comparable[] A, Comparable[] temp, int left, int right) {
-        int i, j, k, mid = (left+right)/2;  // Select the midpoint
-        if (left == right) {
-            return;          // List has one record
-        }
-        if ((mid-left) >= THRESHOLD) {
-            mergesortOpt(A, temp, left, mid);
-        }
-        else {
-            inssort(A, left, mid);
-        }
-        if ((right-mid) > THRESHOLD) {
-            mergesortOpt(A, temp, mid+1, right);
-        }
-        else {
-            inssort(A, mid+1, right);
-        }
-        // Do the merge operation.  First, copy 2 halves to temp.
-        for (i=left; i<=mid; i++) {
-            temp[i] = A[i];
-        }
-        for (j=right; j>mid; j--) {
-            temp[i++] = A[j];
-        }
-        // Merge sublists back to array
-        for (i=left,j=right,k=left; k<=right; k++) {
-          if (temp[i].compareTo(temp[j]) <= 0) {
-              A[k] = temp[i++];
-          }
-          else {
-              A[k] = temp[j--];
-          }
-        }
-      }
     
     
     private LinkedList<runNode> runLocations;
     private minHeap heap;
+    private RandomAccessFile outFile;
 
 }

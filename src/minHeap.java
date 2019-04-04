@@ -37,13 +37,21 @@ public class minHeap {
      * @return
      */
     int compareRecords(byte[] rec1, byte[] rec2) {
-        for (int i = 8; i < 16; i++) {
-            int val = Byte.compare(rec1[i], rec2[i]);
-            if (val != 0) {
-                return val;
-            }
+        byte[] k1 = new byte[8];
+        byte[] k2 = new byte[8];
+        System.arraycopy( rec1, 8, k1, 0, 8);
+        System.arraycopy( rec2, 8, k2, 8, 8);
+        double key1 = ByteBuffer.wrap(k1).getDouble();
+        double key2 = ByteBuffer.wrap(k2).getDouble();
+        if (key1 < key2) {
+            return -1;
         }
-        return 0;   //byte arrays are equal
+        else if (key1 > key2) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 
 
