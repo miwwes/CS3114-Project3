@@ -49,7 +49,7 @@ public class replacementSelection {
             
             long runStart = outFile.getFilePointer();
             long curRunLoc = runStart;
-            
+            int numRuns = 1;
         
             while ( inFile.read(inputBuffer.array()) != -1 ) {
                 
@@ -69,8 +69,12 @@ public class replacementSelection {
                 }
                 // heap is empty 
                 
-                outFile.write(outputBuffer.array());
+                outFile.write(Arrays.copyOfRange(outputBuffer.array(), 0, outputBuffer.array().length));
+                outputBuffer.clear();
                 long end = outFile.getFilePointer();
+                runNode n = new runNode(numRuns, runStart, end);
+                runs.push(n);
+                
             }
         }
         catch (IOException e) {
@@ -139,7 +143,7 @@ public class replacementSelection {
     /**
      * 
      */
-    private LinkedList<Integer> runs;
+    private LinkedList<runNode> runs;
     /**
      * 
      */
