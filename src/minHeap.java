@@ -63,6 +63,13 @@ public class minHeap {
     boolean isLeaf(int pos) {
         return ((pos/16) >= n / 2) && ((pos/16) < n);
     }
+    
+    /**
+     * @return if the number of records in heap is zero
+     */
+    public boolean empty() {
+        return n == 0;
+    }
 
 
     // Return position for left child of pos
