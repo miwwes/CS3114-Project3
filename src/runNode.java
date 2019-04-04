@@ -8,14 +8,14 @@
  */
 public class runNode {
     
-    runNode(int run, int cur, int start, int end){
+    runNode(int run, long start, long end){
         runNumber = run;
-        curPos = cur;
+        //curPos = cur;
         startPos = start;
         endPos = end;
     }
     
-    public int getRunNumber() {
+    public long getRunNumber() {
         return runNumber;
     }
     
@@ -23,7 +23,7 @@ public class runNode {
         runNumber = run;
     }
     
-    public int getCurPos() {
+    public long getCurPos() {
         return curPos;
     }
     
@@ -35,7 +35,7 @@ public class runNode {
         curPos += inc;
     }
     
-    public int getStartPos() {
+    public long getStartPos() {
         return startPos;
     }
     
@@ -43,7 +43,7 @@ public class runNode {
         startPos = start;
     }
     
-    public int getEndPos() {
+    public long getEndPos() {
         return endPos;
     }
     
@@ -52,8 +52,8 @@ public class runNode {
     }
     
     private int runNumber;
-    private int curPos;
-    private int startPos;
-    private int endPos;
+    private long curPos;
+    private long startPos;
+    private long endPos;
 
 }

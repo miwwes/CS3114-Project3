@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -47,6 +49,7 @@ public class replacementSelection {
             
             long runStart = outFile.getFilePointer();
             long curRunLoc = runStart;
+            int numRuns = 1;
         
             while ( inFile.read(inputBuffer.array()) != -1 ) {
                 
@@ -64,8 +67,14 @@ public class replacementSelection {
                         records.removemin(inputBuffer.remove());
                     }
                 }
-                outFile.write(outputBuffer.array());
+                // heap is empty 
+                
+                outFile.write(Arrays.copyOfRange(outputBuffer.array(), 0, outputBuffer.array().length));
+                outputBuffer.clear();
                 long end = outFile.getFilePointer();
+                runNode n = new runNode(numRuns, runStart, end);
+                runs.push(n);
+                
             }
         }
         catch (IOException e) {
@@ -79,13 +88,11 @@ public class replacementSelection {
      * @return
      */
     int compareRecords(byte[] rec1, byte[] rec2) {
-        for (int i = 0; i < 8; i++) {
-            int val = Byte.compare(rec1[i], rec2[i]);
-            if (val != 0) {
-                return val;
-            }
-        }
-        return 0;   //byte arrays are equal
+        ByteBuffer buffer1 = ByteBuffer.wrap(Arrays.copyOfRange(rec1, 8, 16));
+        Double rec1Double = buffer1.getDouble();
+        ByteBuffer buffer2 = ByteBuffer.wrap(Arrays.copyOfRange(rec2, 8, 16));
+        Double rec2Double = buffer2.getDouble();
+        return rec1Double.compareTo(rec2Double);
     }
     
     /**
@@ -136,7 +143,7 @@ public class replacementSelection {
     /**
      * 
      */
-    private LinkedList<Integer> runs;
+    private LinkedList<runNode> runs;
     /**
      * 
      */

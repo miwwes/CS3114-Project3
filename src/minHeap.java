@@ -37,22 +37,12 @@ public class minHeap {
      * @param rec2
      * @return
      */
-    public int compareRecords(byte[] rec1, byte[] rec2) {
-        byte[] k1 = new byte[8];
-        byte[] k2 = new byte[8];
-        System.arraycopy( rec1, 8, k1, 0, 8);
-        System.arraycopy( rec2, 8, k2, 8, 8);
-        double key1 = ByteBuffer.wrap(k1).getDouble();
-        double key2 = ByteBuffer.wrap(k2).getDouble();
-        if (key1 < key2) {
-            return -1;
-        }
-        else if (key1 > key2) {
-            return 1;
-        }
-        else {
-            return 0;
-        }
+    int compareRecords(byte[] rec1, byte[] rec2) {
+        ByteBuffer buffer1 = ByteBuffer.wrap(Arrays.copyOfRange(rec1, 8, 16));
+        Double rec1Double = buffer1.getDouble();
+        ByteBuffer buffer2 = ByteBuffer.wrap(Arrays.copyOfRange(rec2, 8, 16));
+        Double rec2Double = buffer2.getDouble();
+        return rec1Double.compareTo(rec2Double);
     }
 
 
