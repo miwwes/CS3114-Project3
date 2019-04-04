@@ -40,7 +40,7 @@ public class buffer {
      */
     public void update() {
         size = byteArray.length/16;
-        pos = 0;
+        pos = byteArray.length;
         readPos = 0;
     }
     
@@ -72,7 +72,7 @@ public class buffer {
      * @return the record at readPos
      */
     public byte[] read() {
-        if(readPos >= pos)
+        if (readPos >= pos)
             return null;
         readPos += 16;
         return Arrays.copyOfRange(byteArray, readPos - 16, readPos);

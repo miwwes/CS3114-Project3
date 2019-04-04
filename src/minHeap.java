@@ -245,9 +245,11 @@ public class minHeap {
      */
     void update(int pos) {
       // If it is a big value, push it up
-      byte a[] = Arrays.copyOfRange(arr, pos, pos + 16);
-      byte b[] = Arrays.copyOfRange(arr, parent(pos), parent(pos) + 16);        
-      while ((pos > 0) && (compareRecords(a, b) < 0)) {
+      int val = arr.length;
+      int l = parent(pos);
+      while ((pos > 0) && (compareRecords(
+                      Arrays.copyOfRange(arr, pos, pos + 16), 
+                      Arrays.copyOfRange(arr, parent(pos), parent(pos) + 16)) < 0)) {
         swap(pos, parent(pos));
         pos = parent(pos);
       }
