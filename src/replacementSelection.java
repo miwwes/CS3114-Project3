@@ -31,7 +31,8 @@ public class replacementSelection {
    
     public boolean canRead() {
         try {
-            return inFile.getFilePointer() != inFile.length();
+            boolean test = inFile.getFilePointer() != inFile.length();
+            return test;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -54,6 +55,7 @@ public class replacementSelection {
                 
                 inFile.read(inBuffer.array());
                 inBuffer.update();
+                
                 
                 while( !inBuffer.empty() ) {
                 
