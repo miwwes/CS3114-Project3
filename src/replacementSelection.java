@@ -45,19 +45,29 @@ public class replacementSelection {
             inFile.read(heapArray);
             records = new minHeap(heapArray, 4096, 4096);
             records.buildHeap();
-            int LAST = records.getLastPos();
             
             long runStart = outFile.getFilePointer();
-            long curRunLoc = runStart;
             int numRuns = 1;
         
-            while ( inFile.read(inputBuffer.array()) != -1 ) {
+            while ( inFile.getFilePointer() != inFile.length() ) {
+                
+                runStart = outFile.getFilePointer();
+                
+                if( inputBuffer.empty() ) {
+                    inFile.read(inputBuffer.array());
+                    inputBuffer.update();
+                }
                 
                 while ( records.heapSize() > 0 ) {
                     if ( outputBuffer.full() ) {
                         outFile.write(outputBuffer.array());
                         outputBuffer.clear();
                     }
+                    if ( inputBuffer.empty() ) {
+                        inFile.read(inputBuffer.array());
+                        inputBuffer.update();
+                    }
+                    
                     byte[] minVal = records.getMin();
                     outputBuffer.insert(minVal);
                     if (compareRecords(inputBuffer.read(), minVal) > 0 ) {
@@ -66,14 +76,19 @@ public class replacementSelection {
                     else {
                         records.removemin(inputBuffer.remove());
                     }
+                    
                 }
                 // heap is empty 
                 
                 outFile.write(Arrays.copyOfRange(outputBuffer.array(), 0, outputBuffer.array().length));
                 outputBuffer.clear();
+                
                 long end = outFile.getFilePointer();
                 runNode n = new runNode(numRuns, runStart, end);
                 runs.push(n);
+                
+                numRuns++;
+                records.buildHeap(4096);
                 
             }
         }
