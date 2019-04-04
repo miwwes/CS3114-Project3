@@ -70,9 +70,8 @@ public class Externalsort {
             
             replacementSelection rSel = new replacementSelection(in, runs, l, h);
             rSel.execute();
-            
-            multiwayMerge mMerge = new multiwayMerge(in, runs, l, h);
-            
+            buffer outBuffer = new buffer();
+            multiwayMerge mMerge = new multiwayMerge(l, h, runs, in, outBuffer);
         }
         catch (FileNotFoundException e) {
             // TODO Auto-generated catch block

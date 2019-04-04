@@ -35,21 +35,31 @@ public class multiwayMerge {
         this.heap = h;
         this.readFile = outFile;
         this.printFile = inFile;
-        this.numberOfRecords = runs.size();
+        this.numberOfRuns = runs.size();
         this.outputBuffer = outBuf;
+    }
+    
+    public void execute() throws IOException {
+        if (numberOfRuns == 1) {
+            printToStandardOutput(readFile);
+        }
+        else {
+            loadBlocks();
+        }
     }
     
     /**
      * Loads the first 8 blocks from output file into working memory
      * @throws IOException
      */
-    public void loadOriginalBlocks() throws IOException {
+    public void loadBlocks() throws IOException {
         for (int i = 0; i < 8; i++) {
-            if (i == numberOfRecords) {
+            if (i == numberOfRuns) {
                 break;
             }
             loadNextBlock(i);
         }
+        makePriorityQueue();
     }
     
     /**
@@ -57,8 +67,8 @@ public class multiwayMerge {
      */
     public void makePriorityQueue() throws IOException {
         int numOfRuns = 8;
-        if (runs.size() < 8) {
-            numOfRuns = runs.size();
+        if (numberOfRuns < 8) {
+            numOfRuns = numberOfRuns;
         }
         this.pq = new PriorityQueue<mergeNode>(numOfRuns, new mergeNodeComparator());
         for (int i = 0; i < numOfRuns; i++) {
@@ -80,7 +90,7 @@ public class multiwayMerge {
         while (heap.arr.length > 0) {   //all 8 (or however many) runs are exhausted
             mergeNode minNode = pq.poll();
             outputBuffer.insert(minNode.getRecord());
-            if ( outputBuffer.full() ) {
+            if (outputBuffer.full()) {
                 printFile.write(outputBuffer.array());
                 outputBuffer.clear();
             }
@@ -95,10 +105,29 @@ public class multiwayMerge {
             // from the corresponding block
             loadNextNode(nextBlock, minNode.getCurPos());
         }
+        // print whats left in the output buffer
+        if (!outputBuffer.empty()) {
+            printFile.write(outputBuffer.array());
+            outputBuffer.clear();
+        }
+        int numberOfRunsLeft = runs.size();
+        // if heap is empty, then up to 8 runs are exhausted.
         long end = printFile.getFilePointer();
-        runNode n = new runNode(1, runStart, end);
+        runNode n = new runNode(numberOfRunsLeft, runStart, end);   
+        //I guess add to end of linked list
         runs.push(n);
-        // check if there are still runs within 
+        // check if there are still runs within outfile
+        if (runs.size() == 0) {
+            printToStandardOutput(printFile);
+        }
+        else {
+            //switch input and output
+            RandomAccessFile temp = readFile;
+            readFile = printFile;
+            printFile = temp;
+            this.numberOfRuns = runs.size();
+            loadBlocks();
+        }
     }
     
     /**
@@ -124,7 +153,7 @@ public class multiwayMerge {
         long runLength = node.getEndPos() - node.getStartPos();
         if (runLength == 0) {
             // need to remove that run from linked list
-            runs.remove(block);
+            runs.remove(node);
         }
         else {
             if (runLength < blockLength) {
@@ -153,7 +182,7 @@ public class multiwayMerge {
     }
     
     private PriorityQueue<mergeNode> pq;
-    private int numberOfRecords;
+    private int numberOfRuns;
     private LinkedList<runNode> runs;
     private minHeap heap;
     private RandomAccessFile readFile;
