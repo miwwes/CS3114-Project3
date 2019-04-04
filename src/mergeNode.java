@@ -14,7 +14,7 @@ class mergeNode {
     
     static int blockLength = 8192;
     
-    mergeNode(int block, byte[] arr){
+    mergeNode(int block, byte[] arr, int cur){
         this.blockNumber = block;
         this.startPos = block * blockLength;
         this.endPos = (block + 1) * blockLength;
@@ -22,7 +22,7 @@ class mergeNode {
         double keyVal = ByteBuffer.wrap(keyBytes).getDouble();
         this.key = keyVal;
         this.record = arr;
-        this.curPos = 0;
+        this.curPos = cur;
     }
     
     public int getBlockNumber() {

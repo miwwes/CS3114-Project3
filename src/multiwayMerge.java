@@ -29,62 +29,116 @@ public class multiwayMerge {
     static int recordLength = 16;
     
     
-    multiwayMerge(LinkedList<runNode> locations, 
-                    minHeap h, RandomAccessFile file, buffer outBuf) {
-        this.runLocations = locations;
+    multiwayMerge(LinkedList<runNode> locations, minHeap h, 
+                    RandomAccessFile outFile, RandomAccessFile inFile, buffer outBuf) {
+        this.runs = locations;
         this.heap = h;
-        this.readFile = file;
-        this.numberOfRecords = runLocations.size();
+        this.readFile = outFile;
+        this.printFile = inFile;
+        this.numberOfRecords = runs.size();
         this.outputBuffer = outBuf;
     }
     
-    public void readBlocks() throws IOException {
-        
+    /**
+     * Loads the first 8 blocks from output file into working memory
+     * @throws IOException
+     */
+    public void loadOriginalBlocks() throws IOException {
         for (int i = 0; i < 8; i++) {
             if (i == numberOfRecords) {
                 break;
             }
-            readFile.read(heap.arr, blockLength * i, blockLength);
+            loadNextBlock(i);
         }
     }
     
-    public void makePriorityQueue() {
-        PriorityQueue<mergeNode> pq = 
-            new PriorityQueue<mergeNode>(8, new mergeNodeComparator());
-            
-        for (int i = 0; i < 8; i++) {
-            if (i == numberOfRecords) {
-                break;
+    /**
+     * @throws IOException
+     */
+    public void makePriorityQueue() throws IOException {
+        int numOfRuns = 8;
+        if (runs.size() < 8) {
+            numOfRuns = runs.size();
+        }
+        this.pq = new PriorityQueue<mergeNode>(numOfRuns, new mergeNodeComparator());
+        for (int i = 0; i < numOfRuns; i++) {
+            //need to get first record from each block in heap
+            //each run whould start from a specified point in heap
+            loadNextNode(i, 0);
+        }
+        // priority queue is now full with the first record from 8 runs
+        merge(pq);
+    }
+    
+    /**
+     * @param pq
+     * @throws IOException
+     */
+    public void merge(PriorityQueue<mergeNode> pq) throws IOException {
+        long runStart = printFile.getFilePointer();
+        // stop while loop when you cannot read any more from the file
+        while (heap.arr.length == 0) {
+            mergeNode minNode = pq.poll();
+            outputBuffer.insert(minNode.getRecord());
+            if ( outputBuffer.full() ) {
+                printFile.write(outputBuffer.array());
+                outputBuffer.clear();
             }
-            byte[] myNode = new byte[16];
-            System.arraycopy( heap.arr, blockLength * i, myNode, 0, 16);
-            mergeNode mNode = new mergeNode(i, myNode);
-            pq.add(mNode);
+            // need to change record in the minNode and increment its current Position
+            int nextBlock = minNode.getBlockNumber();
+            if (minNode.getCurPos() == minNode.getEndPos()) {
+                loadNextBlock(nextBlock);
+            }
+            // get the current location of the record removed from working memory
+            // and when you ad the next record into the priority queue make sure
+            // that the index is incremented so that we read the next record
+            // from the corresponding block
+            loadNextNode(nextBlock, minNode.getCurPos());
         }
-        
-        while (heap.heapSize() > 0) {
-            //do stuff
+        long end = printFile.getFilePointer();
+        runNode n = new runNode(1, runStart, end);
+        runs.push(n);
+    }
+    
+    /**
+     * @param block
+     * @throws IOException
+     */
+    public void loadNextNode(int block, int cur) throws IOException {
+        // need to remove that record from the heap
+        byte[] myRecord = new byte[16];
+        System.arraycopy( heap.arr, blockLength * block, myRecord, 0, 16);
+        mergeNode mNode = new mergeNode(block, myRecord, cur + recordLength);
+        pq.add(mNode);
+    }
+    
+    /**
+     * @param block
+     * @throws IOException
+     */
+    public void loadNextBlock(int block) throws IOException {
+        // need to reset the curPos for the next block that is read in
+        runNode node = runs.get(block);
+        long runLength = node.getEndPos() - node.getStartPos();
+        if (runLength < blockLength) {
+            // (buffer to read), (position to start reading from), (length read)
+            readFile.read(heap.arr, (int)node.getStartPos(), (int)runLength);
         }
-        mergeNode minNode = pq.poll();
-        outputBuffer.insert(minNode.getRecord());
-        int nextBlock = minNode.getBlockNumber();
-        
-        //int numOfNodes = 8;
-        //if (numberOfRecords < 8) {
-        //    numOfNodes = numberOfRecords;
-        //}
-        //minHeap smallHeap = new minHeap(eightHeap, numOfNodes, 8); 
-        //addToOutputBuffer(smallHeap);
+        else {
+            readFile.read(heap.arr, (int)node.getStartPos(), blockLength);
+        }
     }
     
     public void writeToNextFile(PriorityQueue<mergeNode> pq) {
         
     }
     
+    private PriorityQueue<mergeNode> pq;
     private int numberOfRecords;
-    private LinkedList<runNode> runLocations;
+    private LinkedList<runNode> runs;
     private minHeap heap;
     private RandomAccessFile readFile;
+    private RandomAccessFile printFile;
     private buffer outputBuffer;
 
 }
