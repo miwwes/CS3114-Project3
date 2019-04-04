@@ -59,7 +59,8 @@ public class replacementSelection {
             int numRuns = 1;
             int addCount = 0;
         
-            while ( canRead() ) { // inFile.getFilePointer() != inFile.length() ) {
+            while ( canRead() ) { 
+                while(!inputBuffer.empty()) {
                 
                 runStart = outFile.getFilePointer();
                 
@@ -87,7 +88,7 @@ public class replacementSelection {
                         records.removemin(inputBuffer.remove());
                         addCount++;
                     }
-                    
+                }
                 }
                 // heap is empty 
                 
