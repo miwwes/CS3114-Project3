@@ -8,7 +8,11 @@ import java.util.LinkedList;
  */
 
 /**
- * @author amalone46
+ * @author abbym1
+ * @author juliam8
+ * @version 4-4-19
+ * 
+ * ***Description***
  *
  */
 public class sortContainer {

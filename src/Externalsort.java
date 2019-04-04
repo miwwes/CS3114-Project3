@@ -53,7 +53,7 @@ public class Externalsort {
             
         sortContainer extSort = new sortContainer(args[0]);
         
-        replacementSelection rSel = new replacementSelection(extSort));
+        replacementSelection rSel = new replacementSelection(extSort);
         rSel.execute();
         
         multiwayMerge mMerge = new multiwayMerge(extSort);
