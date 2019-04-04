@@ -114,11 +114,19 @@ public class multiwayMerge {
             printFile.write(outputBuffer.array());
             outputBuffer.clear();
         }
+        Iterator<mergeNode> i = pq.iterator(); 
+        while (i.hasNext()) { 
+            mergeNode minNode = pq.poll();
+            outputBuffer.insert(minNode.getRecord());
+        } 
+        printFile.write(outputBuffer.array());
+        outputBuffer.clear();
+        
         int numberOfRunsLeft = runs.size();
         // if heap is empty, then up to 8 runs are exhausted.
         long end = printFile.getFilePointer();
         runNode n = new runNode(numberOfRunsLeft, runStart, end);   
-        //I guess add to end of linked list
+        //I guess add newly created run to end of linked list
         runs.push(n);
         // check if there are still runs within outfile
         if (runs.size() == 0) {
