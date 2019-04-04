@@ -6,6 +6,15 @@ import java.util.*;
  * @author juliam8
  * @author abbym1
  * @version 2019-04-10
+ * 
+ * This class implements the heap data structure, 
+ * as an array-based min heap meaning the value 
+ * at the root is smaller than all of its children. 
+ * It has some specialized methods for its use as 
+ * the memory for our external sorting assignment. 
+ * 
+ * The heap is also modified to move groups of 16
+ * array elements around at a time (records).
  *
  */
 public class minHeap {
