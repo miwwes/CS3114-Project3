@@ -34,7 +34,16 @@ public class replacementSelection {
         inputBuffer = new buffer();
         outputBuffer = new buffer();
     }
-    
+   
+    public boolean canRead() {
+        try {
+            return inFile.getFilePointer() != inFile.length();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
     
     /**
      * Executes the reading of the input file
@@ -48,8 +57,9 @@ public class replacementSelection {
             
             long runStart = outFile.getFilePointer();
             int numRuns = 1;
+            int addCount = 0;
         
-            while ( inFile.getFilePointer() != inFile.length() ) {
+            while ( canRead() ) { // inFile.getFilePointer() != inFile.length() ) {
                 
                 runStart = outFile.getFilePointer();
                 
@@ -58,7 +68,7 @@ public class replacementSelection {
                     inputBuffer.update();
                 }
                 
-                while ( records.heapSize() > 0 ) {
+                while ( records.heapSize() > 0 && canRead() ) {
                     if ( outputBuffer.full() ) {
                         outFile.write(outputBuffer.array());
                         outputBuffer.clear();
@@ -75,6 +85,7 @@ public class replacementSelection {
                     }
                     else {
                         records.removemin(inputBuffer.remove());
+                        addCount++;
                     }
                     
                 }
@@ -88,7 +99,13 @@ public class replacementSelection {
                 runs.push(n);
                 
                 numRuns++;
-                records.buildHeap(4096);
+                records.buildHeap(records.heapSize() + addCount);
+                
+            }
+            if ( !inputBuffer.empty() ) {
+                
+            }
+            else {
                 
             }
         }
@@ -110,19 +127,6 @@ public class replacementSelection {
         return rec1Double.compareTo(rec2Double);
     }
     
-    /**
-     * Executes the reading of the input file
-     */
-    public void selection() {
-        // first place the root into the output buffer
-        // set first 16 bytes to min of heap
-
-        //System.arraycopy(records.getMin(), 0, outputBuffer, 0, 16);
-        //outputBuffer[0] = records.getMin();
-        //while (!outputBuffer.full()) {
-            
-        //}
-    }
     
     /**
      * Called to find the start of each run within the output file
