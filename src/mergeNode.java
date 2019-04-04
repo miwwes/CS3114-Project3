@@ -12,8 +12,12 @@ import java.util.Comparator;
  */
 class mergeNode {
     
+    static int blockLength = 8192;
+    
     mergeNode(int block, byte[] arr){
         this.blockNumber = block;
+        this.startPos = block * blockLength;
+        this.endPos = (block + 1) * blockLength;
         byte[] keyBytes = Arrays.copyOfRange(arr, 8, 16);
         double keyVal = ByteBuffer.wrap(keyBytes).getDouble();
         this.key = keyVal;
@@ -33,12 +37,28 @@ class mergeNode {
         return record;
     }
     
-    public long getCurPos() {
+    public int getCurPos() {
         return curPos;
     }
     
     public void setCurPos(int cur) {
         curPos = cur;
+    }
+    
+    public int getStartPos() {
+        return startPos;
+    }
+    
+    public void setStartPos(int start) {
+        startPos = start;
+    }
+    
+    public int getEndPos() {
+        return endPos;
+    }
+    
+    public void setEndPos(int end) {
+        endPos = end;
     }
     
     public void incrementCurPos(int inc) {
@@ -47,6 +67,8 @@ class mergeNode {
     
     private int blockNumber;
     private int curPos;
+    private int startPos;
+    private int endPos;
     double key;
     private byte[] record;
 
