@@ -142,6 +142,15 @@ public class minHeap {
         for (int i = n / 2 - 1; i >= 0; i--)
             siftdown(i * 16);
     }
+    
+    /**
+     * parameterized
+     */
+    void buildHeap(int size) {
+        n = size;
+        for (int i = n / 2 - 1; i >= 0; i--)
+            siftdown(i * 16);
+    }
 
 
     // Put element in its correct place

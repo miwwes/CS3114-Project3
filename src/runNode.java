@@ -10,7 +10,7 @@ public class runNode {
     
     runNode(int run, long start, long end){
         runNumber = run;
-        //curPos = cur;
+        curPos = start;
         startPos = start;
         endPos = end;
     }

@@ -25,9 +25,8 @@ public class buffer {
         writePos = 0;
     }
     
-    public void loadBlock(byte[] b) {
-        byteArray = b;
-        size = 0;
+    public void update() {
+        size = byteArray.length/16;
         pos = 0;
         readPos = 0;
         writePos = 0;
