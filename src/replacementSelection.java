@@ -31,8 +31,6 @@ public class replacementSelection {
             e.printStackTrace();
         }
         
-        
-        
         inputBuffer = new buffer();
         outputBuffer = new buffer();
     }
@@ -71,6 +69,8 @@ public class replacementSelection {
                 }
                 // heap is empty 
                 
+                outFile.write(outputBuffer.array());
+                double end = outFile.getFilePointer();
             }
         }
         catch (IOException e) {
