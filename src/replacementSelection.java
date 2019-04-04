@@ -20,19 +20,15 @@ public class replacementSelection {
     /**
      * @param raf
      */
-    replacementSelection(RandomAccessFile raf){
-        inFile = raf;
-        File newFile = new File("output.bin");
-        try {
-            newFile.createNewFile();
-            outFile = new RandomAccessFile(newFile, "rw");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    replacementSelection(RandomAccessFile in, RandomAccessFile out,
+            LinkedList<runNode> l, minHeap h){
+        runs = l;
+        recordHeap = h;
+        inFile = in;
+        outFile = out;
         
-        inputBuffer = new buffer();
-        outputBuffer = new buffer();
+        inBuffer = new buffer();
+        outBuffer = new buffer();
     }
    
     public boolean canRead() {
@@ -50,65 +46,95 @@ public class replacementSelection {
      */
     public void execute() {
         try {
-            byte[] heapArray = new byte[HEAP_SIZE];
-            inFile.read(heapArray);
-            records = new minHeap(heapArray, 4096, 4096);
-            records.buildHeap();
+            // load 8 blocks into the heap and build 
+            //byte[] heapArray = new byte[HEAP_SIZE];
+            //inFile.read(heapArray);
+            //recordHeap = new minHeap(heapArray, MAX_REC_HEAP, MAX_REC_HEAP);
+            //recordHeap.buildHeap();
             
+            // initialize helper variables
             long runStart = outFile.getFilePointer();
             int numRuns = 1;
             int addCount = 0;
         
             while ( canRead() ) { 
-                while(!inputBuffer.empty()) {
                 
-                runStart = outFile.getFilePointer();
+                inFile.read(inBuffer.array());
+                inBuffer.update();
                 
-                if( inputBuffer.empty() ) {
-                    inFile.read(inputBuffer.array());
-                    inputBuffer.update();
-                }
+                while( !inBuffer.empty() ) {
                 
-                while ( records.heapSize() > 0 && canRead() ) {
-                    if ( outputBuffer.full() ) {
-                        outFile.write(outputBuffer.array());
-                        outputBuffer.clear();
+                    if( recordHeap.empty() ) {
+                        outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+                        outBuffer.clear();
+                        
+                        long end = outFile.getFilePointer();
+                        runNode n = new runNode(numRuns, runStart, end);
+                        runs.push(n);
+                        
+                        numRuns++;
+                        runStart = end;
+                        addCount = 0;
+                        recordHeap.buildHeap(MAX_REC_HEAP);
+                        
                     }
-                    if ( inputBuffer.empty() ) {
-                        inFile.read(inputBuffer.array());
-                        inputBuffer.update();
+                    else if ( outBuffer.full() ) {
+                        outFile.write(outBuffer.array());
+                        outBuffer.clear();
                     }
                     
-                    byte[] minVal = records.getMin();
-                    outputBuffer.insert(minVal);
-                    if (compareRecords(inputBuffer.read(), minVal) > 0 ) {
-                        records.modify(0, inputBuffer.remove());
+                    byte[] minVal = recordHeap.getMin();
+                    outBuffer.insert(minVal);
+                    
+                    if (comparerecordHeap(inBuffer.read(), minVal) > 0 ) {
+                        recordHeap.modify(0, inBuffer.remove());
                     }
                     else {
-                        records.removemin(inputBuffer.remove());
+                        recordHeap.removemin(inBuffer.remove());
                         addCount++;
-                    }
+                    } 
+                
+                } // inBuffer is empty
+                
+            } // inFile is empty
+            // could still be stuff in the heap and outBuffer
+            if( !outBuffer.empty() ) {
+                outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+                outBuffer.clear();
+            }
+            
+            while( !recordHeap.empty() ) {
+                if ( outBuffer.full() ) {
+                    outFile.write(outBuffer.array());
+                    outBuffer.clear();
                 }
+                outBuffer.insert(recordHeap.removemin());
+            }
+            
+            outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+            outBuffer.clear();
+            
+            long end = outFile.getFilePointer();
+            runNode n = new runNode(numRuns, runStart, end);
+            runs.push(n);
+            
+            numRuns++;
+            runStart = end;
+            recordHeap.buildHeap(addCount);
+            
+            while( !recordHeap.empty() ) {
+                if ( outBuffer.full() ) {
+                    outFile.write(outBuffer.array());
+                    outBuffer.clear();
                 }
-                // heap is empty 
-                
-                outFile.write(Arrays.copyOfRange(outputBuffer.array(), 0, outputBuffer.array().length));
-                outputBuffer.clear();
-                
-                long end = outFile.getFilePointer();
-                runNode n = new runNode(numRuns, runStart, end);
-                runs.push(n);
-                
-                numRuns++;
-                records.buildHeap(records.heapSize() + addCount);
-                
+                outBuffer.insert(recordHeap.removemin());
             }
-            if ( !inputBuffer.empty() ) {
-                
-            }
-            else {
-                
-            }
+            
+            outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+            outBuffer.clear();
+            end = outFile.getFilePointer();
+            runNode n2 = new runNode(numRuns, runStart, end);
+            runs.push(n2);
         }
         catch (IOException e) {
             System.err.println("IO error: " + e);
@@ -120,7 +146,7 @@ public class replacementSelection {
      * @param rec2
      * @return
      */
-    int compareRecords(byte[] rec1, byte[] rec2) {
+    int comparerecordHeap(byte[] rec1, byte[] rec2) {
         ByteBuffer buffer1 = ByteBuffer.wrap(Arrays.copyOfRange(rec1, 8, 16));
         Double rec1Double = buffer1.getDouble();
         ByteBuffer buffer2 = ByteBuffer.wrap(Arrays.copyOfRange(rec2, 8, 16));
@@ -128,37 +154,18 @@ public class replacementSelection {
         return rec1Double.compareTo(rec2Double);
     }
     
-    
-    /**
-     * Called to find the start of each run within the output file
-     * @return the number of bytes in the output buffer
-     */
-    public int addToOutputBuf(byte[] record) {
-        // return the number of bytes in the output buffer
-        return outputBuffer.size();
-    }
-    
-    /**
-     * Called to find the start of each run within the output file
-     * @return the number of bytes in the output buffer
-     */
-    public int getOutputBufLength() {
-        // return the number of bytes in the output buffer
-        return outputBuffer.size();
-    }
-    
     /**
      * 
      */
-    private static final int BUFFER_SIZE = 8192;
     private static final int HEAP_SIZE = 8*8192;
+    private static final int MAX_REC_HEAP = 4096;
 
     
     
     /**
      * 
      */
-    private minHeap records;
+    private minHeap recordHeap;
     
     /**
      * 
@@ -167,11 +174,11 @@ public class replacementSelection {
     /**
      * 
      */
-    private buffer inputBuffer;
+    private buffer inBuffer;
     /**
      * 
      */
-    private buffer outputBuffer;
+    private buffer outBuffer;
     
     /**
      * 
@@ -181,16 +188,5 @@ public class replacementSelection {
      * 
      */
     private RandomAccessFile outFile;
-    /**
-     * 
-     */
-    private byte numWords = 0;
-    /**
-     * 
-     */
-    private short wordOffset = 0;
-    /**
-     * 
-     */
-    private byte wordLength = 0;
+
 }
