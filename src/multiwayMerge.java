@@ -74,7 +74,7 @@ public class multiwayMerge {
         this.pq = new PriorityQueue<mergeNode>(numOfRuns, new mergeNodeComparator());
         for (int i = 0; i < numOfRuns; i++) {
             //need to get first record from each block in heap
-            //each run whould start from a specified point in heap
+            //each run would start from a specified point in heap
             loadNextNode(i, 0);
         }
         // priority queue is now full with the first record from 8 runs
@@ -102,7 +102,7 @@ public class multiwayMerge {
                 canLoadNode = loadNextBlock(nextBlock);
             }
             // get the current location of the record removed from working memory
-            // and when you ad the next record into the priority queue make sure
+            // and when you add the next record into the priority queue make sure
             // that the index is incremented so that we read the next record
             // from the corresponding block
             if (canLoadNode) {
