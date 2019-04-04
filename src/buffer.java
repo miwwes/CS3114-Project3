@@ -24,7 +24,6 @@ public class buffer {
         size = 0;
         pos = 0;
         readPos = 0;
-        writePos = 0;
     }
     
     /**
@@ -34,7 +33,6 @@ public class buffer {
         size = 0;
         pos = 0;
         readPos = 0;
-        writePos = 0;
     }
     
     /**
@@ -44,7 +42,6 @@ public class buffer {
         size = byteArray.length/16;
         pos = 0;
         readPos = 0;
-        writePos = 0;
     }
     
     /**
@@ -130,8 +127,5 @@ public class buffer {
      * Keeps track of what has been read from the array
      */
     private int readPos;
-    /**
-     * may be useless (probably)
-     */
-    private int writePos;
+
 }
