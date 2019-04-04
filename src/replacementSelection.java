@@ -81,6 +81,7 @@ public class replacementSelection {
                     byte[] minVal = recordHeap.getMin();
                     outBuffer.insert(minVal);
                     
+                    //breaks here
                     if (comparerecordHeap(inBuffer.read(), minVal) > 0 ) {
                         recordHeap.modify(0, inBuffer.remove());
                     }

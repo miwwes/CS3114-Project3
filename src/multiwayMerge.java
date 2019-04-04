@@ -109,6 +109,7 @@ public class multiwayMerge {
                 loadNextNode(nextBlock, minNode.getCurPos());
             }
         }
+        System.out.println("HERE");
         // print whats left in the output buffer
         if (!outputBuffer.empty()) {
             printFile.write(outputBuffer.array());
@@ -127,7 +128,7 @@ public class multiwayMerge {
         long end = printFile.getFilePointer();
         runNode n = new runNode(numberOfRunsLeft, runStart, end);   
         //I guess add newly created run to end of linked list
-        runs.push(n);
+        runs.add(n);
         // check if there are still runs within outfile
         if (runs.size() == 0) {
             printToStandardOutput(printFile);
@@ -171,10 +172,13 @@ public class multiwayMerge {
         else {
             if (runLength < blockLength) {
                 // (buffer to read), (position to start reading from), (length read)
-                readFile.read(heap.arr, (int)node.getStartPos(), (int)runLength);
+                readFile.seek(node.getStartPos());
+                readFile.read(heap.arr, blockLength*block, (int)runLength);
             }
             else {
-                readFile.read(heap.arr, (int)node.getStartPos(), blockLength);
+                //long fp = readFile.getFilePointer();
+                readFile.seek(node.getStartPos());
+                readFile.read(heap.arr, blockLength*block, blockLength);
             }
             return true;
         }
