@@ -50,38 +50,13 @@ public class Externalsort {
      * 
      */
     public static void main(String[] args) {
-        final int HEAP_SIZE = 8*8192;
-        final int MAX_REC_HEAP = 4096;
-
-        try {
-            RandomAccessFile in = new RandomAccessFile(args[0], "rw");
             
-            
-            File newFile = new File("output.bin");
-            newFile.createNewFile();
-            RandomAccessFile runs = new RandomAccessFile(newFile, "rw");
-                        
-            byte[] heapArray = new byte[HEAP_SIZE];
-            in.read(heapArray);
-            minHeap h = new minHeap(heapArray, MAX_REC_HEAP, MAX_REC_HEAP);
-            h.buildHeap();
-            
-            LinkedList<runNode> l = new LinkedList<runNode>();
-            
-            replacementSelection rSel = new replacementSelection(in, runs, l, h);
-            rSel.execute();
-            
-            multiwayMerge mMerge = new multiwayMerge(in, runs, l, h);
-            
-        }
-        catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
+        sortContainer extSort = new sortContainer(args[0]);
+        
+        replacementSelection rSel = new replacementSelection(extSort));
+        rSel.execute();
+        
+        multiwayMerge mMerge = new multiwayMerge(extSort);
+        mMerge.execute();
     }
-
 }

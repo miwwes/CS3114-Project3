@@ -20,15 +20,13 @@ public class replacementSelection {
     /**
      * @param raf
      */
-    replacementSelection(RandomAccessFile in, RandomAccessFile out,
-            LinkedList<runNode> l, minHeap h){
-        runs = l;
-        recordHeap = h;
-        inFile = in;
-        outFile = out;
-        
-        inBuffer = new buffer();
-        outBuffer = new buffer();
+    replacementSelection(sortContainer c){
+        runs = c.l;
+        recordHeap = c.h;
+        inFile = c.in;
+        outFile = c.runs;
+        inBuffer = c.ib;
+        outBuffer = c.ob;
     }
    
     public boolean canRead() {
@@ -157,7 +155,7 @@ public class replacementSelection {
     /**
      * 
      */
-    private static final int HEAP_SIZE = 8*8192;
+    //private static final int HEAP_SIZE = 8*8192;
     private static final int MAX_REC_HEAP = 4096;
 
     
