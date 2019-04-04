@@ -43,7 +43,7 @@ public class replacementSelection {
         try {
             byte[] heapArray = new byte[HEAP_SIZE];
             inFile.read(heapArray);
-            records = new minHeap(heapArray, 4096);
+            records = new minHeap(heapArray, 4096, 4096);
             records.buildHeap();
             int LAST = records.getLastPos();
             

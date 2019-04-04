@@ -46,7 +46,7 @@ class minHeapTest {
         System.arraycopy( byteArr, 0, record, 0, 16);
         System.arraycopy( byteArr2, 0, record, 16, 16);
         
-        minHeap myHeap = new minHeap(record, 2);
+        minHeap myHeap = new minHeap(record, 2, 4096);
         double val = toNumber(myHeap.getMin());
         assert(val == 5);
     }
