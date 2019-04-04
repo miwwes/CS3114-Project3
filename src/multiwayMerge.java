@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.*;
 
@@ -10,37 +11,59 @@ import java.util.*;
  *
  */
 /** 
- * pos The offset position, measured in bytes from the 
- * beginning of the file, at which to set the file pointer.
+ * Need to place 8 blocks into working memory
  * 
- * Need to keep track of the byte position of each run in
- * the file pointer.
+ * Take the first record from each block and put into
+ *  8 record heap
  * 
- * So keep track of how large the output buffer is in bytes
+ * Get the minimum value from the 8 record heap and place
+ *  into output buffer
  * 
- * Once the first run is complete (i.e., the heap becomes empty),
+ * If a run is exhausted, then get the next block from the
+ *  data file for that run.
  *
  */
 public class multiwayMerge {
     
-    static double THRESHOLD = 0.1;
+    static int blockLength = 8192;
+    static int recordLength = 16;
     
-    multiwayMerge(LinkedList<runNode> locations, minHeap h) {
+    
+    multiwayMerge(LinkedList<runNode> locations, minHeap h, RandomAccessFile file) {
         runLocations = locations;
         heap = h;
-        File newFile = new File("output2.bin");
-        try {
-            outFile = new RandomAccessFile(newFile, "rw");
-        }
-        catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        readFile = file;
+        numberOfRecords = runLocations.size();
+    }
+    
+    public void readBlocks() throws IOException {
+        
+        for (int i = 0; i < 8; i++) {
+            if (i == numberOfRecords) {
+                break;
+            }
+            readFile.read(heap.arr, blockLength * i, blockLength);
         }
     }
     
+    public void makeSmallHeap() {
+        byte[] eightHeap = new byte[16*8];
+        for (int i = 0; i < 8; i++) {
+            if (i == numberOfRecords) {
+                break;
+            }
+            System.arraycopy( heap.arr, blockLength * i, eightHeap, i, 16);
+        }
+        int numOfNodes = 8;
+        if (numberOfRecords < 8) {
+            numOfNodes = numberOfRecords;
+        }
+        minHeap smallHeap = new minHeap(eightHeap, numOfNodes, 8); 
+    }
     
+    private int numberOfRecords;
     private LinkedList<runNode> runLocations;
     private minHeap heap;
-    private RandomAccessFile outFile;
+    private RandomAccessFile readFile;
 
 }

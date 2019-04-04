@@ -10,24 +10,25 @@ import java.util.*;
  */
 public class minHeap {
 
-    private byte[] arr; // Pointer to the arr array
-    private final int size = 4096; // Maximum number of records in arr
+    public byte[] arr; // Pointer to the arr array
+    private int size; // Maximum number of records in arr
     private int n; // Number of records now in arr
 
     // Constructor supporting preloading of arr contents
-    minHeap(byte[] h, int num){ 
+    minHeap(byte[] h, int num, int largeness){ 
         arr = h;  
         n = num;  
+        size = largeness;
         buildHeap(); 
     }
 
 
     // Return current number of records in the arr
-    int heapSize() {
+    public int heapSize() {
         return n;
     }
     
-    int getLastPos() {
+    public int getLastPos() {
         return n*16 - 16;
     }
     
@@ -36,7 +37,7 @@ public class minHeap {
      * @param rec2
      * @return
      */
-    int compareRecords(byte[] rec1, byte[] rec2) {
+    public int compareRecords(byte[] rec1, byte[] rec2) {
         byte[] k1 = new byte[8];
         byte[] k2 = new byte[8];
         System.arraycopy( rec1, 8, k1, 0, 8);
