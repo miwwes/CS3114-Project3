@@ -70,7 +70,7 @@ public class replacementSelection {
                 // heap is empty 
                 
                 outFile.write(outputBuffer.array());
-                double end = outFile.getFilePointer();
+                long end = outFile.getFilePointer();
             }
         }
         catch (IOException e) {
