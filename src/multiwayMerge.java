@@ -77,7 +77,7 @@ public class multiwayMerge {
     public void merge(PriorityQueue<mergeNode> pq) throws IOException {
         long runStart = printFile.getFilePointer();
         // stop while loop when you cannot read any more from the file
-        while (heap.arr.length == 0) {
+        while (heap.arr.length > 0) {   //all 8 (or however many) runs are exhausted
             mergeNode minNode = pq.poll();
             outputBuffer.insert(minNode.getRecord());
             if ( outputBuffer.full() ) {
@@ -98,6 +98,7 @@ public class multiwayMerge {
         long end = printFile.getFilePointer();
         runNode n = new runNode(1, runStart, end);
         runs.push(n);
+        // check if there are still runs within 
     }
     
     /**
@@ -117,20 +118,38 @@ public class multiwayMerge {
      * @throws IOException
      */
     public void loadNextBlock(int block) throws IOException {
+        // need to check if you can load the next block
         // need to reset the curPos for the next block that is read in
         runNode node = runs.get(block);
         long runLength = node.getEndPos() - node.getStartPos();
-        if (runLength < blockLength) {
-            // (buffer to read), (position to start reading from), (length read)
-            readFile.read(heap.arr, (int)node.getStartPos(), (int)runLength);
+        if (runLength == 0) {
+            // need to remove that run from linked list
+            runs.remove(block);
         }
         else {
-            readFile.read(heap.arr, (int)node.getStartPos(), blockLength);
+            if (runLength < blockLength) {
+                // (buffer to read), (position to start reading from), (length read)
+                readFile.read(heap.arr, (int)node.getStartPos(), (int)runLength);
+            }
+            else {
+                readFile.read(heap.arr, (int)node.getStartPos(), blockLength);
+            }
         }
     }
     
     public void writeToNextFile(PriorityQueue<mergeNode> pq) {
         
+    }
+    
+    /**
+     * @param endFile
+     * @throws IOException
+     */
+    public void printToStandardOutput(RandomAccessFile endFile) throws IOException {
+        String line = null;
+        while ((line = endFile.readLine()) != null) {
+            System.out.println(line);
+        }
     }
     
     private PriorityQueue<mergeNode> pq;
