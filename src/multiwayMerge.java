@@ -51,6 +51,7 @@ public class multiwayMerge {
     public void makePriorityQueue() {
         PriorityQueue<mergeNode> pq = 
             new PriorityQueue<mergeNode>(8, new mergeNodeComparator());
+            
         for (int i = 0; i < 8; i++) {
             if (i == numberOfRecords) {
                 break;
@@ -59,6 +60,10 @@ public class multiwayMerge {
             System.arraycopy( heap.arr, blockLength * i, myNode, 0, 16);
             mergeNode mNode = new mergeNode(i, myNode);
             pq.add(mNode);
+        }
+        
+        while (heap.heapSize() > 0) {
+            //do stuff
         }
         mergeNode minNode = pq.poll();
         outputBuffer.insert(minNode.getRecord());
