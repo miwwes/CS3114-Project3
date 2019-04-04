@@ -46,10 +46,11 @@ public class Externalsort {
      * 
      * @param args
      *            input string array
+     * @throws IOException 
      * @throws FileNotFoundException
      * 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
             
         sortContainer extSort = new sortContainer(args[0]);
         
