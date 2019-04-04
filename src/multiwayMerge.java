@@ -96,14 +96,17 @@ public class multiwayMerge {
             }
             // need to change record in the minNode and increment its current Position
             int nextBlock = minNode.getBlockNumber();
+            boolean canLoadNode = true;
             if (minNode.getCurPos() == minNode.getEndPos()) {
-                loadNextBlock(nextBlock);
+                canLoadNode = loadNextBlock(nextBlock);
             }
             // get the current location of the record removed from working memory
             // and when you ad the next record into the priority queue make sure
             // that the index is incremented so that we read the next record
             // from the corresponding block
-            loadNextNode(nextBlock, minNode.getCurPos());
+            if (canLoadNode) {
+                loadNextNode(nextBlock, minNode.getCurPos());
+            }
         }
         // print whats left in the output buffer
         if (!outputBuffer.empty()) {
@@ -146,7 +149,7 @@ public class multiwayMerge {
      * @param block
      * @throws IOException
      */
-    public void loadNextBlock(int block) throws IOException {
+    public boolean loadNextBlock(int block) throws IOException {
         // need to check if you can load the next block
         // need to reset the curPos for the next block that is read in
         runNode node = runs.get(block);
@@ -154,6 +157,7 @@ public class multiwayMerge {
         if (runLength == 0) {
             // need to remove that run from linked list
             runs.remove(node);
+            return false;
         }
         else {
             if (runLength < blockLength) {
@@ -163,6 +167,7 @@ public class multiwayMerge {
             else {
                 readFile.read(heap.arr, (int)node.getStartPos(), blockLength);
             }
+            return true;
         }
     }
     
