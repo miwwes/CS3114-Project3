@@ -68,7 +68,7 @@ public class replacementSelection {
                         
                         long end = outFile.getFilePointer();
                         runNode n = new runNode(numRuns, runStart, end);
-                        runs.push(n);
+                        runs.add(n);
                         
                         numRuns++;
                         runStart = end;
