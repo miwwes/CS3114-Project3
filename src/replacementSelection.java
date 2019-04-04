@@ -18,7 +18,7 @@ import java.util.LinkedList;
 public class replacementSelection {
 
     /**
-     * @param raf
+     * @param c
      */
     replacementSelection(sortContainer c){
         runs = c.l;
@@ -44,15 +44,10 @@ public class replacementSelection {
      */
     public void execute() {
         try {
-            // load 8 blocks into the heap and build 
-            //byte[] heapArray = new byte[HEAP_SIZE];
-            //inFile.read(heapArray);
-            //recordHeap = new minHeap(heapArray, MAX_REC_HEAP, MAX_REC_HEAP);
-            //recordHeap.buildHeap();
             
             // initialize helper variables
             long runStart = outFile.getFilePointer();
-            int numRuns = 1;
+            int numRuns = 0;
             int addCount = 0;
         
             while ( canRead() ) { 
@@ -68,7 +63,7 @@ public class replacementSelection {
                         
                         long end = outFile.getFilePointer();
                         runNode n = new runNode(numRuns, runStart, end);
-                        runs.add(n);
+                        runs.addLast(n);
                         
                         numRuns++;
                         runStart = end;
