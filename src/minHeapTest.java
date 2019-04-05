@@ -44,7 +44,7 @@ class minHeapTest {
         System.arraycopy( byteArr2, 0, record, 16, 16);
         
         minHeap myHeap = new minHeap(record, 2, 4096);
-        double val = toNumber(myHeap.getMin());
+        double val = toNumber(myHeap.getRecord(0));
         assert(val == 5);
     }
     
@@ -235,41 +235,32 @@ class minHeapTest {
         System.arraycopy( b4, 0, record, 48, 16);
         System.arraycopy( b5, 0, record, 64, 16);
         minHeap myHeap = new minHeap(record, 5, 4096);
-        assert(Arrays.equals(myHeap.getRecord(0), toByteArray(15, 2)));
         byte[] b6 = toByteArray(143, 41);
         myHeap.insert(b6);
         byte[] b7 = toByteArray(144, 1);
         myHeap.insert(b7);
         assert(Arrays.equals(myHeap.getRecord(0), toByteArray(144, 1)));
+        myHeap.removemin();
+        assert(Arrays.equals(myHeap.getRecord(0), toByteArray(15, 2)));
+        
     }
 
 
     /**
      * Test method for {@link minHeap#getMin()}.
      */
-    @Test
-    void testGetMin() {
-        fail("Not yet implemented");
-    }
+    //@Test
+    //void testGetMin() {
+    //    fail("Not yet implemented");
+    //}
 
 
     /**
      * Test method for {@link minHeap#modify(int, byte[])}.
      */
-    @Test
-    void testModify() {
-        fail("Not yet implemented");
-    }
-
-
-    /**
-     * Test method for {@link minHeap#update(int)}.
-     */
-    @Test
-    void testUpdate() {
-        fail("Not yet implemented");
-    }
-
-    
+    //@Test
+    //void testModify() {
+    //    fail("Not yet implemented");
+    //}    
 
 }

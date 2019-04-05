@@ -225,13 +225,13 @@ public class minHeap {
         return Arrays.copyOfRange(arr, n, n + 16);
     }
     
-    // return maximum value
+    // return minimum value
     /**
      * @return
      */
-    public byte[] getMin() {
-        return Arrays.copyOfRange(arr, 0, 16);
-    }
+    //public byte[] getMin() {
+    //    return Arrays.copyOfRange(arr, 0, 16);
+    //}
 
 
     // Modify the value at the given position
