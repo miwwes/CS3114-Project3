@@ -72,10 +72,14 @@ public class buffer {
      * @return the record at readPos
      */
     public byte[] read() {
-        if (readPos >= pos)
+        if (readPos >= BUFFER_SIZE)
             return null;
         readPos += 16;
         return Arrays.copyOfRange(byteArray, readPos - 16, readPos);
+    }
+    
+    public boolean doneReading() {
+        return readPos == BUFFER_SIZE;
     }
     
     /**

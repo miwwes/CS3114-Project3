@@ -57,7 +57,7 @@ public class replacementSelection {
                 inBuffer.update();
                 
                 
-                while( !inBuffer.empty() ) {
+                while( !inBuffer.doneReading() ) {
                 
                     if( recordHeap.empty() ) {
                         outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
@@ -65,7 +65,7 @@ public class replacementSelection {
                         
                         long end = outFile.getFilePointer();
                         runNode n = new runNode(numRuns, runStart, end);
-                        runs.addLast(n);
+                        runs.add(n);
                         
                         numRuns++;
                         runStart = end;
@@ -83,10 +83,10 @@ public class replacementSelection {
                     byte[] buf = inBuffer.read();
                     //breaks here
                     if (comparerecordHeap(buf, minVal) > 0 ) {
-                        recordHeap.modify(0, inBuffer.remove());
+                        recordHeap.modify(0, buf);
                     }
                     else {
-                        recordHeap.removemin(inBuffer.remove());
+                        recordHeap.removemin(buf);
                         addCount++;
                     } 
                 
@@ -112,7 +112,7 @@ public class replacementSelection {
             
             long end = outFile.getFilePointer();
             runNode n = new runNode(numRuns, runStart, end);
-            runs.push(n);
+            runs.add(n);
             
             numRuns++;
             runStart = end;
@@ -130,7 +130,7 @@ public class replacementSelection {
             outBuffer.clear();
             end = outFile.getFilePointer();
             runNode n2 = new runNode(numRuns, runStart, end);
-            runs.push(n2);
+            runs.add(n2);
         }
         catch (IOException e) {
             System.err.println("IO error: " + e);
