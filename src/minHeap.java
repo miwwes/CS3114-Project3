@@ -31,6 +31,11 @@ public class minHeap {
         buildHeap(); 
     }
 
+    
+    // Return current number of records in the arr
+    public byte[] getRecord(int pos) {
+        return Arrays.copyOfRange(arr, pos, pos + 16);
+    }
 
     // Return current number of records in the arr
     public int heapSize() {
@@ -46,7 +51,7 @@ public class minHeap {
      * @param rec2
      * @return
      */
-    int compareRecords(byte[] rec1, byte[] rec2) {
+    public int compareRecords(byte[] rec1, byte[] rec2) {
         ByteBuffer buffer1 = ByteBuffer.wrap(Arrays.copyOfRange(rec1, 8, 16));
         Double rec1Double = buffer1.getDouble();
         ByteBuffer buffer2 = ByteBuffer.wrap(Arrays.copyOfRange(rec2, 8, 16));
@@ -60,7 +65,7 @@ public class minHeap {
      * @param pos
      * @return
      */
-    boolean isLeaf(int pos) {
+    public boolean isLeaf(int pos) {
         return ((pos/16) >= n / 2) && ((pos/16) < n);
     }
     
@@ -77,7 +82,7 @@ public class minHeap {
      * @param pos
      * @return
      */
-    int leftchild(int pos) {
+    public int leftchild(int pos) {
         if ((pos/16) >= n / 2)
             return -1;
         return (2 * pos) + 16;
@@ -89,7 +94,7 @@ public class minHeap {
      * @param pos
      * @return
      */
-    int rightchild(int pos) {
+    public int rightchild(int pos) {
         if ((pos/16) >= (n - 1) / 2)
             return -1;
         return (2 * pos) + 32;
@@ -101,7 +106,7 @@ public class minHeap {
      * @param pos
      * @return
      */
-    int parent(int pos) {
+    public int parent(int pos) {
         if ((pos/16) <= 0)
             return -1;
         return (pos - 16) / 2;
@@ -112,7 +117,7 @@ public class minHeap {
     /**
      * @param key
      */
-    void insert(byte[] key) {
+    public void insert(byte[] key) {
         if (n*16 >= size) {
             System.out.println("Heap is full");
             return;
@@ -154,7 +159,7 @@ public class minHeap {
     /**
      * 
      */
-    void buildHeap() {
+    public void buildHeap() {
         for (int i = n / 2 - 1; i >= 0; i--)
             siftdown(i * 16);
     }
@@ -162,7 +167,7 @@ public class minHeap {
     /**
      * parameterized
      */
-    void buildHeap(int size) {
+    public void buildHeap(int size) {
         n = size;
         for (int i = n / 2 - 1; i >= 0; i--)
             siftdown(i * 16);
@@ -173,7 +178,7 @@ public class minHeap {
     /**
      * @param pos
      */
-    void siftdown(int pos) {
+    private void siftdown(int pos) {
         if ((pos < 0) || ((pos/16) >= n))
             return; // Illegal position
         while (!isLeaf(pos)) {
@@ -199,7 +204,7 @@ public class minHeap {
     /**
      * @return
      */
-    byte[] removemin() {
+    public byte[] removemin() {
         if (n == 0)
             return null; // Removing from empty arr
         swap(0, (--n) * 16); // Swap maximum with last value
@@ -208,7 +213,7 @@ public class minHeap {
         return Arrays.copyOfRange(arr, n, n + 16);
     }
     
-    byte[] removemin(byte[] b) {
+    public byte[] removemin(byte[] b) {
         if (n == 0) {
             return null; // Removing from empty arr
         }
@@ -245,7 +250,7 @@ public class minHeap {
     /**
      * @param pos
      */
-    void update(int pos) {
+    private void update(int pos) {
       // If it is a big value, push it up
       while ((pos > 0) && (compareRecords(
                       Arrays.copyOfRange(arr, pos, pos + 16), 
