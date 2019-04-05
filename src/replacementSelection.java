@@ -78,7 +78,7 @@ public class replacementSelection {
                         outBuffer.clear();
                     }
                     
-                    byte[] minVal = recordHeap.getMin();
+                    byte[] minVal = recordHeap.getRecord(0);    //get the minimum
                     outBuffer.insert(minVal);
                     byte[] buf = inBuffer.read();
                     //breaks here
