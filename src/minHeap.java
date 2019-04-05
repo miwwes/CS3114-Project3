@@ -214,8 +214,8 @@ public class minHeap {
         swap(0, (--n) * 16); // Swap maximum with last value
         if (n != 0) // Not on last element
             siftdown(0); // Put new arr root val in correct place
-        System.arraycopy(b, 0, arr, n, n+16);
-        return Arrays.copyOfRange(arr, n, n + 16);
+        System.arraycopy(b, 0, arr, n, 16);
+        return Arrays.copyOfRange(arr, n, n+16);
     }
     
     // return maximum value
