@@ -37,6 +37,10 @@ class mergeNode {
         return record;
     }
     
+    public double key() {
+        return key;
+    }
+    
     public int getCurPos() {
         return curPos;
     }

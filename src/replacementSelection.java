@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -75,11 +76,14 @@ public class replacementSelection {
                     }
                     else if ( outBuffer.full() ) {
                         outFile.write(outBuffer.array());
+                        FileOutputStream out = new FileOutputStream("f.bin");
+                        out.write(outBuffer.array());
                         outBuffer.clear();
                     }
                     
                     byte[] minVal = recordHeap.getRecord(0);    //get the minimum
                     outBuffer.insert(minVal);
+                    System.out.println(Arrays.toString(outBuffer.array()));
                     byte[] buf = inBuffer.read();
                     //breaks here
                     if (comparerecordHeap(buf, minVal) > 0 ) {

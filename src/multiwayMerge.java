@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.util.*;
 
 /**
@@ -38,9 +39,11 @@ public class multiwayMerge {
         this.printFile = c.in;
         this.numberOfRuns = runs.size();
         this.outputBuffer = c.ob;
+        this.heapLength = 0;
     }
     
     public void execute() throws IOException {
+        
         if (numberOfRuns == 1) {
             printToStandardOutput(readFile);
         }
@@ -86,9 +89,11 @@ public class multiwayMerge {
      * @throws IOException
      */
     public void merge(PriorityQueue<mergeNode> pq) throws IOException {
+        printFile.seek(0);
         long runStart = printFile.getFilePointer();
         // stop while loop when you cannot read any more from the file
-        while (heap.arr.length > 0) {   //all 8 (or however many) runs are exhausted
+        while (heapLength > 0) {   //all 8 (or however many) runs are exhausted
+            System.out.println(pq.peek().key());
             mergeNode minNode = pq.poll();
             outputBuffer.insert(minNode.getRecord());
             if (outputBuffer.full()) {
@@ -97,6 +102,9 @@ public class multiwayMerge {
             }
             // need to change record in the minNode and increment its current Position
             int nextBlock = minNode.getBlockNumber();
+            if (nextBlock == 1) {
+                System.out.println("1");
+            }
             boolean canLoadNode = true;
             if (minNode.getCurPos() == minNode.getEndPos()) {
                 canLoadNode = loadNextBlock(nextBlock);
@@ -134,6 +142,7 @@ public class multiwayMerge {
             printToStandardOutput(printFile);
         }
         else {
+            heapLength = 0;
             //switch input and output
             RandomAccessFile temp = readFile;
             readFile = printFile;
@@ -150,9 +159,36 @@ public class multiwayMerge {
     public void loadNextNode(int block, int cur) throws IOException {
         // need to remove that record from the heap
         byte[] myRecord = new byte[16];
-        System.arraycopy( heap.arr, blockLength * block, myRecord, 0, 16);
+        byte[] myRecordt = new byte[16];
+        int nextNodeLocation = (blockLength * block) + (cur);
+        int c = (blockLength * block) + (cur * 10);
+        System.arraycopy(heap.arr, c, myRecord, 0, 16);        
+        
+        //toNumber(myRecord);
+        System.arraycopy(heap.arr, nextNodeLocation, myRecord, 0, 16);
+        String v = Arrays.toString(Arrays.copyOfRange(heap.arr, 0, 16));
+        System.out.println(v);
+        System.arraycopy(heap.arr, nextNodeLocation + 16, myRecordt, 0, 16);
+        String d = Arrays.toString(Arrays.copyOfRange(heap.arr, 16, 32));
+        System.out.println(d);
+        //System.out.println("loc: " + nextNodeLocation);
+        //toNumber(myRecord);
+        //toNumber(myRecordt);
+        heapLength -= 16;
         mergeNode mNode = new mergeNode(block, myRecord, cur + recordLength);
         pq.add(mNode);
+    }
+    
+    private double toNumber(byte[] bytes) {
+        byte[] idBytes = Arrays.copyOfRange(bytes, 0, 8);
+        System.out.println("id bytes" + idBytes);
+        byte[] keyBytes = Arrays.copyOfRange(bytes, 8, 16);
+        System.out.println("key bytes" + keyBytes);
+        long id = ByteBuffer.wrap(idBytes).getLong();
+        double key = ByteBuffer.wrap(keyBytes).getDouble();
+        System.out.println("id: " + id);
+        System.out.println("key: " + key);
+        return key;
     }
     
     /**
@@ -171,11 +207,13 @@ public class multiwayMerge {
         }
         else {
             if (runLength < blockLength) {
+                heapLength += runLength;
                 // (buffer to read), (position to start reading from), (length read)
                 readFile.seek(node.getStartPos());
                 readFile.read(heap.arr, blockLength*block, (int)runLength);
             }
             else {
+                heapLength += blockLength;
                 //long fp = readFile.getFilePointer();
                 readFile.seek(node.getStartPos());
                 readFile.read(heap.arr, blockLength*block, blockLength);
@@ -199,6 +237,7 @@ public class multiwayMerge {
         }
     }
     
+    private int heapLength;
     private PriorityQueue<mergeNode> pq;
     private int numberOfRuns;
     private LinkedList<runNode> runs;
