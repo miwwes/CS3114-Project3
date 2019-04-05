@@ -143,6 +143,9 @@ public class replacementSelection {
      * @return
      */
     int comparerecordHeap(byte[] rec1, byte[] rec2) {
+        if (rec1 == null) {
+            System.out.println("ger");
+        }
         ByteBuffer buffer1 = ByteBuffer.wrap(Arrays.copyOfRange(rec1, 8, 16));
         Double rec1Double = buffer1.getDouble();
         ByteBuffer buffer2 = ByteBuffer.wrap(Arrays.copyOfRange(rec2, 8, 16));
