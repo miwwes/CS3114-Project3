@@ -209,12 +209,14 @@ public class minHeap {
     }
     
     byte[] removemin(byte[] b) {
-        if (n == 0)
+        if (n == 0) {
             return null; // Removing from empty arr
+        }
         swap(0, (--n) * 16); // Swap maximum with last value
-        if (n != 0) // Not on last element
+        if (n != 0) {// Not on last element
             siftdown(0); // Put new arr root val in correct place
-        System.arraycopy(b, 0, arr, n, n+16);
+        }
+        System.arraycopy(b, 0, arr, n, 16);
         return Arrays.copyOfRange(arr, n, n + 16);
     }
     
@@ -245,8 +247,6 @@ public class minHeap {
      */
     void update(int pos) {
       // If it is a big value, push it up
-      int val = arr.length;
-      int l = parent(pos);
       while ((pos > 0) && (compareRecords(
                       Arrays.copyOfRange(arr, pos, pos + 16), 
                       Arrays.copyOfRange(arr, parent(pos), parent(pos) + 16)) < 0)) {
