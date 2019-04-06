@@ -38,9 +38,9 @@ public class buffer {
     /**
      * used when new data is written into the array
      */
-    public void update() {
-        size = byteArray.length/16;
-        pos = byteArray.length;
+    public void update(int amount) {
+        size = amount/16;
+        pos = amount;
         readPos = 0;
     }
     
@@ -94,6 +94,10 @@ public class buffer {
      */
     public boolean empty() {
         return size == 0;
+    }
+    
+    public int pos() {
+        return pos;
     }
     
     /**

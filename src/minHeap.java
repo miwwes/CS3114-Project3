@@ -149,7 +149,7 @@ public class minHeap {
      */
     public void buildHeap(int size) {
         n = size;
-        for (int i = (n / 2 - 1)*16; i >= 0; i-=16)
+        for (int i = (n / 2 - 1)*16; i >= 0; i -= 16)
             siftdown(i);
     }
 
@@ -165,23 +165,15 @@ public class minHeap {
             int j = leftchild(pos);
             //if (rightchild(pos) != -1) {
             byte a[] = Arrays.copyOfRange(arr, j, j + 16);
-            //System.out.println("a and b:");
-            //toNumber(a);
             byte b[] = Arrays.copyOfRange(arr, j + 16, j + 32);
-            //toNumber(b);
             
             if (((j/16) < (n - 1)) && (compareRecords(a, b) >= 0)) {
                 j += 16; // j is now index of child with lesser value
             }
-            //System.out.println();
-            //System.out.println("not a and b:");
             byte c[] = Arrays.copyOfRange(arr, pos, pos + 16);
             byte d[] = Arrays.copyOfRange(arr, j, j + 16);
-            //toNumber(c);
-            //toNumber(d);
-            if (compareRecords(c, d) < 0)
+            if (compareRecords(c, d) <= 0)
                 return;
-            
             swap(j, pos);
             pos = j; // Move down
             
