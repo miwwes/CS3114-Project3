@@ -135,26 +135,6 @@ public class minHeap {
     }
 
 
-    /**
-     * @param arr2
-     * @param curr
-     * @param parent
-     */
-    private void swap(int curr, int parent) {
-        byte[] temp = Arrays.copyOfRange(arr, curr, curr + 16);
-        int i = curr;
-        int j = parent;
-        for (; i < curr + 16; i++, j++) {
-            arr[i] = arr[j];
-        }
-        i = 0;
-        j = parent; //reset parent value
-        for (; j < parent + 16; j++, i++) {
-            arr[j] = temp[i];
-        }  
-    }
-
-
     // Heapify contents of heap
     /**
      * 
@@ -194,9 +174,28 @@ public class minHeap {
             byte d[] = Arrays.copyOfRange(arr, j, j + 16);
             if (compareRecords(c, d) < 0)
                 return;
-            swap(pos, j);
+            swap(j, pos);
             pos = j; // Move down
         }
+    }
+    
+    /**
+     * @param arr2
+     * @param curr
+     * @param parent
+     */
+    private void swap(int pos1, int pos2) {
+        byte[] temp = Arrays.copyOfRange(arr, pos1, pos1 + 16);
+        int i = pos1;
+        int j = pos2;
+        for (; i < pos1 + 16; i++, j++) {
+            arr[i] = arr[j];
+        }
+        i = 0;
+        j = pos2; //reset parent value
+        for (; j < pos2 + 16; j++, i++) {
+            arr[j] = temp[i];
+        }  
     }
 
 

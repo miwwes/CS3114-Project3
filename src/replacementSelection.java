@@ -20,8 +20,9 @@ public class replacementSelection {
 
     /**
      * @param c
+     * @throws IOException 
      */
-    replacementSelection(sortContainer c){
+    replacementSelection(sortContainer c) throws IOException{
         runs = c.l;
         recordHeap = c.h;
         inFile = c.in;
@@ -89,10 +90,24 @@ public class replacementSelection {
                     
                     byte[] minVal = recordHeap.getRecord(0);    //get the minimum
                     outBuffer.insert(minVal);
-                    System.out.println(Arrays.toString(outBuffer.array()));
+                    //System.out.println(Arrays.toString(outBuffer.array()));
                     byte[] buf = inBuffer.read();
                     //breaks here
                     if (comparerecordHeap(buf, minVal) > 0 ) {
+                        
+                        byte[] idBytes = Arrays.copyOfRange(buf, 0, 8);
+                        byte[] keyBytes = Arrays.copyOfRange(buf, 8, 16);
+                        long id = ByteBuffer.wrap(idBytes).getLong();
+                        double key = ByteBuffer.wrap(keyBytes).getDouble();
+                        System.out.println("id1: " + id);
+                        System.out.println("key1: " + key);
+                        byte[] idB = Arrays.copyOfRange(minVal, 0, 8);
+                        byte[] keyB = Arrays.copyOfRange(minVal, 8, 16);
+                        long i = ByteBuffer.wrap(idB).getLong();
+                        double k = ByteBuffer.wrap(keyB).getDouble();
+                        System.out.println("id2: " + i);
+                        System.out.println("key2: " + k);
+                        
                         recordHeap.modify(0, buf);
                     }
                     else {
@@ -118,7 +133,10 @@ public class replacementSelection {
                     outBuffer.clear();
                     
                 }
-                outBuffer.insert(recordHeap.removemin());
+                byte[] rm = new byte[16];
+                rm = recordHeap.removemin();
+                toNumber(rm);
+                outBuffer.insert(rm);
             }
             
             outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
@@ -153,6 +171,16 @@ public class replacementSelection {
         catch (IOException e) {
             System.err.println("IO error: " + e);
         }
+    }
+    
+    private double toNumber(byte[] bytes) {
+        byte[] idBytes = Arrays.copyOfRange(bytes, 0, 8);
+        byte[] keyBytes = Arrays.copyOfRange(bytes, 8, 16);
+        long id = ByteBuffer.wrap(idBytes).getLong();
+        double key = ByteBuffer.wrap(keyBytes).getDouble();
+        System.out.println("id: " + id);
+        System.out.println("key: " + key);
+        return key;
     }
     
     /**
@@ -198,6 +226,7 @@ public class replacementSelection {
      * 
      */
     private RandomAccessFile inFile;
+    private RandomAccessFile wow;
     /**
      * 
      */

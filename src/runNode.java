@@ -51,10 +51,10 @@ public class runNode {
     }
     
     /**
-     * @param cur
+     * @param l
      */
-    public void setCurPos(int cur) {
-        curPos = cur;
+    public void setCurPos(long l) {
+        curPos = l;
     }
     
     /**

@@ -23,6 +23,7 @@ public class sortContainer {
         l = new LinkedList<runNode>();
         try {
             in = new RandomAccessFile(s, "rw");
+            long val = in.getFilePointer();
             runs = new RandomAccessFile("runfile.bin", "rw");
             
             byte[] heapArray = new byte[HEAP_SIZE];
