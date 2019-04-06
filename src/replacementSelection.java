@@ -95,7 +95,7 @@ public class replacementSelection {
                     //breaks here
                     if (comparerecordHeap(buf, minVal) > 0 ) {
                         
-                        byte[] idBytes = Arrays.copyOfRange(buf, 0, 8);
+                        /**byte[] idBytes = Arrays.copyOfRange(buf, 0, 8);
                         byte[] keyBytes = Arrays.copyOfRange(buf, 8, 16);
                         long id = ByteBuffer.wrap(idBytes).getLong();
                         double key = ByteBuffer.wrap(keyBytes).getDouble();
@@ -106,7 +106,7 @@ public class replacementSelection {
                         long i = ByteBuffer.wrap(idB).getLong();
                         double k = ByteBuffer.wrap(keyB).getDouble();
                         System.out.println("id2: " + i);
-                        System.out.println("key2: " + k);
+                        System.out.println("key2: " + k);**/
                         
                         recordHeap.modify(0, buf);
                     }
@@ -133,10 +133,10 @@ public class replacementSelection {
                     outBuffer.clear();
                     
                 }
-                byte[] rm = new byte[16];
-                rm = recordHeap.removemin();
-                toNumber(rm);
-                outBuffer.insert(rm);
+                //byte[] rm = new byte[16];
+                //rm = recordHeap.removemin();
+                //toNumber(rm);
+                outBuffer.insert(recordHeap.removemin());
             }
             
             outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
