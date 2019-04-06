@@ -150,7 +150,7 @@ public class replacementSelection {
             outBuffer.clear();
             end = outFile.getFilePointer();
             runNode n2 = new runNode(numRuns, runStart, end);
-            runs.add(n2);
+            runs.add(n2);            
         }
         catch (IOException e) {
             System.err.println("IO error: " + e);
