@@ -91,9 +91,7 @@ public class multiwayMerge {
     public void merge(PriorityQueue<mergeNode> pq) throws IOException {
         printFile.seek(0);
         long runStart = printFile.getFilePointer();
-        // stop while loop when you cannot read any more from the file
         while (heapLength > 0) {   //all 8 (or however many) runs are exhausted
-            System.out.println(pq.peek().key());
             mergeNode minNode = pq.poll();
             outputBuffer.insert(minNode.getRecord());
             if (outputBuffer.full()) {
@@ -153,70 +151,46 @@ public class multiwayMerge {
     }
     
     /**
-     * @param block
+     * @param runNum
      * @throws IOException
      */
-    public void loadNextNode(int block, int cur) throws IOException {
+    //merge nodes correspond to each run that has a block in working memory
+    public void loadNextNode(int runNum, int cur) throws IOException {
         // need to remove that record from the heap
         byte[] myRecord = new byte[16];
-        byte[] myRecordt = new byte[16];
-        int nextNodeLocation = (blockLength * block) + (cur);
-        int c = (blockLength * block) + (cur * 10);
-        System.arraycopy(heap.arr, c, myRecord, 0, 16);        
-        
-        toNumber(myRecord);
+        int nextNodeLocation = (blockLength * runNum) + (cur);
         System.arraycopy(heap.arr, nextNodeLocation, myRecord, 0, 16);
-        String v = Arrays.toString(Arrays.copyOfRange(heap.arr, 0, 16));
-        System.out.println(v);
-        System.arraycopy(heap.arr, nextNodeLocation + 16, myRecordt, 0, 16);
-        String d = Arrays.toString(Arrays.copyOfRange(heap.arr, 16, 32));
-        System.out.println(d);
-        //System.out.println("loc: " + nextNodeLocation);
-        toNumber(myRecord);
-        toNumber(myRecordt);
         heapLength -= 16;
-        mergeNode mNode = new mergeNode(block, myRecord, cur + recordLength);
+        mergeNode mNode = new mergeNode(runNum, myRecord, cur + recordLength);
         pq.add(mNode);
     }
     
-    private double toNumber(byte[] bytes) {
-        byte[] idBytes = Arrays.copyOfRange(bytes, 0, 8);
-        System.out.println("id bytes" + idBytes);
-        byte[] keyBytes = Arrays.copyOfRange(bytes, 8, 16);
-        System.out.println("key bytes" + keyBytes);
-        long id = ByteBuffer.wrap(idBytes).getLong();
-        double key = ByteBuffer.wrap(keyBytes).getDouble();
-        System.out.println("id: " + id);
-        System.out.println("key: " + key);
-        return key;
-    }
-    
     /**
-     * @param block
+     * @param runNum
      * @throws IOException
      */
-    public boolean loadNextBlock(int block) throws IOException {
-        // need to check if you can load the next block
-        // need to reset the curPos for the next block that is read in
-        runNode node = runs.get(block);
+    // need to check if you can load the next block
+    // need to reset the curPos for the next block that is read in
+    public boolean loadNextBlock(int runNum) throws IOException {
+        runNode node = runs.get(runNum);    //getting data from disk
         long runLength = node.getEndPos() - node.getStartPos();
         if (runLength == 0) {
-            // need to remove that run from linked list
-            runs.remove(node);
+            runs.remove(node);// need to remove that run from linked list
             return false;
         }
         else {
             if (runLength < blockLength) {
                 heapLength += runLength;
                 // (buffer to read), (position to start reading from), (length read)
-                readFile.seek(node.getStartPos());
-                readFile.read(heap.arr, (int)(blockLength*runLength), (int)runLength);
+                readFile.seek(node.getCurPos());
+                readFile.read(heap.arr, (int)(blockLength*runNum), (int)runLength);
+                node.setCurPos(readFile.getFilePointer());
             }
             else {
                 heapLength += blockLength;
-                //long fp = readFile.getFilePointer();
-                readFile.seek(node.getStartPos());
-                readFile.read(heap.arr, blockLength*block, blockLength);
+                readFile.seek(node.getCurPos());
+                readFile.read(heap.arr, blockLength*runNum, blockLength);
+                node.setCurPos(readFile.getFilePointer());
             }
             return true;
         }

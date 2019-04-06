@@ -51,7 +51,6 @@ public class Externalsort {
      */
     public static void main(String[] args) throws IOException {
         
-        
         sortContainer extSort = new sortContainer(args[0]);
         
         replacementSelection rSel = new replacementSelection(extSort);
