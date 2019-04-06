@@ -30,7 +30,8 @@ public class replacementSelection {
         inBuffer = c.ib;
         outBuffer = c.ob;
         try {
-            out = new FileOutputStream("afterRepSel.bin");
+            //out = new FileOutputStream("afterRepSel.bin");
+            out = new FileOutputStream("afterc.bin");
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -135,8 +136,8 @@ public class replacementSelection {
                 }
                 byte[] b = new byte[16];
                 b = recordHeap.removemin();
-                System.out.println("HERE");
-                toNumber(b);
+                //System.out.println("HERE");
+                //toNumber(b);
                 outBuffer.insert(b);
             }
             
