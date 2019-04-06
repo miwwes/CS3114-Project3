@@ -61,15 +61,17 @@ public class replacementSelection {
         
             while ( canRead() ) { 
                 inBuffer.clear();
+                long before = inFile.getFilePointer();
                 inFile.read(inBuffer.array());
-                inBuffer.update();
+                long after = inFile.getFilePointer();
+                inBuffer.update((int)(after - before));
                 
                 
                 while( !inBuffer.doneReading() ) {
                 
                     if( recordHeap.empty() ) {
-                        outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
-                        out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+                        outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                        out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                         outBuffer.clear();
                         
                         long end = outFile.getFilePointer();
@@ -90,24 +92,8 @@ public class replacementSelection {
                     
                     byte[] minVal = recordHeap.getRecord(0);    //get the minimum
                     outBuffer.insert(minVal);
-                    //System.out.println(Arrays.toString(outBuffer.array()));
                     byte[] buf = inBuffer.read();
-                    //breaks here
                     if (comparerecordHeap(buf, minVal) > 0 ) {
-                        
-                        /**byte[] idBytes = Arrays.copyOfRange(buf, 0, 8);
-                        byte[] keyBytes = Arrays.copyOfRange(buf, 8, 16);
-                        long id = ByteBuffer.wrap(idBytes).getLong();
-                        double key = ByteBuffer.wrap(keyBytes).getDouble();
-                        System.out.println("id1: " + id);
-                        System.out.println("key1: " + key);
-                        byte[] idB = Arrays.copyOfRange(minVal, 0, 8);
-                        byte[] keyB = Arrays.copyOfRange(minVal, 8, 16);
-                        long i = ByteBuffer.wrap(idB).getLong();
-                        double k = ByteBuffer.wrap(keyB).getDouble();
-                        System.out.println("id2: " + i);
-                        System.out.println("key2: " + k);**/
-                        
                         recordHeap.modify(0, buf);
                     }
                     else {
@@ -120,9 +106,9 @@ public class replacementSelection {
             } // inFile is empty
             // could still be stuff in the heap and outBuffer
             if( !outBuffer.empty() ) {
-                outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+                outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 
-                out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+                out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
@@ -133,15 +119,11 @@ public class replacementSelection {
                     outBuffer.clear();
                     
                 }
-                byte[] b = new byte[16];
-                b = recordHeap.removemin();
-                System.out.println("HERE");
-                toNumber(b);
-                outBuffer.insert(b);
+                outBuffer.insert(recordHeap.removemin());
             }
             
-            outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
-            out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+            outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+            out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
             outBuffer.clear();
             
             long end = outFile.getFilePointer();
@@ -162,8 +144,8 @@ public class replacementSelection {
                 outBuffer.insert(recordHeap.removemin());
             }
             
-            outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
-            out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+            outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+            out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
             outBuffer.clear();
             end = outFile.getFilePointer();
             runNode n2 = new runNode(numRuns, runStart, end);
