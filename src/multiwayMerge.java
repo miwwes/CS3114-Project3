@@ -164,7 +164,7 @@ public class multiwayMerge {
         int c = (blockLength * block) + (cur * 10);
         System.arraycopy(heap.arr, c, myRecord, 0, 16);        
         
-        //toNumber(myRecord);
+        toNumber(myRecord);
         System.arraycopy(heap.arr, nextNodeLocation, myRecord, 0, 16);
         String v = Arrays.toString(Arrays.copyOfRange(heap.arr, 0, 16));
         System.out.println(v);
@@ -172,8 +172,8 @@ public class multiwayMerge {
         String d = Arrays.toString(Arrays.copyOfRange(heap.arr, 16, 32));
         System.out.println(d);
         //System.out.println("loc: " + nextNodeLocation);
-        //toNumber(myRecord);
-        //toNumber(myRecordt);
+        toNumber(myRecord);
+        toNumber(myRecordt);
         heapLength -= 16;
         mergeNode mNode = new mergeNode(block, myRecord, cur + recordLength);
         pq.add(mNode);
@@ -210,7 +210,7 @@ public class multiwayMerge {
                 heapLength += runLength;
                 // (buffer to read), (position to start reading from), (length read)
                 readFile.seek(node.getStartPos());
-                readFile.read(heap.arr, blockLength*block, (int)runLength);
+                readFile.read(heap.arr, (int)(blockLength*runLength), (int)runLength);
             }
             else {
                 heapLength += blockLength;

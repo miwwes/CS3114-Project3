@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -28,6 +29,13 @@ public class replacementSelection {
         outFile = c.runs;
         inBuffer = c.ib;
         outBuffer = c.ob;
+        try {
+            wow = new RandomAccessFile("bb.bin", "rw");
+        }
+        catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
    
     public boolean canRead() {
@@ -62,6 +70,7 @@ public class replacementSelection {
                 
                     if( recordHeap.empty() ) {
                         outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+                        wow.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
                         outBuffer.clear();
                         
                         long end = outFile.getFilePointer();
@@ -76,14 +85,15 @@ public class replacementSelection {
                     }
                     else if ( outBuffer.full() ) {
                         outFile.write(outBuffer.array());
-                        FileOutputStream out = new FileOutputStream("f.bin");
-                        out.write(outBuffer.array());
+                        wow.write(outBuffer.array());
+                        //FileOutputStream out = new FileOutputStream("f.bin");
+                        //out.write(outBuffer.array());
                         outBuffer.clear();
                     }
                     
                     byte[] minVal = recordHeap.getRecord(0);    //get the minimum
                     outBuffer.insert(minVal);
-                    System.out.println(Arrays.toString(outBuffer.array()));
+                    //System.out.println(Arrays.toString(outBuffer.array()));
                     byte[] buf = inBuffer.read();
                     //breaks here
                     if (comparerecordHeap(buf, minVal) > 0 ) {
@@ -100,18 +110,21 @@ public class replacementSelection {
             // could still be stuff in the heap and outBuffer
             if( !outBuffer.empty() ) {
                 outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+                wow.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
                 outBuffer.clear();
             }
             
             while( !recordHeap.empty() ) {
                 if ( outBuffer.full() ) {
                     outFile.write(outBuffer.array());
+                    wow.write(outBuffer.array());
                     outBuffer.clear();
                 }
                 outBuffer.insert(recordHeap.removemin());
             }
             
             outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+            wow.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
             outBuffer.clear();
             
             long end = outFile.getFilePointer();
@@ -125,12 +138,14 @@ public class replacementSelection {
             while( !recordHeap.empty() ) {
                 if ( outBuffer.full() ) {
                     outFile.write(outBuffer.array());
+                    wow.write(outBuffer.array());
                     outBuffer.clear();
                 }
                 outBuffer.insert(recordHeap.removemin());
             }
             
             outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
+            wow.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
             outBuffer.clear();
             end = outFile.getFilePointer();
             runNode n2 = new runNode(numRuns, runStart, end);
@@ -184,6 +199,7 @@ public class replacementSelection {
      * 
      */
     private RandomAccessFile inFile;
+    private RandomAccessFile wow;
     /**
      * 
      */
