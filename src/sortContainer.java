@@ -1,6 +1,8 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -17,19 +19,31 @@ import java.util.LinkedList;
  */
 public class sortContainer {
     
+    private double toNumber(byte[] bytes) {
+        byte[] idBytes = Arrays.copyOfRange(bytes, 0, 8);
+        byte[] keyBytes = Arrays.copyOfRange(bytes, 8, 16);
+        long id = ByteBuffer.wrap(idBytes).getLong();
+        double key = ByteBuffer.wrap(keyBytes).getDouble();
+        System.out.println("id: " + id);
+        System.out.println("key: " + key);
+        return key;
+    }
+    
     sortContainer(String s){
         ib = new buffer();
         ob = new buffer();
         l = new LinkedList<runNode>();
         try {
             in = new RandomAccessFile(s, "rw");
-            long val = in.getFilePointer();
             runs = new RandomAccessFile("runfile.bin", "rw");
             
             byte[] heapArray = new byte[HEAP_SIZE];
+            in.seek(0);
             in.read(heapArray);
+
             h = new minHeap(heapArray, MAX_REC_HEAP, MAX_REC_HEAP);
-            h.buildHeap();
+
+            
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

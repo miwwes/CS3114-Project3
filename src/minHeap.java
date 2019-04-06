@@ -140,12 +140,8 @@ public class minHeap {
      * 
      */
     public void buildHeap() {
-        for (int i = (n / 2 - 1)*16; i >= 0; i -= 16)
+        for (int i = (n / 2 - 1)*16; i >= 0; i-=16)
             siftdown(i);
-        byte e[] = Arrays.copyOfRange(arr, 0, 16);
-        toNumber(e);
-        byte f[] = Arrays.copyOfRange(arr, 16, 32);
-        toNumber(f);
     }
     
     /**
@@ -167,19 +163,18 @@ public class minHeap {
             return; // Illegal position
         while (!isLeaf(pos)) {
             int j = leftchild(pos);
-            if (rightchild(pos) != -1) {
-                byte a[] = Arrays.copyOfRange(arr, j, j + 16);
-                byte b[] = Arrays.copyOfRange(arr, j + 16, j + 32);
-                
-                if (((j/16) < (n - 1)) && (compareRecords(a, b) >= 0))
-                    j += 16; // j is now index of child with lesser value
+            //if (rightchild(pos) != -1) {
+            byte a[] = Arrays.copyOfRange(arr, j, j + 16);
+            byte b[] = Arrays.copyOfRange(arr, j + 16, j + 32);
+            
+            if (((j/16) < (n - 1)) && (compareRecords(a, b) >= 0)) {
+                j += 16; // j is now index of child with lesser value
             }
             byte c[] = Arrays.copyOfRange(arr, pos, pos + 16);
-            //toNumber(c);
             byte d[] = Arrays.copyOfRange(arr, j, j + 16);
-            //toNumber(d);
             if (compareRecords(c, d) <= 0)
                 return;
+            
             swap(j, pos);
             pos = j; // Move down
             
@@ -216,8 +211,13 @@ public class minHeap {
         swap(0, (--n) * 16); // Swap maximum with last value
         if (n != 0) // Not on last element
             siftdown(0); // Put new arr root val in correct place
+        
         return Arrays.copyOfRange(arr, n*16, n*16 + 16);
     }
+    
+    //toNumber(Arrays.copyOfRange(arr, n*16, n*16 + 16));
+    //toNumber(Arrays.copyOfRange(arr, (n*16)-16, n*16));
+    //toNumber(Arrays.copyOfRange(arr, 16, 32));
     
     public byte[] removemin(byte[] b) {
         if (n == 0) {
