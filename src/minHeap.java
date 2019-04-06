@@ -140,8 +140,8 @@ public class minHeap {
      * 
      */
     public void buildHeap() {
-        for (int i = n / 2 - 1; i >= 0; i--)
-            siftdown(i * 16);
+        for (int i = (n / 2 - 1)*16; i >= 0; i -= 16)
+            siftdown(i);
         byte e[] = Arrays.copyOfRange(arr, 0, 16);
         toNumber(e);
         byte f[] = Arrays.copyOfRange(arr, 16, 32);
@@ -153,8 +153,8 @@ public class minHeap {
      */
     public void buildHeap(int size) {
         n = size;
-        for (int i = n / 2 - 1; i >= 0; i--)
-            siftdown(i * 16);
+        for (int i = (n / 2 - 1)*16; i >= 0; i -= 16)
+            siftdown(i);
     }
 
 
@@ -178,7 +178,7 @@ public class minHeap {
             //toNumber(c);
             byte d[] = Arrays.copyOfRange(arr, j, j + 16);
             //toNumber(d);
-            if (compareRecords(c, d) < 0)
+            if (compareRecords(c, d) <= 0)
                 return;
             swap(j, pos);
             pos = j; // Move down
