@@ -133,7 +133,11 @@ public class replacementSelection {
                     outBuffer.clear();
                     
                 }
-                outBuffer.insert(recordHeap.removemin());
+                byte[] b = new byte[16];
+                b = recordHeap.removemin();
+                System.out.println("HERE");
+                toNumber(b);
+                outBuffer.insert(b);
             }
             
             outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
