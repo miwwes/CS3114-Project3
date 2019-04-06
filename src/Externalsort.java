@@ -55,6 +55,7 @@ public class Externalsort {
         
         replacementSelection rSel = new replacementSelection(extSort);
         rSel.execute();
+
         //extSort.runs = new RandomAccessFile("b.bin", "rw");
         //multiwayMerge mMerge = new multiwayMerge(extSort);
         //mMerge.execute();
