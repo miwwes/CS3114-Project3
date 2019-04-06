@@ -124,10 +124,7 @@ public class replacementSelection {
                     outFile.write(outBuffer.array());
                     outBuffer.clear();
                 }
-                byte[] rm = new byte[16];
-                rm = recordHeap.removemin();
-                toNumber(rm);
-                outBuffer.insert(rm);
+                outBuffer.insert(recordHeap.removemin());
             }
             
             outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.array().length));
