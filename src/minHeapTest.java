@@ -32,6 +32,162 @@ class minHeapTest {
         return key;
     }
    
+    /**
+     * Test method for {@link minHeap#minHeap(byte[], int)}.
+     */
+    @Test
+    void testMinHeap() {  
+        byte[] byteArr = toByteArray(15, 8);
+        byte[] byteArr2 = toByteArray(18, 5);
+        byte[] record = new byte[32];
+        System.arraycopy( byteArr, 0, record, 0, 16);
+        System.arraycopy( byteArr2, 0, record, 16, 16);
+        
+        minHeap myHeap = new minHeap(record, 2, 4096);
+        double val = toNumber(myHeap.getRecord(0));
+        assert(val == 5);
+    }
+
+
+    /**
+     * Test method for {@link minHeap#heapSize()}.
+     */
+    @Test
+    void testHeapSize() {
+        byte[] byteArr = toByteArray(15, 8);
+        byte[] byteArr2 = toByteArray(18, 5);
+        byte[] record = new byte[32];
+        System.arraycopy( byteArr, 0, record, 0, 16);
+        System.arraycopy( byteArr2, 0, record, 16, 16);
+        minHeap myHeap = new minHeap(record, 2, 4096);
+        assert(myHeap.heapSize() == 2);
+    }
+
+
+    /**
+     * Test method for {@link minHeap#compareRecords(byte[], byte[])}.
+     */
+    @Test
+    void testCompareRecords() {
+        byte[] b = toByteArray(15, 8);
+        byte[] b2 = toByteArray(18, 5);
+        byte[] record = new byte[32];
+        System.arraycopy( b, 0, record, 0, 16);
+        System.arraycopy( b2, 0, record, 16, 16);
+        minHeap myHeap = new minHeap(record, 2, 4096);
+        assert(myHeap.compareRecords(b, b2) == 1);
+    }
+
+
+    /**
+     * Test method for {@link minHeap#isLeaf(int)}.
+     */
+    @Test
+    void testIsLeaf() {
+        byte[] byteArr = toByteArray(15, 8);
+        byte[] byteArr2 = toByteArray(18, 5);
+        byte[] record = new byte[32];
+        System.arraycopy( byteArr, 0, record, 0, 16);
+        System.arraycopy( byteArr2, 0, record, 16, 16);
+        
+        minHeap myHeap = new minHeap(record, 2, 4096);
+        assert(myHeap.isLeaf(16));
+    }
+
+
+    /**
+     * Test method for {@link minHeap#leftchild(int)}.
+     */
+    @Test
+    void testLeftchild() {
+        byte[] byteArr = toByteArray(15, 8);
+        byte[] byteArr2 = toByteArray(18, 5);
+        byte[] record = new byte[32];
+        System.arraycopy( byteArr, 0, record, 0, 16);
+        System.arraycopy( byteArr2, 0, record, 16, 16);
+        
+        minHeap myHeap = new minHeap(record, 2, 4096);
+        assert(myHeap.leftchild(0) == 16);
+    }
+
+
+    /**
+     * Test method for {@link minHeap#rightchild(int)}.
+     */
+    @Test
+    void testRightchild() {
+        byte[] byteArr = toByteArray(15, 8);
+        byte[] byteArr2 = toByteArray(18, 5);
+        byte[] byteArr3 = toByteArray(14, 2);
+        byte[] record = new byte[48];
+        System.arraycopy( byteArr, 0, record, 0, 16);
+        System.arraycopy( byteArr2, 0, record, 16, 16);
+        System.arraycopy( byteArr3, 0, record, 32, 16);
+        
+        minHeap myHeap = new minHeap(record, 3, 4096);
+        
+        assert(myHeap.rightchild(0) == 32);
+    }
+
+
+    /**
+     * Test method for {@link minHeap#parent(int)}.
+     */
+    @Test
+    void testParent() {
+        byte[] byteArr = toByteArray(15, 8);
+        byte[] byteArr2 = toByteArray(18, 5);
+        byte[] record = new byte[32];
+        System.arraycopy( byteArr, 0, record, 0, 16);
+        System.arraycopy( byteArr2, 0, record, 16, 16);
+        
+        minHeap myHeap = new minHeap(record, 2, 4096);
+        assert(myHeap.parent(16) == 0);
+    }
+
+
+    /**
+     * Test method for {@link minHeap#buildHeap()}.
+     */
+    @Test
+    void testBuildHeap() {
+        byte[] b1 = toByteArray(15, 8);
+        byte[] b2 = toByteArray(18, 5);
+        byte[] b3 = toByteArray(15, 8);
+        byte[] b4 = toByteArray(18, 5);
+        byte[] b5 = toByteArray(15, 8);
+        byte[] record = new byte[80];
+        System.arraycopy( b1, 0, record, 0, 16);
+        System.arraycopy( b2, 0, record, 16, 16);
+        System.arraycopy( b3, 0, record, 32, 16);
+        System.arraycopy( b4, 0, record, 48, 16);
+        System.arraycopy( b5, 0, record, 64, 16);
+        minHeap myHeap = new minHeap(record, 5, 4096);
+        assert(myHeap.heapSize() == 5);
+        assert(myHeap.parent(32) == 0);
+    }
+
+
+    /**
+     * Test method for {@link minHeap#siftdown(int)}.
+     */
+    @Test
+    void testSiftdown() {
+        byte[] b1 = toByteArray(15, 2);
+        byte[] b2 = toByteArray(18, 3);
+        byte[] b3 = toByteArray(15, 55);
+        byte[] b4 = toByteArray(18, 7);
+        byte[] b5 = toByteArray(15, 8);
+        byte[] record = new byte[80];
+        System.arraycopy( b1, 0, record, 0, 16);
+        System.arraycopy( b2, 0, record, 16, 16);
+        System.arraycopy( b3, 0, record, 32, 16);
+        System.arraycopy( b4, 0, record, 48, 16);
+        System.arraycopy( b5, 0, record, 64, 16);
+        minHeap myHeap = new minHeap(record, 5, 4096);
+        assert(Arrays.equals(myHeap.getRecord(0), toByteArray(15, 2)));
+        assert(Arrays.equals(myHeap.getRecord(16), toByteArray(18, 3)));
+    }
 
 
     /**
@@ -39,7 +195,7 @@ class minHeapTest {
      */
     @Test
     void testRemovemin() {
-        byte[] b1 = toByteArray(15, 2);
+        byte[] b1 = toByteArray(15, 7);
         byte[] b2 = toByteArray(18, 6);
         byte[] b3 = toByteArray(15, 4);
         byte[] b4 = toByteArray(18, 8);
@@ -51,25 +207,39 @@ class minHeapTest {
         System.arraycopy( b4, 0, record, 48, 16);
         System.arraycopy( b5, 0, record, 64, 16);
         minHeap myHeap = new minHeap(record, 5, 4096);
-        byte[] b6 = toByteArray(143, 41);
-        myHeap.insert(b6);
-        byte[] b7 = toByteArray(144, 1);
-        myHeap.insert(b7);
-        assert(Arrays.equals(myHeap.getRecord(0), toByteArray(144, 1)));
+        assert(Arrays.equals(myHeap.getRecord(0), toByteArray(15, 4)));
         myHeap.removemin();
-        assert(Arrays.equals(myHeap.getRecord(0), toByteArray(15, 2)));
+        assert(Arrays.equals(myHeap.getRecord(0), toByteArray(15, 5)));
+        myHeap.removemin();
+        assert(Arrays.equals(myHeap.getRecord(0), toByteArray(18, 6)));
+        myHeap.removemin();
+        assert(Arrays.equals(myHeap.getRecord(0), toByteArray(15, 7)));
+        myHeap.removemin();
+        assert(Arrays.equals(myHeap.getRecord(0), toByteArray(18, 8)));
         
+        byte[] a1 = toByteArray(15, 7);
+        byte[] a2 = toByteArray(18, 6);
+        byte[] a3 = toByteArray(15, 4);
+        byte[] a4 = toByteArray(18, 8);
+        byte[] a5 = toByteArray(15, 5);
+        byte[] r = new byte[80];
+        System.arraycopy( a1, 0, r, 0, 16);
+        System.arraycopy( a2, 0, r, 16, 16);
+        System.arraycopy( a3, 0, r, 32, 16);
+        System.arraycopy( a4, 0, r, 48, 16);
+        System.arraycopy( a5, 0, r, 64, 16);
+        minHeap h = new minHeap(r, 5, 4096);
+        assert(Arrays.equals(h.getRecord(0), toByteArray(15, 4)));
+        byte[] t1 = toByteArray(15, 2);
+        h.removemin(t1);
+        assert(Arrays.equals(h.getRecord(0), toByteArray(15, 5)));
+        h.removemin(t1);
+        assert(Arrays.equals(h.getRecord(0), toByteArray(18, 6)));
+        h.removemin(t1);
+        assert(Arrays.equals(h.getRecord(0), toByteArray(15, 7)));
+        h.removemin(t1);
+        assert(Arrays.equals(h.getRecord(0), toByteArray(18, 8)));
     }
-
-
-    /**
-     * Test method for {@link minHeap#getMin()}.
-     */
-    //@Test
-    //void testGetMin() {
-    //    fail("Not yet implemented");
-    //}
-
 
     /**
      * Test method for {@link minHeap#modify(int, byte[])}.

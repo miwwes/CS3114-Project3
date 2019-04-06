@@ -109,7 +109,7 @@ public class minHeap {
     public int parent(int pos) {
         if ((pos/16) <= 0)
             return -1;
-        return (pos - 16) / 2;
+        return (pos/16 - 1) / 2;
     }
 
 
@@ -117,7 +117,7 @@ public class minHeap {
     /**
      * @param key
      */
-    public void insert(byte[] key) {
+    /*public void insert(byte[] key) {
         if (n*16 >= size) {
             System.out.println("Heap is full");
             return;
@@ -132,7 +132,7 @@ public class minHeap {
             swap(curr, parent(curr));
             curr = parent(curr);
         }
-    }
+    }*/
 
 
     // Heapify contents of heap
@@ -142,6 +142,10 @@ public class minHeap {
     public void buildHeap() {
         for (int i = n / 2 - 1; i >= 0; i--)
             siftdown(i * 16);
+        byte e[] = Arrays.copyOfRange(arr, 0, 16);
+        toNumber(e);
+        byte f[] = Arrays.copyOfRange(arr, 16, 32);
+        toNumber(f);
     }
     
     /**
@@ -171,11 +175,14 @@ public class minHeap {
                     j += 16; // j is now index of child with lesser value
             }
             byte c[] = Arrays.copyOfRange(arr, pos, pos + 16);
+            //toNumber(c);
             byte d[] = Arrays.copyOfRange(arr, j, j + 16);
+            //toNumber(d);
             if (compareRecords(c, d) < 0)
                 return;
             swap(j, pos);
             pos = j; // Move down
+            
         }
     }
     
@@ -259,4 +266,15 @@ public class minHeap {
       }
       if (n != 0) siftdown(pos); // If it is little, push down
     }
+    
+    private double toNumber(byte[] bytes) {
+        byte[] idBytes = Arrays.copyOfRange(bytes, 0, 8);
+        byte[] keyBytes = Arrays.copyOfRange(bytes, 8, 16);
+        long id = ByteBuffer.wrap(idBytes).getLong();
+        double key = ByteBuffer.wrap(keyBytes).getDouble();
+        System.out.println("id: " + id);
+        System.out.println("key: " + key);
+        return key;
+    }
+    
   }

@@ -133,9 +133,6 @@ public class replacementSelection {
                     outBuffer.clear();
                     
                 }
-                //byte[] rm = new byte[16];
-                //rm = recordHeap.removemin();
-                //toNumber(rm);
                 outBuffer.insert(recordHeap.removemin());
             }
             
