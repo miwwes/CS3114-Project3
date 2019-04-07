@@ -186,8 +186,6 @@ public class replacementSelection {
     //private static final int HEAP_SIZE = 8*8192;
     private static final int MAX_REC_HEAP = 4096;
 
-    
-    
     /**
      * 
      */
@@ -210,7 +208,6 @@ public class replacementSelection {
      * 
      */
     private RandomAccessFile inFile;
-    private RandomAccessFile wow;
     /**
      * 
      */

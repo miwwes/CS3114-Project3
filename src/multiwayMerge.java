@@ -36,8 +36,8 @@ public class multiwayMerge {
         this.runs = c.l;
         this.heap = c.h;
         this.readFile = c.runs;
-        this.printFile = c.in;
-        //this.printFile = new RandomAccessFile("test.bin", "rw");
+        //this.printFile = c.in;
+        this.printFile = new RandomAccessFile("test.bin", "rw");
         this.numberOfRuns = runs.size();
         this.outputBuffer = c.ob;
         this.heapLength = 0;
@@ -186,10 +186,10 @@ public class multiwayMerge {
         // that the index is incremented so that we read the next record
         // from the corresponding block
         byte[] myRecord = new byte[16];
-        //int nextNodeLocation = (blockLength * runNum) + (cur);
+        // int nextNodeLocation = (blockLength * runNum) + (cur);
         System.arraycopy(heap.arr, cur, myRecord, 0, 16);
-        //System.out.println(runNum);
-        //toNumber(myRecord);
+        // System.out.println(runNum);
+        // toNumber(myRecord);
         heapLength -= 16;
         mergeNode mNode = new mergeNode(runNum, myRecord, cur);
         pq.add(mNode);
