@@ -191,17 +191,7 @@ public class multiwayMerge {
         // that the index is incremented so that we read the next record
         // from the corresponding block
         byte[] myRecord = new byte[16];
-        // int nextNodeLocation = (blockLength * runNum) + (cur);
         System.arraycopy(heap.arr, cur, myRecord, 0, 16);
-<<<<<<< HEAD
-        // System.out.println(runNum);
-        // toNumber(myRecord);
-        heapLength -= 16;
-=======
-        //System.out.println("  ");
-        //toNumber(myRecord);
-        //heapLength -= 16;
->>>>>>> c7a69e36713fec242b4542f3ac0e5fd22c2becbd
         mergeNode mNode = new mergeNode(runNum, myRecord, cur);
         pq.add(mNode);
     }
