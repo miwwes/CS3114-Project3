@@ -30,6 +30,12 @@ public class minHeap {
         size = largeness;
         buildHeap(); 
     }
+    // Constructor supporting preloading of arr contents
+    minHeap(){ 
+        arr = new byte[4096];  
+        n = 4096;  
+        size = 4096;
+    }
 
     
     // Return current number of records in the arr
@@ -266,7 +272,18 @@ public class minHeap {
       if (n != 0) siftdown(pos); // If it is little, push down
     }
     
-    private double toNumber(byte[] bytes) {
+    public byte[] toByteArray(long id, double key) {
+        byte[] bytes1 = new byte[8];
+        byte[] bytes2 = new byte[8];
+        ByteBuffer.wrap(bytes1).putLong(id);
+        ByteBuffer.wrap(bytes2).putDouble(key);
+        byte[] record = new byte[16];
+        System.arraycopy( bytes1, 0, record, 0, 8);
+        System.arraycopy( bytes2, 0, record, 8, 8);
+        return record;
+    }
+    
+    public double toNumber(byte[] bytes) {
         byte[] idBytes = Arrays.copyOfRange(bytes, 0, 8);
         byte[] keyBytes = Arrays.copyOfRange(bytes, 8, 16);
         long id = ByteBuffer.wrap(idBytes).getLong();
