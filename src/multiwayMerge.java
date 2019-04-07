@@ -36,8 +36,8 @@ public class multiwayMerge {
         this.runs = c.l;
         this.heap = c.h;
         this.readFile = c.runs;
-        //this.printFile = c.in;
-        this.printFile = new RandomAccessFile("test.bin", "rw");
+        this.printFile = c.in;
+        //this.printFile = new RandomAccessFile("test.bin", "rw");
         this.numberOfRuns = runs.size();
         this.outputBuffer = c.ob;
         this.heapLength = 0;
@@ -231,8 +231,17 @@ public class multiwayMerge {
     public void printToStandardOutput(RandomAccessFile endFile) throws IOException {
         String line = null;
         endFile.seek(0);
+        int i = 0;
         while ((line = endFile.readLine()) != null) {
-            System.out.println(line);
+            byte[] rec = new byte[16];
+            endFile.read(rec);
+            endFile.seek(blockLength*i);
+            toNumber(rec);
+            if (i % 5 == 0) {
+                System.out.println('\n');
+            }
+            System.out.println(' ');
+            i++;
         }
     }
     private double toNumber(byte[] bytes) {
@@ -240,8 +249,7 @@ public class multiwayMerge {
         byte[] keyBytes = Arrays.copyOfRange(bytes, 8, 16);
         long id = ByteBuffer.wrap(idBytes).getLong();
         double key = ByteBuffer.wrap(keyBytes).getDouble();
-        System.out.println("id: " + id);
-        System.out.println("key: " + key);
+        System.out.print(id + " " + key);
         return key;
     }
     
