@@ -1,9 +1,7 @@
 //import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
 import student.TestCase;
 import java.nio.ByteBuffer;
 //import org.junit.jupiter.api.Test;
-import java.util.Arrays;
 
 /**
  * 
@@ -66,16 +64,6 @@ public class mergeNodeTest extends TestCase {
         byte[] b = toByteArray(51, 8);
         mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
         assertEquals(mn.getRecord(), b);
-    }
-
-
-    /**
-     * Test method for {@link mergeNode#key()}.
-     */
-    void testKey() {
-        byte[] b = toByteArray(1, 8);
-        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
-        assertEquals(mn.key(), 8);
     }
 
 

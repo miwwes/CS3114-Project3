@@ -1,4 +1,5 @@
 
+
 import java.io.File;
 import java.io.IOException;
 import student.TestCase;
@@ -21,9 +22,15 @@ public class ExternalsortTest extends TestCase {
         long startLength = in.length();
         Externalsort.main(args);
         sortContainer sc = Externalsort.getSortContainer();
-        long endLength = sc.in.length();
+        long endLength = 0;
+        try {
+            endLength = sc.in.length();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         assertEquals(startLength, endLength);
-        //assertEquals(sc.in.getFilePointer(), sc.in.length());
     }
 
 }
