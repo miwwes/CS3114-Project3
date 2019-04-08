@@ -145,7 +145,14 @@ class mergeNode {
     private byte[] record;
 
 }
-
+/**
+ * @author juliam8
+ * @author abbym1
+ * @version 2019-04-10
+ *
+ *  mergeNodeComparator class
+ *      Used in the priority queue 
+ */
 class mergeNodeComparator implements Comparator<mergeNode>{ 
     /* (non-Javadoc)
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)

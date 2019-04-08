@@ -31,13 +31,6 @@ public class ExternalsortTest extends TestCase {
             e.printStackTrace();
         }
         assertEquals(startLength, endLength);
-        try {
-            assertEquals(sc.in.getFilePointer(), sc.in.length());
-        }
-        catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
 }

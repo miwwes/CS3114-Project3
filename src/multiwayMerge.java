@@ -43,6 +43,15 @@ public class multiwayMerge {
     public void execute() throws IOException {        
         if (numberOfRuns == 1) {
             printToStandardOutput(readFile);
+            if(printFile != originalInputFile) {
+                originalInputFile.seek(0);
+                int length;
+                while ((length = printFile.read(heap.arr)) > 0){
+                    originalInputFile.write(heap.arr, 0, length);
+                }
+            }
+            //System.out.println();
+            //System.out.print(originalInputFile.getFilePointer());
         }
         else {
             loadBlocks();
