@@ -25,10 +25,7 @@ public class multiwayMerge {
     static int blockLength = 8192;
     static int recordLength = 16;
     
-    
-    //multiwayMerge(LinkedList<runNode> locations, minHeap h, 
-    //                RandomAccessFile outFile, RandomAccessFile inFile, buffer outBuf) {
-    multiwayMerge(sortContainer c) throws FileNotFoundException{
+    multiwayMerge(sortContainer c) throws IOException{
         runs = c.l;
         heap = c.h;
         readFile = c.runs;
@@ -36,12 +33,13 @@ public class multiwayMerge {
         printFile = new RandomAccessFile("test.bin", "rw");
         numberOfRuns = runs.size();
         outputBuffer = c.ob;
-        //this.heapLength = 0;
         curRuns = new LinkedList<Integer>();
+        readFile.seek(0);
+        printFile.seek(0);
+        
     }
     
-    public void execute() throws IOException {
-
+    public void execute() throws IOException {        
         if (numberOfRuns == 1) {
             printToStandardOutput(readFile);
         }
@@ -166,7 +164,8 @@ public class multiwayMerge {
             mergeNode minNode = pq.poll();
             outputBuffer.insert(minNode.getRecord());
         } 
-        printFile.write(outputBuffer.array());
+        printFile.write(Arrays.copyOfRange(
+                outputBuffer.array(), 0, outputBuffer.pos()));
         outputBuffer.clear();
         
         // check if there are still runs within outfile

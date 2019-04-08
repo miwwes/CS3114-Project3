@@ -36,11 +36,11 @@ public class sortContainer {
         try {
             in = new RandomAccessFile(s, "rw");
             runs = new RandomAccessFile("runfile.bin", "rw");
+            in.seek(0);
+            runs.seek(0);
             
             byte[] heapArray = new byte[HEAP_SIZE];
-            in.seek(0);
             in.read(heapArray);
-
             h = new minHeap(heapArray, MAX_REC_HEAP, MAX_REC_HEAP);
 
             
