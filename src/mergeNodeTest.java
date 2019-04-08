@@ -26,7 +26,7 @@ public class mergeNodeTest extends TestCase {
         return record;
     }
     /**
-     * Test method for {@link mergeNode#mergeNode(int, byte[], int, int)}.
+     * Test method for 
      */
     public void testMergeNode() {
         byte[] b = toByteArray(10, 4);
@@ -37,7 +37,7 @@ public class mergeNodeTest extends TestCase {
 
 
     /**
-     * Test method for {@link mergeNode#getBlockNumber()}.
+     * Test method for 
      */
     public void testGetBlockNumber() {
         byte[] b = toByteArray(1, 48);
@@ -47,7 +47,7 @@ public class mergeNodeTest extends TestCase {
 
 
     /**
-     * Test method for {@link mergeNode#setBlockNumber(int)}.
+     * Test method for.
      */
     public void testSetBlockNumber() {
         byte[] b = toByteArray(51, 8);
@@ -58,7 +58,7 @@ public class mergeNodeTest extends TestCase {
 
 
     /**
-     * Test method for {@link mergeNode#getRecord()}.
+     * Test method for 
      */
     public void testGetRecord() {
         byte[] b = toByteArray(51, 8);
@@ -68,7 +68,7 @@ public class mergeNodeTest extends TestCase {
 
 
     /**
-     * Test method for {@link mergeNode#getCurPos()}.
+     * Test method for 
      */
     void testGetCurPos() {
         byte[] b = toByteArray(51, 8);
@@ -78,7 +78,7 @@ public class mergeNodeTest extends TestCase {
 
 
     /**
-     * Test method for {@link mergeNode#setCurPos(int)}.
+     * Test method for
      */
     void testSetCurPos() {
         byte[] b = toByteArray(5, 28);
@@ -89,7 +89,7 @@ public class mergeNodeTest extends TestCase {
 
 
     /**
-     * Test method for {@link mergeNode#getStartPos()}.
+     * Test method for 
      */
     void testGetStartPos() {
         byte[] b = toByteArray(51, 8);
@@ -99,7 +99,7 @@ public class mergeNodeTest extends TestCase {
 
 
     /**
-     * Test method for {@link mergeNode#setStartPos(int)}.
+     * Test method for 
      */
     void testSetStartPos() {
         byte[] b = toByteArray(51, 48);
@@ -110,7 +110,7 @@ public class mergeNodeTest extends TestCase {
 
 
     /**
-     * Test method for {@link mergeNode#getEndPos()}.
+     * Test method for 
      */
     void testGetEndPos() {
         byte[] b = toByteArray(61, 8);
@@ -119,7 +119,7 @@ public class mergeNodeTest extends TestCase {
     }
 
     /**
-     * Test method for {@link mergeNode#setEndPos(int)}.
+     * Test method 
      */
     void testSetEndPos() {
         byte[] b = toByteArray(9, 58);
@@ -130,7 +130,7 @@ public class mergeNodeTest extends TestCase {
 
 
     /**
-     * Test method for {@link mergeNode#incrementCurPos(int)}.
+     * Test method for 
      */
     void testIncrementCurPos() {
         byte[] b = toByteArray(50, 88);
