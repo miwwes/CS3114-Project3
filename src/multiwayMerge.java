@@ -29,7 +29,7 @@ public class multiwayMerge {
         runs = c.l;
         heap = c.h;
         readFile = c.runs;
-        //this.printFile = c.in;
+        //printFile = c.in;
         printFile = new RandomAccessFile("test.bin", "rw");
         numberOfRuns = runs.size();
         outputBuffer = c.ob;
@@ -239,16 +239,16 @@ public class multiwayMerge {
         String line;// = null;
         endFile.seek(0);
         int i = 0;
-        while ((line = endFile.readLine()) != null) {
-            byte[] rec = new byte[16];
-            endFile.read(rec);
+        while (endFile.getFilePointer() != endFile.length()) {
+            byte[] b = new byte[16];
+            endFile.read(b);
             i++;
             endFile.seek(blockLength*i);
-            toNumber(rec);
+            toNumber(b);
             if (i % 5 == 0) {
                 System.out.println('\n');
             }
-            System.out.println(' ');
+            System.out.print(' ');
         }
     }
     
