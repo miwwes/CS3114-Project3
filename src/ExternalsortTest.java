@@ -1,25 +1,19 @@
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 import org.junit.jupiter.api.Test;
 
-/**
- * 
- */
 
 /**
  * @author amalone46
  *
  */
-class ExternalsortTest {
+public class ExternalsortTest {
 
-    @Test
+    //@Test
     final void test() throws IOException {
         String[] args = {"sampleInput16.bin"};
         final PrintStream standard = System.out;
