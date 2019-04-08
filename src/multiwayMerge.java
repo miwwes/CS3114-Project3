@@ -151,7 +151,7 @@ public class multiwayMerge {
         for (int i = nRuns-1; i >= 0; i--) {
             runs.remove(i);
         }
-        //checkAftermath();
+        checkAftermath();
     }
     
     public void checkAftermath() throws IOException {
