@@ -29,8 +29,8 @@ public class multiwayMerge {
         runs = c.l;
         heap = c.h;
         readFile = c.runs;
-        //this.printFile = c.in;
-        printFile = new RandomAccessFile("test.bin", "rw");
+        printFile = c.in;
+        //printFile = new RandomAccessFile("test.bin", "rw");
         numberOfRuns = runs.size();
         outputBuffer = c.ob;
         curRuns = new LinkedList<Integer>();
