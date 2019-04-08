@@ -12,8 +12,8 @@ import student.TestCase;
  * @author amalone46
  *
  */
-public class ExternalsortTest extends TestCase {
 
+public class ExternalsortTest extends TestCase {
     
     public final void test() throws IOException {
         String[] args = {"src//sampleInput16.bin"};
