@@ -25,42 +25,27 @@ public class multiwayMerge {
     static int blockLength = 8192;
     static int recordLength = 16;
     
-    
-    //multiwayMerge(LinkedList<runNode> locations, minHeap h, 
-    //                RandomAccessFile outFile, RandomAccessFile inFile, buffer outBuf) {
-    multiwayMerge(sortContainer c) throws FileNotFoundException{
-        this.runs = c.l;
-        this.heap = c.h;
-        this.readFile = c.runs;
+    multiwayMerge(sortContainer c) throws IOException{
+        runs = c.l;
+        heap = c.h;
+        readFile = c.runs;
         //this.printFile = c.in;
-        this.printFile = new RandomAccessFile("test.bin", "rw");
-        this.numberOfRuns = runs.size();
-        this.outputBuffer = c.ob;
-        //this.heapLength = 0;
-        this.curRuns = new LinkedList<Integer>();
+        printFile = new RandomAccessFile("test.bin", "rw");
+        numberOfRuns = runs.size();
+        outputBuffer = c.ob;
+        curRuns = new LinkedList<Integer>();
+        readFile.seek(0);
+        printFile.seek(0);
+        
     }
     
-    public void execute() throws IOException {
-        readFile.seek(0);
-        byte[] rec = new byte[16];
-        readFile.read(rec);
-        System.out.println("  ");
-        toNumber(rec);
-        byte[] rec1 = new byte[16];
-        readFile.read(rec1);
-        System.out.println("  ");
-        toNumber(rec1);
-        byte[] rec2 = new byte[16];
-        readFile.read(rec2);
-        System.out.println("  ");
-        toNumber(rec2);
-        
-        //if (numberOfRuns == 1) {
-        //    printToStandardOutput(readFile);
-        //}
-        //else {
-        //    loadBlocks();
-        //}
+    public void execute() throws IOException {        
+        if (numberOfRuns == 1) {
+            printToStandardOutput(readFile);
+        }
+        else {
+            loadBlocks();
+        }
     }
     
     /**
@@ -156,7 +141,8 @@ public class multiwayMerge {
             mergeNode minNode = pq.poll();
             outputBuffer.insert(minNode.getRecord());
         } 
-        printFile.write(outputBuffer.array());
+        printFile.write(Arrays.copyOfRange(
+                outputBuffer.array(), 0, outputBuffer.pos()));
         outputBuffer.clear();
         
         // check if there are still runs within outfile

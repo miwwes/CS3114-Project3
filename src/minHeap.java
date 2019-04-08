@@ -131,10 +131,12 @@ public class minHeap {
      * @param size the size of the heap to build
      */
     public void buildHeap(int recordsLeft) {
-        int start = (size - recordsLeft) * 16;
         //byte[] temp = Arrays.copyOfRange(arr, start, 65536);
         //System.arraycopy(temp, 0, arr, 0, temp.length);
-        System.arraycopy(arr, start, arr, 0, recordsLeft*16);
+        if(recordsLeft < size) {
+            int start = (size - recordsLeft) * 16;
+            System.arraycopy(arr, start, arr, 0, recordsLeft*16);
+        }
         n = recordsLeft;
         for (int i = (n / 2 - 1)*16; i >= 0; i -= 16) {
             siftdown(i);
