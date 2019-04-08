@@ -1,11 +1,13 @@
-//import java.io.File;
 
-import java.io.FileNotFoundException;
+
+import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import student.TestCase;
-//import org.junit.jupiter.api.Test;
 
+
+/**
+ * 
+ */
 
 /**
  * @author amalone46
@@ -13,33 +15,12 @@ import student.TestCase;
  */
 
 public class ExternalsortTest extends TestCase {
-
-    //@Test
-    public final void test() {
+    
+    public final void test() throws IOException {
         String[] args = {"src//sampleInput16.bin"};
-        RandomAccessFile in = null;
-        try {
-            in = new RandomAccessFile("src//sampleInput16.bin", "rw");
-        }
-        catch (FileNotFoundException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        long startLength = 0;
-        try {
-            startLength = in.length();
-        }
-        catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        try {
-            Externalsort.main(args);
-        }
-        catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        File in = new File("src//sampleInput16.bin");
+        long startLength = in.length();
+        Externalsort.main(args);
         sortContainer sc = Externalsort.getSortContainer();
         long endLength = 0;
         try {
