@@ -123,17 +123,24 @@ public class replacementSelection {
                 outBuffer.insert(recordHeap.removemin());
             }
             
-            outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-            out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-            outBuffer.clear();
+            if( !outBuffer.empty() ) {
+                outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                outBuffer.clear();
+            }
             
             long end = outFile.getFilePointer();
-            runNode n = new runNode(numRuns, runStart, end);
-            runs.add(n);
             
-            numRuns++;
-            runStart = end;
-            recordHeap.buildHeap(addCount);
+            if(runStart != end) {
+                runNode n = new runNode(numRuns, runStart, end);
+                runs.add(n);
+                numRuns++;
+                runStart = end;
+            }
+            
+            if(addCount > 0) {
+                recordHeap.buildHeap(addCount);
+            }
             
             while( !recordHeap.empty() ) {
                 if ( outBuffer.full() ) {
@@ -145,12 +152,16 @@ public class replacementSelection {
                 outBuffer.insert(recordHeap.removemin());
             }
             
-            outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-            out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-            outBuffer.clear();
+            if( !outBuffer.empty() ) {
+                outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                outBuffer.clear();
+            }
             end = outFile.getFilePointer();
-            runNode n2 = new runNode(numRuns, runStart, end);
-            runs.add(n2);            
+            if(runStart != end) {
+                runNode n2 = new runNode(numRuns, runStart, end);
+                runs.add(n2);     
+            }
         }
         catch (IOException e) {
             System.err.println("IO error: " + e);

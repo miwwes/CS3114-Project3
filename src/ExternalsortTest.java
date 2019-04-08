@@ -1,16 +1,8 @@
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import student.TestCase;
 
-
-import org.junit.jupiter.api.Test;
 
 /**
  * 
@@ -22,10 +14,10 @@ import org.junit.jupiter.api.Test;
  */
 public class ExternalsortTest extends TestCase {
 
-    //@Test
+    
     public final void test() throws IOException {
-        String[] args = {"sampleInput16.bin"};
-        File in = new File("sampleInput16.bin");
+        String[] args = {"src//sampleInput16.bin"};
+        File in = new File("src//sampleInput16.bin");
         long startLength = in.length();
         Externalsort.main(args);
         sortContainer sc = Externalsort.getSortContainer();
