@@ -30,19 +30,17 @@ public class mergeNodeTest extends TestCase {
     /**
      * Test method for {@link mergeNode#mergeNode(int, byte[], int, int)}.
      */
-    //@Test
     public void testMergeNode() {
         byte[] b = toByteArray(10, 4);
         mergeNode mn = new mergeNode(0, b, 0, blockLength);
         assertEquals(mn.getBlockNumber(), 0);
-        assertEquals(mn.key, 4);
+        assertEquals(mn.key, 4, 0.1);
     }
 
 
     /**
      * Test method for {@link mergeNode#getBlockNumber()}.
      */
-    //@Test
     public void testGetBlockNumber() {
         byte[] b = toByteArray(1, 48);
         mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
@@ -53,7 +51,6 @@ public class mergeNodeTest extends TestCase {
     /**
      * Test method for {@link mergeNode#setBlockNumber(int)}.
      */
-    //@Test
     public void testSetBlockNumber() {
         byte[] b = toByteArray(51, 8);
         mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
@@ -65,81 +62,93 @@ public class mergeNodeTest extends TestCase {
     /**
      * Test method for {@link mergeNode#getRecord()}.
      */
-    //@Test
     public void testGetRecord() {
-        fail("Not yet implemented");
+        byte[] b = toByteArray(51, 8);
+        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        assertEquals(mn.getRecord(), b);
     }
 
 
     /**
      * Test method for {@link mergeNode#key()}.
      */
-    @Test
     void testKey() {
-        fail("Not yet implemented");
+        byte[] b = toByteArray(1, 8);
+        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        assertEquals(mn.key(), 8);
     }
 
 
     /**
      * Test method for {@link mergeNode#getCurPos()}.
      */
-    @Test
     void testGetCurPos() {
-        fail("Not yet implemented");
+        byte[] b = toByteArray(51, 8);
+        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        assertEquals(mn.getCurPos(), blockLength);
     }
 
 
     /**
      * Test method for {@link mergeNode#setCurPos(int)}.
      */
-    @Test
     void testSetCurPos() {
-        fail("Not yet implemented");
+        byte[] b = toByteArray(5, 28);
+        mergeNode mn = new mergeNode(0, b, 0, blockLength);
+        mn.setCurPos(blockLength);
+        assertEquals(mn.getCurPos(), blockLength);
     }
 
 
     /**
      * Test method for {@link mergeNode#getStartPos()}.
      */
-    @Test
     void testGetStartPos() {
-        fail("Not yet implemented");
+        byte[] b = toByteArray(51, 8);
+        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        assertEquals(mn.getStartPos(), blockLength);
     }
 
 
     /**
      * Test method for {@link mergeNode#setStartPos(int)}.
      */
-    @Test
     void testSetStartPos() {
-        fail("Not yet implemented");
+        byte[] b = toByteArray(51, 48);
+        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        mn.setStartPos(0);
+        assertEquals(mn.getStartPos(), 0);
     }
 
 
     /**
      * Test method for {@link mergeNode#getEndPos()}.
      */
-    @Test
     void testGetEndPos() {
-        fail("Not yet implemented");
+        byte[] b = toByteArray(61, 8);
+        mergeNode mn = new mergeNode(0, b, 0, blockLength);
+        assertEquals(mn.getEndPos(), blockLength);
     }
-
 
     /**
      * Test method for {@link mergeNode#setEndPos(int)}.
      */
-    @Test
     void testSetEndPos() {
-        fail("Not yet implemented");
+        byte[] b = toByteArray(9, 58);
+        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        mn.setEndPos(blockLength + (blockLength/2));
+        assertEquals(mn.getEndPos(), blockLength + (blockLength/2));
     }
 
 
     /**
      * Test method for {@link mergeNode#incrementCurPos(int)}.
      */
-    @Test
     void testIncrementCurPos() {
-        fail("Not yet implemented");
+        byte[] b = toByteArray(50, 88);
+        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        mn.incrementCurPos(16);
+        assertEquals(mn.getBlockNumber(), blockLength + 16);
     }
 
 }
