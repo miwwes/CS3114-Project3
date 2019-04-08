@@ -30,6 +30,7 @@ public class multiwayMerge {
         heap = c.h;
         readFile = c.runs;
         printFile = c.in;
+        originalInputFile = c.in;
         //printFile = new RandomAccessFile("test.bin", "rw");
         numberOfRuns = runs.size();
         outputBuffer = c.ob;
@@ -173,6 +174,14 @@ public class multiwayMerge {
         // check if there are still runs within outfile
         if (runs.size() == 0) {
             printToStandardOutput(printFile);
+            
+            if(printFile != originalInputFile) {
+                originalInputFile.seek(0);
+                int length;
+                while ((length = printFile.read(heap.arr)) > 0){
+                    originalInputFile.write(heap.arr, 0, length);
+                }
+            }
         }
         else {
             int numberOfRunsLeft = runs.size();
@@ -267,6 +276,7 @@ public class multiwayMerge {
     private LinkedList<Integer> curRuns;
     private minHeap heap;
     private RandomAccessFile readFile;
+    private RandomAccessFile originalInputFile;
     private RandomAccessFile printFile;
     private buffer outputBuffer;
 }
