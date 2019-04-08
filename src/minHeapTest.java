@@ -1,5 +1,5 @@
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+import student.TestCase;
+//import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 /**
  * @author juliam8
@@ -7,14 +7,14 @@ import java.util.Arrays;
  * @version 2019-04-10
  *
  */
-class minHeapTest {
+public class minHeapTest extends TestCase {
     
     
     /**
      * Test method for {@link minHeap#minHeap(byte[], int)}.
      */
-    @Test
-    void testMinHeap() {
+    //@Test
+    public void testMinHeap() {
         minHeap m = new minHeap();
         byte[] y = m.toByteArray(15, 8);
         byte[] y2 = m.toByteArray(18, 5);
@@ -24,15 +24,15 @@ class minHeapTest {
 
         minHeap myHeap = new minHeap(record, 2, 4096);
         double val = m.toNumber(myHeap.getRecord(0));
-        assertEquals(val, 5);
+        assertEquals((int)val, 5);
     }
 
 
     /**
      * Test method for {@link minHeap#heapSize()}.
      */
-    @Test
-    void testHeapSize() {
+   // @Test
+    public void testHeapSize() {
         minHeap m = new minHeap();
         byte[] byteArr = m.toByteArray(15, 8);
         byte[] byteArr2 = m.toByteArray(18, 5);
@@ -47,8 +47,8 @@ class minHeapTest {
     /**
      * Test method for {@link minHeap#compareRecords(byte[], byte[])}.
      */
-    @Test
-    void testCompareRecords() {
+   // @Test
+    public void testCompareRecords() {
         minHeap m = new minHeap();
         byte[] b = m.toByteArray(15, 8);
         byte[] b2 = m.toByteArray(18, 5);
@@ -63,8 +63,8 @@ class minHeapTest {
     /**
      * Test method for {@link minHeap#isLeaf(int)}.
      */
-    @Test
-    void testIsLeaf() {
+   // @Test
+    public void testIsLeaf() {
         minHeap m = new minHeap();
         byte[] byteArr = m.toByteArray(15, 8);
         byte[] byteArr2 = m.toByteArray(18, 5);
@@ -80,8 +80,8 @@ class minHeapTest {
     /**
      * Test method for {@link minHeap#leftchild(int)}.
      */
-    @Test
-    void testLeftchild() {
+    //@Test
+    public void testLeftchild() {
         minHeap m = new minHeap();
         byte[] byteArr = m.toByteArray(15, 8);
         byte[] byteArr2 = m.toByteArray(18, 5);
@@ -97,8 +97,8 @@ class minHeapTest {
     /**
      * Test method for {@link minHeap#rightchild(int)}.
      */
-    @Test
-    void testRightchild() {
+    //@Test
+    public void testRightchild() {
         minHeap m = new minHeap();
         byte[] byteArr = m.toByteArray(15, 8);
         byte[] byteArr2 = m.toByteArray(18, 5);
@@ -117,8 +117,8 @@ class minHeapTest {
     /**
      * Test method for {@link minHeap#parent(int)}.
      */
-    @Test
-    void testParent() {
+    //@Test
+    public void testParent() {
         minHeap m = new minHeap();
         byte[] byteArr = m.toByteArray(15, 8);
         byte[] byteArr2 = m.toByteArray(18, 5);
@@ -134,8 +134,8 @@ class minHeapTest {
     /**
      * Test method for {@link minHeap#buildHeap()}.
      */
-    @Test
-    void testBuildHeap() {
+    //@Test
+    public void testBuildHeap() {
         minHeap m = new minHeap();
         byte[] b1 = m.toByteArray(15, 8);
         byte[] b2 = m.toByteArray(18, 5);
@@ -157,8 +157,8 @@ class minHeapTest {
     /**
      * Test method for {@link minHeap#siftdown(int)}.
      */
-    @Test
-    void testSiftdown() {
+    //@Test
+    public void testSiftdown() {
         minHeap m = new minHeap();
         byte[] b1 = m.toByteArray(15, 2);
         byte[] b2 = m.toByteArray(18, 3);
@@ -182,8 +182,8 @@ class minHeapTest {
     /**
      * Test method for {@link minHeap#removemin()}.
      */
-    @Test
-    void testRemovemin() {
+    //@Test
+    public void testRemovemin() {
         minHeap m = new minHeap();
         byte[] b1 = m.toByteArray(15, 7);
         byte[] b2 = m.toByteArray(18, 6);
