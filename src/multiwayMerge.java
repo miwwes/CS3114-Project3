@@ -164,9 +164,11 @@ public class multiwayMerge {
             mergeNode minNode = pq.poll();
             outputBuffer.insert(minNode.getRecord());
         } 
-        printFile.write(Arrays.copyOfRange(
-                outputBuffer.array(), 0, outputBuffer.pos()));
-        outputBuffer.clear();
+        if (!outputBuffer.empty()) {
+            printFile.write(Arrays.copyOfRange(
+                        outputBuffer.array(), 0, outputBuffer.pos()));
+            outputBuffer.clear();
+        }
         
         // check if there are still runs within outfile
         if (runs.size() == 0) {
