@@ -99,6 +99,9 @@ public class multiwayMerge {
         while (curRuns.size() > 0) {   //all 8 (or however many) runs are exhausted
             mergeNode minNode = pq.poll();
             outputBuffer.insert(minNode.getRecord());
+            if (Arrays.equals(minNode.getRecord(), toByteArray(0, 0))) {
+                System.out.print("STOP");
+            }
             
             minNode.incrementCurPos(recordLength);
             if (outputBuffer.full()) {
@@ -109,12 +112,15 @@ public class multiwayMerge {
             // need to change record in the minNode and increment its current Position
             int blockToRead = minNode.getBlockNumber();
             int blockSpace = minNode.getEndPos() - minNode.getCurPos(); 
+            if (blockSpace < 0) {
+                System.out.print("STOP2");
+            }
             boolean blockReloaded = false;
             boolean canReadFromRun = true;
             //boolean changeNodeEnd = false;
-            if (minNode.getEndPos() < minNode.getStartPos()) {
-                System.out.print('d');
-            }
+            //if (minNode.getEndPos() < minNode.getStartPos()) {
+            //    System.out.print('d');
+            //}
             runNode fileNode = runs.get(blockToRead); //getting data from disk
             long runLength = fileNode.getEndPos() - fileNode.getCurPos();
             if (blockSpace == 0 && curRuns.contains(blockToRead)) {  
@@ -211,7 +217,13 @@ public class multiwayMerge {
         // that the index is incremented so that we read the next record
         // from the corresponding block
         byte[] myRecord = new byte[16];
-        System.arraycopy(heap.arr, cur, myRecord, 0, 16);
+        try {
+            System.arraycopy(heap.arr, cur, myRecord, 0, 16);
+        }
+        catch(ArrayIndexOutOfBoundsException exception) {
+            System.out.println(exception);
+        }
+        
         mergeNode mNode = new mergeNode(runNum, myRecord, cur, end);
         pq.add(mNode);
     }
@@ -268,6 +280,16 @@ public class multiwayMerge {
         double key = ByteBuffer.wrap(keyBytes).getDouble();
         System.out.print(id + " " + key);
         return key;
+    }
+    public byte[] toByteArray(long id, double key) {
+        byte[] bytes1 = new byte[8];
+        byte[] bytes2 = new byte[8];
+        ByteBuffer.wrap(bytes1).putLong(id);
+        ByteBuffer.wrap(bytes2).putDouble(key);
+        byte[] record = new byte[16];
+        System.arraycopy( bytes1, 0, record, 0, 8);
+        System.arraycopy( bytes2, 0, record, 8, 8);
+        return record;
     }
     
     private PriorityQueue<mergeNode> pq;
