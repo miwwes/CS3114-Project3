@@ -14,10 +14,10 @@ class mergeNode {
     
     static int blockLength = 8192;
     
-    mergeNode(int block, byte[] arr, int cur){
+    mergeNode(int block, byte[] arr, int cur, int end){
         this.blockNumber = block;
         this.startPos = block * blockLength;
-        this.endPos = (block + 1) * blockLength;
+        this.endPos = end;
         byte[] keyBytes = Arrays.copyOfRange(arr, 8, 16);
         double keyVal = ByteBuffer.wrap(keyBytes).getDouble();
         this.key = keyVal;
