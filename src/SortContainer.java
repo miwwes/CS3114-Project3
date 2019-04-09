@@ -17,7 +17,7 @@ import java.util.LinkedList;
  * ***Description***
  *
  */
-public class sortContainer {
+public class SortContainer {
     
     private double toNumber(byte[] bytes) {
         byte[] idBytes = Arrays.copyOfRange(bytes, 0, 8);
@@ -29,10 +29,10 @@ public class sortContainer {
         return key;
     }
     
-    sortContainer(String s){
+    SortContainer(String s){
         ib = new Buffer();
         ob = new Buffer();
-        l = new LinkedList<runNode>();
+        l = new LinkedList<RunNode>();
         try {
             in = new RandomAccessFile(s, "rw");
             runs = new RandomAccessFile("runfile.bin", "rw");
@@ -56,7 +56,7 @@ public class sortContainer {
     public RandomAccessFile in;
     public RandomAccessFile runs;
     public MinHeap h;
-    public LinkedList<runNode> l;
+    public LinkedList<RunNode> l;
     public Buffer ib;
     public Buffer ob;
     

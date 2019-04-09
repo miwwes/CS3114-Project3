@@ -20,17 +20,18 @@ import java.util.*;
  * If a run is exhausted, then get the next block from the
  *  data file for that run.
  */
-public class multiwayMerge {
+public class MultiwayMerge {
     
     static int blockLength = 8192;
     static int recordLength = 16;
     
-    multiwayMerge(sortContainer c) throws IOException{
+    MultiwayMerge(SortContainer c) throws IOException{
         runs = c.l;
         heap = c.h;
         readFile = c.runs;
         printFile = c.in;
         originalInputFile = c.in;
+        c.ib.clear();
         //printFile = new RandomAccessFile("test.bin", "rw");
         numberOfRuns = runs.size();
         outputBuffer = c.ob;
@@ -134,7 +135,7 @@ public class multiwayMerge {
             //if (minNode.getEndPos() < minNode.getStartPos()) {
             //    System.out.print('d');
             //}
-            runNode fileNode = runs.get(blockToRead); //getting data from disk
+            RunNode fileNode = runs.get(blockToRead); //getting data from disk
             long runLength = fileNode.getEndPos() - fileNode.getCurPos();
             if (blockSpace == 0 && curRuns.contains(blockToRead)) {  
                 blockReloaded = true;
