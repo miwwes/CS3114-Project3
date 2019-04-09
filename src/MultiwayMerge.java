@@ -44,7 +44,8 @@ public class MultiwayMerge {
         
     }
     
-    public void execute() throws IOException {        
+    public void execute() throws IOException {   
+        long val = readFile.length();
         
         if (numberOfRuns == 1) {
             printToStandardOutput(readFile);
@@ -187,14 +188,6 @@ public class MultiwayMerge {
         // check if there are still runs within outfile
         if (runs.size() == 0) {
             printToStandardOutput(printFile);
-            
-            /*if(printFile != originalInputFile) {
-                originalInputFile.seek(0);
-                int length;
-                while ((length = printFile.read(heap.arr())) > 0){
-                    originalInputFile.write(heap.arr(), 0, length);
-                }
-            }*/
         }
         else {
             long end = printFile.getFilePointer();
@@ -309,6 +302,7 @@ public class MultiwayMerge {
         String line;// = null;
         endFile.seek(0);
         int i = 0;
+        long val = endFile.length();
         while (endFile.getFilePointer() != endFile.length()) {
             byte[] b = new byte[16];
             endFile.read(b);
