@@ -28,10 +28,12 @@ public class ReplacementSelection {
         outFile = c.runs;
         inBuffer = c.ib;
         outBuffer = c.ob;
+        runStartPos = 0;
+        runEndPos = 0;
     }
    
     /**
-     * @return true if the infile can be read from, false if not
+     * @return true if the inFile can be read from, false if not
      */
     public boolean canRead() {
         try {
@@ -46,121 +48,90 @@ public class ReplacementSelection {
     
     /**
      * Executes the reading of the input file
+     * @throws IOException 
      */
-    public void execute() {
-        try {
-            // initialize helper variables
-            long runStart = outFile.getFilePointer();
-            int numRuns = 0;
-            int addCount = 0;
+    public void execute() throws IOException {
+        // initialize helper variables
+        runStartPos = outFile.getFilePointer();
+        int nextRunCount = 0;
+    
+        while (canRead()) { 
+            
+            inBuffer.loadBlock(inFile);
+            
+            while (!inBuffer.doneReading()) {
+            
+                if (recordHeap.empty()) {
+                    writeBufferToFile();           
+                    createRun();
+                    nextRunCount = 0;
+                    recordHeap.buildHeap(MAX_REC_HEAP);
+                    
+                }
+                else if (outBuffer.full()) {
+                    writeBufferToFile();
+                }
+                
+                byte[] minVal = recordHeap.getRecord(0);
+                outBuffer.write(minVal);
+                byte[] buf = inBuffer.read();
+                if (comparerecordHeap(buf, minVal) > 0 ) {
+                    recordHeap.modify(0, buf);
+                }
+                else {
+                    recordHeap.removemin(buf);
+                    nextRunCount++;
+                } 
+            
+            } // inBuffer is empty
+            
+        } // inFile is empty
         
-            while (canRead()) { 
-                inBuffer.clear();
-                long before = inFile.getFilePointer();
-                inFile.read(inBuffer.array());
-                long after = inFile.getFilePointer();
-                inBuffer.loadBlock((int)(after - before));
-                
-                
-                while (!inBuffer.doneReading()) {
-                
-                    if (recordHeap.empty()) {
-                        outFile.write(Arrays.copyOfRange(outBuffer.array(), 
-                                        0, outBuffer.pos()));
-                        outBuffer.clear();
-                        
-                        long end = outFile.getFilePointer();
-                        RunNode n = new RunNode(numRuns, runStart, end, false);
-                        runs.add(n);
-                        
-                        numRuns++;
-                        runStart = end;
-                        addCount = 0;
-                        recordHeap.buildHeap(MAX_REC_HEAP);
-                        
-                    }
-                    else if (outBuffer.full()) {
-                        outFile.write(outBuffer.array());
-                        outBuffer.clear();
-                    }
-                    
-                    byte[] minVal = recordHeap.getRecord(0);
-                    outBuffer.write(minVal);
-                    byte[] buf = inBuffer.read();
-                    if (comparerecordHeap(buf, minVal) > 0 ) {
-                        recordHeap.modify(0, buf);
-                    }
-                    else {
-                        recordHeap.removemin(buf);
-                        addCount++;
-                    } 
-                
-                } // inBuffer is empty
-                
-            } // inFile is empty
-            // could still be stuff in the heap and outBuffer
-            if (!outBuffer.empty()) {
-                outFile.write(Arrays.copyOfRange(outBuffer.array(), 
-                                0, outBuffer.pos()));
-                outBuffer.clear();
-            }
-            
+        writeBufferToFile();
+        
+        for (int i = 0; i <= nextRunCount; i += nextRunCount) {
             while (!recordHeap.empty()) {
                 if (outBuffer.full()) {
-                    outFile.write(outBuffer.array());
-                    outBuffer.clear();
-                    
+                    writeBufferToFile();
                 }
                 outBuffer.write(recordHeap.removemin());
             }
             
-            if (!outBuffer.empty()) {
-                outFile.write(Arrays.copyOfRange(outBuffer.array(), 
-                                0, outBuffer.pos()));
-                outBuffer.clear();
-            }
+            writeBufferToFile();
+            createRun();
             
-            long end = outFile.getFilePointer();
-            
-            if (runStart != end) {
-                RunNode n = new RunNode(numRuns, runStart, end, false);
-                runs.add(n);
-                numRuns++;
-                runStart = end;
+            if (nextRunCount == 0) {
+                i++;
             }
-            
-            if (addCount > 0) {
-                recordHeap.buildHeap(addCount);
+            else {
+                recordHeap.buildHeap(nextRunCount);
             }
-            
-            while (!recordHeap.empty()) {
-                if (outBuffer.full()) {
-                    outFile.write(outBuffer.array());
-                    outBuffer.clear();
-                }
-                outBuffer.write(recordHeap.removemin());
-            }
-            
-            if (!outBuffer.empty()) {
-                outFile.write(Arrays.copyOfRange(outBuffer.array(), 
-                                0, outBuffer.pos()));
-                outBuffer.clear();
-            }
-            
-            end = outFile.getFilePointer();
-            if (runStart != end) {
-                RunNode n2 = new RunNode(numRuns, runStart, end, false);
-                runs.add(n2);     
-            }
-            inBuffer.clear();
         }
-        catch (IOException e) {
-            System.err.println("IO error: " + e);
+        inBuffer.clear();
+    }
+    
+    private void writeBufferToFile() throws IOException {
+        if (!outBuffer.empty()) {
+            outFile.write(Arrays.copyOfRange(outBuffer.array(), 
+                            0, outBuffer.pos()));
+            outBuffer.clear();
+        }
+    }
+    
+    private void createRun() throws IOException {
+        
+        runEndPos = outFile.getFilePointer();
+        
+        if (runStartPos != runEndPos) {
+            RunNode n = new RunNode(numRuns, runStartPos, runEndPos, false);
+            runs.add(n);
+            numRuns++;
+            runStartPos = runEndPos;
         }
     }
     
     /**
-     * Compares two records
+     * Compares two records based on key value
      * @param rec1 the first record to compare
      * @param rec2 the second record to compare
      * @return the comparison value
@@ -184,24 +155,42 @@ public class ReplacementSelection {
     private MinHeap recordHeap;
     
     /**
-     * Private variable holding the runs going into the outfile
+     * Private variable holding the runs going into the output
      */
     private LinkedList<RunNode> runs;
+    
     /**
      * Input buffer to aid in replacement selection
      */
     private Buffer inBuffer;
+    
     /**
      * Output buffer to aid in replacement selection
      */
     private Buffer outBuffer;
+    
     /**
      * File from which the raw data is being read from
      */
     private RandomAccessFile inFile;
+    
     /**
      * File into which the original runs are put
      */
     private RandomAccessFile outFile;
 
+    /**
+     * Starting position of current run
+     */
+    private long runStartPos;
+    
+    /**
+     * Ending position of current run
+     */
+    private long runEndPos;
+    
+    /**
+     * The total number of runs created
+     */
+    private int numRuns;
 }

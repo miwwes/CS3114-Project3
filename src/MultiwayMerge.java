@@ -96,26 +96,6 @@ public class MultiwayMerge {
     }
     
     /**
-<<<<<<< HEAD
-=======
-     * @throws IOException
-     */
-    /*public void makePriorityQueue() throws IOException {
-        for (int i = 0; i < 2; i++) { //get first record from each block
-            //each run would start from a specified point in heap
-            int end = (i + 1) * BLOCK_LENGTH;
-            RunNode f = runs.get(i);
-            long runLength = f.getEndPos() - f.getCurPos();
-            if (runLength < BLOCK_LENGTH) {
-                end = (int)((i *  BLOCK_LENGTH) + runLength);
-            }
-            loadRecordFromHeap(i, BLOCK_LENGTH*i, end);
-        }
-        // priority queue is now full with the first record from 8 runs
-        //merge(pq, numOfRuns);
-    }*/
-    
-    /**
      * Merges multiple blocks together in the working memory
      * @param nRuns the number of runs for which to merge
      * @throws IOException
@@ -123,15 +103,10 @@ public class MultiwayMerge {
     public void merge(int nRuns) throws IOException {
         long nextStartPos = printFile.getFilePointer();
         outputBuffer.clear();
-        //int k = 0;
+        
         while (curRuns.size() > 0) {   //all runs are exhausted
             BlockNode minNode = pq.poll();
             outputBuffer.write(minNode.getRecord());
-            //toNumber(minNode.getRecord());
-            //System.out.println();
-            //if (Arrays.equals(minNode.getRecord(), toByteArray(0, 0))) {
-            //    System.out.print("STOP");
-            //}
             
             minNode.incrementCurPos(RECORD_LENGTH);
             if (outputBuffer.full()) {
@@ -139,26 +114,19 @@ public class MultiwayMerge {
                             outputBuffer.array(), 0, outputBuffer.pos()));
                 outputBuffer.clear();
             }
+            
             // change minNode record and increment its current Position
             int blockToRead = minNode.getBlockNumber();
-            //if (blockToRead == 0) {
-            //    k++;
-            //}
             int blockSpace = minNode.getEndPos() - minNode.getCurPos(); 
-            //if (blockSpace < 0) {
-            //    System.out.print("STOP2");
-            //}
+            
             boolean blockReloaded = false;
             boolean canReadFromRun = true;
-            //boolean changeNodeEnd = false;
-            //if (minNode.getEndPos() < minNode.getStartPos()) {
-            //    System.out.print('d');
-            //}
+            
             RunNode fileNode = runs.get(blockToRead); //getting data from disk
             long runLength = fileNode.getEndPos() - fileNode.getCurPos();
             if (blockSpace == 0 && curRuns.contains(blockToRead)) {  
                 blockReloaded = true;
-                //need to get a new block!
+                // need to get a new block!
                 if (runLength < BLOCK_LENGTH) {
                     long end = (blockToRead * BLOCK_LENGTH) + runLength;
                     minNode.setEndPos((int)end);
