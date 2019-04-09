@@ -42,6 +42,7 @@ public class SortContainer {
             byte[] heapArray = new byte[HEAP_SIZE];
             in.read(heapArray);
             h = new MinHeap(heapArray, MAX_REC_HEAP, MAX_REC_HEAP);
+            h.buildHeap();
 
             
         } catch (FileNotFoundException e) {

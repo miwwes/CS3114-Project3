@@ -38,7 +38,9 @@ public class MultiwayMerge {
         runs = c.l;
         heap = c.h;
         readFile = c.runs;
+        long val = readFile.length();
         printFile = c.in;
+        long b = printFile.length();
         originalInputFile = c.in;
         c.ib.clear();
         //printFile = new RandomAccessFile("test.bin", "rw");
@@ -47,6 +49,7 @@ public class MultiwayMerge {
         curRuns = new LinkedList<Integer>();
         readFile.seek(0);
         printFile.seek(0);
+        
         
     }
     
