@@ -80,13 +80,6 @@ public class MinHeap {
     }
     
     /**
-     * @return the position of the last record
-     */
-    public int getLastPos() {
-        return recordCount * RECORD_SIZE - RECORD_SIZE;
-    }
-    
-    /**
      * Compare records by key value
      * must convert to doubles
      * @param rec1 the first record to compare
