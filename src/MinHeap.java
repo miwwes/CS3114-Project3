@@ -15,6 +15,8 @@ import java.util.*;
  * 
  * The heap is also modified to move groups of 16
  * array elements around at a time (records).
+ * 
+ * **** Modified from the (max) heap class in the textbook ****
  *
  */
 public class MinHeap {
@@ -56,7 +58,7 @@ public class MinHeap {
     }
     
     /**
-     * Constructor supporting preloading of arr contents
+     * Default Constructor allocates the default size
      */
     MinHeap() { 
         arr = new byte[HEAP_SIZE];  
@@ -78,13 +80,6 @@ public class MinHeap {
     public int heapSize() {
         return recordCount;
     }
-    
-    /**
-     * @return the position of the last record
-     */
-    //public int getLastPos() {
-    //    return recordCount * RECORD_SIZE - RECORD_SIZE;
-    //}
     
     /**
      * Compare records by key value
@@ -178,15 +173,13 @@ public class MinHeap {
      * @param recordsLeft the number of records in heap
      */
     public void buildHeap(int recordsLeft) {
+        // move the stored records to the top of the heap
         if (recordsLeft < capacity) {
             int start = (capacity - recordsLeft) * RECORD_SIZE;
             System.arraycopy(arr, start, arr, 0, recordsLeft * RECORD_SIZE);
         }
         recordCount = recordsLeft;
-        int i = (recordCount / 2 - 1) * RECORD_SIZE;
-        for (; i >= 0; i -= RECORD_SIZE) {
-            siftdown(i);
-        }
+        buildHeap();
     }
 
 
