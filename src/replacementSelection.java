@@ -1,5 +1,3 @@
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -29,13 +27,13 @@ public class replacementSelection {
         outFile = c.runs;
         inBuffer = c.ib;
         outBuffer = c.ob;
-        try {
+       // try {
             //out = new FileOutputStream("afterRepSel.bin");
-            out = new FileOutputStream("afterc.bin");
-        } catch (FileNotFoundException e) {
+            //out = new FileOutputStream("afterc.bin");
+        //} catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        //    e.printStackTrace();
+        //}
     }
    
     public boolean canRead() {
@@ -72,7 +70,7 @@ public class replacementSelection {
                 
                     if( recordHeap.empty() ) {
                         outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                        out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                        //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                         outBuffer.clear();
                         
                         long end = outFile.getFilePointer();
@@ -87,7 +85,7 @@ public class replacementSelection {
                     }
                     else if ( outBuffer.full() ) {
                         outFile.write(outBuffer.array());
-                        out.write(outBuffer.array());
+                        //out.write(outBuffer.array());
                         outBuffer.clear();
                     }
                     
@@ -108,15 +106,14 @@ public class replacementSelection {
             // could still be stuff in the heap and outBuffer
             if( !outBuffer.empty() ) {
                 outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                
-                out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
             while( !recordHeap.empty() ) {
                 if ( outBuffer.full() ) {
                     outFile.write(outBuffer.array());
-                    out.write(outBuffer.array());
+                    //out.write(outBuffer.array());
                     outBuffer.clear();
                     
                 }
@@ -125,7 +122,7 @@ public class replacementSelection {
             
             if( !outBuffer.empty() ) {
                 outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
@@ -145,8 +142,7 @@ public class replacementSelection {
             while( !recordHeap.empty() ) {
                 if ( outBuffer.full() ) {
                     outFile.write(outBuffer.array());
-                    
-                    out.write(outBuffer.array());
+                    //out.write(outBuffer.array());
                     outBuffer.clear();
                 }
                 outBuffer.insert(recordHeap.removemin());
@@ -154,9 +150,10 @@ public class replacementSelection {
             
             if( !outBuffer.empty() ) {
                 outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 outBuffer.clear();
             }
+            
             end = outFile.getFilePointer();
             if(runStart != end) {
                 runNode n2 = new runNode(numRuns, runStart, end);
@@ -166,16 +163,6 @@ public class replacementSelection {
         catch (IOException e) {
             System.err.println("IO error: " + e);
         }
-    }
-    
-    private double toNumber(byte[] bytes) {
-        byte[] idBytes = Arrays.copyOfRange(bytes, 0, 8);
-        byte[] keyBytes = Arrays.copyOfRange(bytes, 8, 16);
-        long id = ByteBuffer.wrap(idBytes).getLong();
-        double key = ByteBuffer.wrap(keyBytes).getDouble();
-        System.out.println("id: " + id);
-        System.out.println("key: " + key);
-        return key;
     }
     
     /**
@@ -194,7 +181,6 @@ public class replacementSelection {
     /**
      * 
      */
-    //private static final int HEAP_SIZE = 8*8192;
     private static final int MAX_REC_HEAP = 4096;
 
     /**
@@ -214,7 +200,7 @@ public class replacementSelection {
      * 
      */
     private buffer outBuffer;
-    private FileOutputStream out;
+    // private FileOutputStream out;
     /**
      * 
      */

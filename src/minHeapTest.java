@@ -1,5 +1,4 @@
 import student.TestCase;
-//import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 /**
  * @author juliam8
@@ -11,7 +10,7 @@ public class minHeapTest extends TestCase {
     
     
     /**
-     * Test method for {@link minHeap#minHeap(byte[], int)}.
+     * Test method for 
      */
     //@Test
     public void testMinHeap() {
@@ -29,7 +28,7 @@ public class minHeapTest extends TestCase {
 
 
     /**
-     * Test method for {@link minHeap#heapSize()}.
+     * Test method for 
      */
    // @Test
     public void testHeapSize() {
@@ -45,7 +44,7 @@ public class minHeapTest extends TestCase {
 
 
     /**
-     * Test method for {@link minHeap#compareRecords(byte[], byte[])}.
+     * Test method for 
      */
    // @Test
     public void testCompareRecords() {
@@ -61,7 +60,7 @@ public class minHeapTest extends TestCase {
 
 
     /**
-     * Test method for {@link minHeap#isLeaf(int)}.
+     * Test method 
      */
    // @Test
     public void testIsLeaf() {
@@ -78,7 +77,7 @@ public class minHeapTest extends TestCase {
 
 
     /**
-     * Test method for {@link minHeap#leftchild(int)}.
+     * Test method for 
      */
     //@Test
     public void testLeftchild() {
@@ -95,7 +94,7 @@ public class minHeapTest extends TestCase {
 
 
     /**
-     * Test method for {@link minHeap#rightchild(int)}.
+     * Test method for 
      */
     //@Test
     public void testRightchild() {
@@ -115,7 +114,7 @@ public class minHeapTest extends TestCase {
 
 
     /**
-     * Test method for {@link minHeap#parent(int)}.
+     * Test method for 
      */
     //@Test
     public void testParent() {
@@ -132,7 +131,7 @@ public class minHeapTest extends TestCase {
 
 
     /**
-     * Test method for {@link minHeap#buildHeap()}.
+     * Test method 
      */
     //@Test
     public void testBuildHeap() {
@@ -155,7 +154,7 @@ public class minHeapTest extends TestCase {
 
 
     /**
-     * Test method for {@link minHeap#siftdown(int)}.
+     * Test method for.
      */
     //@Test
     public void testSiftdown() {
@@ -180,7 +179,7 @@ public class minHeapTest extends TestCase {
 
 
     /**
-     * Test method for {@link minHeap#removemin()}.
+     * Test method for 
      */
     //@Test
     public void testRemovemin() {
@@ -232,7 +231,7 @@ public class minHeapTest extends TestCase {
     }
 
     /**
-     * Test method for {@link minHeap#modify(int, byte[])}.
+     * Test method for 
      */
     //@Test
     //void testModify() {
