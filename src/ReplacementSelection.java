@@ -31,13 +31,12 @@ public class ReplacementSelection {
     ReplacementSelection(SortContainer c) throws IOException {
         // set the private variables to the shared 
         // resources from the SortContainer
-        runs = c.getRunsList();
-        recordHeap = c.getHeap();
-        inFile = c.getInFile();
-        outFile = c.getRunsFile();
-        inBuffer = c.getInputBuffer();
-        outBuffer = c.getOutputBuffer();
-        
+        runs = c.runsList();
+        recordHeap = c.heap();
+        inFile = c.inFile();
+        outFile = c.runsFile();
+        inBuffer = c.inputBuffer();
+        outBuffer = c.outputBuffer();
         // initialize start and end run positions to zero
         runStartPos = 0;
         runEndPos = 0;

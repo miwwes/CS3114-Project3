@@ -28,7 +28,7 @@ public class MultiwayMergeTest extends TestCase {
         MultiwayMerge mMerge = new MultiwayMerge(c);
         assertEquals(mMerge.numberOfRuns, 2);
         assertNull(mMerge.pq);
-        assertTrue(c.getInputBuffer().empty());
+        assertTrue(c.inputBuffer().empty());
     }
 
 
@@ -47,8 +47,8 @@ public class MultiwayMergeTest extends TestCase {
         mMerge.execute();
         assertTrue(mMerge.pq.isEmpty());
         assertTrue(mMerge.runs.isEmpty());
-        assertTrue(sc.getInputBuffer().empty());
-        assertTrue(sc.getOutputBuffer().empty());
+        assertTrue(sc.inputBuffer().empty());
+        assertTrue(sc.outputBuffer().empty());
         
         String[] args2 = {"mm_test3.bin", "130"};
         Genfile.main(args2);
@@ -60,8 +60,8 @@ public class MultiwayMergeTest extends TestCase {
         mMerge2.execute();
         assertTrue(mMerge2.pq.isEmpty());
         assertTrue(mMerge2.runs.isEmpty());
-        assertTrue(sc.getInputBuffer().empty());
-        assertTrue(sc.getOutputBuffer().empty());
+        assertTrue(sc.inputBuffer().empty());
+        assertTrue(sc.outputBuffer().empty());
     }
 
 

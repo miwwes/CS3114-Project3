@@ -44,14 +44,14 @@ public class MultiwayMerge {
      * @throws IOException
      */
     MultiwayMerge(SortContainer c) throws IOException {
-        runs = c.getRunsList();
-        heap = c.getHeap();
-        readFile = c.getRunsFile();
-        printFile = c.getInFile();
-        originalInputFile = c.getInFile();
-        c.getInputBuffer().clear();
+        runs = c.runsList();
+        heap = c.heap();
+        readFile = c.runsFile();
+        printFile = c.inFile();
+        originalInputFile = c.inFile();
+        c.inputBuffer().clear();
         numberOfRuns = runs.size();
-        outputBuffer = c.getOutputBuffer();
+        outputBuffer = c.outputBuffer();
         curRuns = new LinkedList<Integer>();
         readFile.seek(0);
         printFile.seek(0);   

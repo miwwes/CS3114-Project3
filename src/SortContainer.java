@@ -47,7 +47,7 @@ public class SortContainer {
     /**
      * @return the input random access file
      */
-    public RandomAccessFile getInFile() {
+    public RandomAccessFile inFile() {
         return in;
     }
     
@@ -63,7 +63,7 @@ public class SortContainer {
     /**
      * @return the output random access file
      */
-    public RandomAccessFile getRunsFile() {
+    public RandomAccessFile runsFile() {
         return runs;
     }
     
@@ -79,7 +79,7 @@ public class SortContainer {
     /**
      * @return the working memory heap
      */
-    public MinHeap getHeap() {
+    public MinHeap heap() {
         return h;
     }
     
@@ -95,7 +95,7 @@ public class SortContainer {
     /**
      * @return the list holding the runs 
      */
-    public LinkedList<RunNode> getRunsList() {
+    public LinkedList<RunNode> runsList() {
         return l;
     }
     
@@ -111,7 +111,7 @@ public class SortContainer {
     /**
      * @return the input buffer, used in replacement selection
      */
-    public Buffer getInputBuffer() {
+    public Buffer inputBuffer() {
         return ib;
     }
     
@@ -126,7 +126,7 @@ public class SortContainer {
     /**
      * @return the output buffer used for memory storage
      */
-    public Buffer getOutputBuffer() {
+    public Buffer outputBuffer() {
         return ob;
     }
     
