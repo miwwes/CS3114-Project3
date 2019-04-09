@@ -162,7 +162,8 @@ public class BlockNode {
  * @version 2019-04-10
  *
  *  blockNodeComparator class
- *      Used in the priority queue 
+ *      Used in the priority queue to compare two 
+ *      record's key values
  */
 class BlockNodeComparator implements Comparator<BlockNode> { 
     /* (non-Javadoc)

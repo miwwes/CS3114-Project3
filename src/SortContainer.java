@@ -2,9 +2,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.LinkedList;
 
-/**
- * 
- */
 
 /**
  * @author abbym1
@@ -133,7 +130,6 @@ public class SortContainer {
         return ob;
     }
     
-  
     private RandomAccessFile in;
     private RandomAccessFile runs;
     private MinHeap h;

@@ -79,7 +79,14 @@ public class RunNode {
         curPos = l;
     }
     
-   
+    /**
+     * Increment the current position by a certain amount
+     * @param inc the value to increment the current position by
+     */
+    public void incrementCurPos(int inc) {
+        curPos += inc;
+    }
+    
     /**
      * Get the starting position of the run
      * @return the starting position of the run within the file

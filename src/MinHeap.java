@@ -82,9 +82,9 @@ public class MinHeap {
     /**
      * @return the position of the last record
      */
-    public int getLastPos() {
-        return recordCount * RECORD_SIZE - RECORD_SIZE;
-    }
+    //public int getLastPos() {
+    //    return recordCount * RECORD_SIZE - RECORD_SIZE;
+    //}
     
     /**
      * Compare records by key value
@@ -332,7 +332,7 @@ public class MinHeap {
      */
     public double toNumber(byte[] bytes) {
         byte[] keyBytes = Arrays.copyOfRange(bytes, 
-                        RECORD_SIZE / 2, RECORD_SIZE);
+            RECORD_SIZE / 2, RECORD_SIZE);
         double key = ByteBuffer.wrap(keyBytes).getDouble();
         return key;
     }
