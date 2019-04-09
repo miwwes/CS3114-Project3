@@ -146,7 +146,7 @@ public class BlockNodeTest extends TestCase {
         byte[] b = toByteArray(50, 88);
         BlockNode mn = new BlockNode(1, b, BLOCK_LENGTH, BLOCK_LENGTH * 2);
         mn.incrementCurPos(16);
-        assertEquals(mn.getBlockNumber(), BLOCK_LENGTH + 16);
+        assertEquals(mn.getCurPos(), BLOCK_LENGTH + 16);
     }
 
 }
