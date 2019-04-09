@@ -36,12 +36,14 @@ public class SortContainer {
         try {
             in = new RandomAccessFile(s, "rw");
             runs = new RandomAccessFile("runfile.bin", "rw");
+            runs.setLength(HEAP_SIZE);
             in.seek(0);
             runs.seek(0);
             
             byte[] heapArray = new byte[HEAP_SIZE];
             in.read(heapArray);
             h = new MinHeap(heapArray, MAX_REC_HEAP, MAX_REC_HEAP);
+            h.buildHeap();
 
             
         } catch (FileNotFoundException e) {

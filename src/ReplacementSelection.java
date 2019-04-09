@@ -27,13 +27,6 @@ public class ReplacementSelection {
         outFile = c.runs;
         inBuffer = c.ib;
         outBuffer = c.ob;
-       // try {
-            //out = new FileOutputStream("afterRepSel.bin");
-            //out = new FileOutputStream("afterc.bin");
-        //} catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-        //    e.printStackTrace();
-        //}
     }
    
     public boolean canRead() {
@@ -52,6 +45,7 @@ public class ReplacementSelection {
      */
     public void execute() {
         try {
+            long v = outFile.length();
             
             // initialize helper variables
             long runStart = outFile.getFilePointer();
@@ -70,7 +64,6 @@ public class ReplacementSelection {
                 
                     if( recordHeap.empty() ) {
                         outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                        //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                         outBuffer.clear();
                         
                         long end = outFile.getFilePointer();
@@ -85,7 +78,6 @@ public class ReplacementSelection {
                     }
                     else if ( outBuffer.full() ) {
                         outFile.write(outBuffer.array());
-                        //out.write(outBuffer.array());
                         outBuffer.clear();
                     }
                     
@@ -104,58 +96,53 @@ public class ReplacementSelection {
                 
             } // inFile is empty
             // could still be stuff in the heap and outBuffer
-            if( !outBuffer.empty() ) {
+            if ( !outBuffer.empty() ) {
                 outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
-            while( !recordHeap.empty() ) {
+            while ( !recordHeap.empty() ) {
                 if ( outBuffer.full() ) {
                     outFile.write(outBuffer.array());
-                    //out.write(outBuffer.array());
                     outBuffer.clear();
                     
                 }
                 outBuffer.write(recordHeap.removemin());
             }
             
-            if( !outBuffer.empty() ) {
+            if ( !outBuffer.empty() ) {
                 outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
             long end = outFile.getFilePointer();
             
-            if(runStart != end) {
+            if (runStart != end) {
                 RunNode n = new RunNode(numRuns, runStart, end, false);
                 runs.add(n);
                 numRuns++;
                 runStart = end;
             }
             
-            if(addCount > 0) {
+            if (addCount > 0) {
                 recordHeap.buildHeap(addCount);
             }
             
-            while( !recordHeap.empty() ) {
+            while ( !recordHeap.empty() ) {
                 if ( outBuffer.full() ) {
                     outFile.write(outBuffer.array());
-                    //out.write(outBuffer.array());
                     outBuffer.clear();
                 }
                 outBuffer.write(recordHeap.removemin());
             }
             
-            if( !outBuffer.empty() ) {
+            if (!outBuffer.empty()) {
                 outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
             end = outFile.getFilePointer();
-            if(runStart != end) {
+            if (runStart != end) {
                 RunNode n2 = new RunNode(numRuns, runStart, end, false);
                 runs.add(n2);     
             }
@@ -201,7 +188,6 @@ public class ReplacementSelection {
      * 
      */
     private Buffer outBuffer;
-    // private FileOutputStream out;
     /**
      * 
      */

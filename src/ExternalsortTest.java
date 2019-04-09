@@ -20,7 +20,7 @@ public class ExternalsortTest extends TestCase {
      * @throws IOException
      */
     public void test() throws IOException {
-        String[] args = {"src//sampleInput16.bin"};
+        String[] args = {"src//b.bin"};
         Externalsort.main(args);
         SortContainer sc = Externalsort.getSortContainer();
         assertTrue(sc.h.empty());
