@@ -4,15 +4,14 @@ import java.util.Arrays;
  * @author juliam8
  * @author abbym1
  * @version 2019-04-10
- *
+ * Test class for MinHeap
  */
 public class MinHeapTest extends TestCase {
     
     
     /**
-     * Test method for 
+     * Test method for MinHeap
      */
-    //@Test
     public void testMinHeap() {
         MinHeap m = new MinHeap();
         byte[] y = m.toByteArray(15, 8);
@@ -28,9 +27,8 @@ public class MinHeapTest extends TestCase {
 
 
     /**
-     * Test method for 
+     * Test method for HeapSize
      */
-   // @Test
     public void testHeapSize() {
         MinHeap m = new MinHeap();
         byte[] byteArr = m.toByteArray(15, 8);
@@ -44,9 +42,8 @@ public class MinHeapTest extends TestCase {
 
 
     /**
-     * Test method for 
+     * Test method for CompareRecords
      */
-   // @Test
     public void testCompareRecords() {
         MinHeap m = new MinHeap();
         byte[] b = m.toByteArray(15, 8);
@@ -60,9 +57,8 @@ public class MinHeapTest extends TestCase {
 
 
     /**
-     * Test method 
+     * Test method for IsLeaf
      */
-   // @Test
     public void testIsLeaf() {
         MinHeap m = new MinHeap();
         byte[] byteArr = m.toByteArray(15, 8);
@@ -77,9 +73,8 @@ public class MinHeapTest extends TestCase {
 
 
     /**
-     * Test method for 
+     * Test method for Leftchild
      */
-    //@Test
     public void testLeftchild() {
         MinHeap m = new MinHeap();
         byte[] byteArr = m.toByteArray(15, 8);
@@ -94,9 +89,8 @@ public class MinHeapTest extends TestCase {
 
 
     /**
-     * Test method for 
+     * Test method for Rightchild
      */
-    //@Test
     public void testRightchild() {
         MinHeap m = new MinHeap();
         byte[] byteArr = m.toByteArray(15, 8);
@@ -114,9 +108,8 @@ public class MinHeapTest extends TestCase {
 
 
     /**
-     * Test method for 
+     * Test method for Parent
      */
-    //@Test
     public void testParent() {
         MinHeap m = new MinHeap();
         byte[] byteArr = m.toByteArray(15, 8);
@@ -131,9 +124,8 @@ public class MinHeapTest extends TestCase {
 
 
     /**
-     * Test method 
+     * Test method for BuildHeap
      */
-    //@Test
     public void testBuildHeap() {
         MinHeap m = new MinHeap();
         byte[] b1 = m.toByteArray(15, 8);
@@ -154,9 +146,8 @@ public class MinHeapTest extends TestCase {
 
 
     /**
-     * Test method for.
+     * Test method for Siftdown
      */
-    //@Test
     public void testSiftdown() {
         MinHeap m = new MinHeap();
         byte[] b1 = m.toByteArray(15, 2);
@@ -179,9 +170,8 @@ public class MinHeapTest extends TestCase {
 
 
     /**
-     * Test method for 
+     * Test method for Removemin
      */
-    //@Test
     public void testRemovemin() {
         MinHeap m = new MinHeap();
         byte[] b1 = m.toByteArray(15, 7);
@@ -229,14 +219,5 @@ public class MinHeapTest extends TestCase {
         h.removemin(t1);
         assertTrue(Arrays.equals(h.getRecord(0), m.toByteArray(18, 8)));
     }
-
-    /**
-     * Test method for 
-     */
-    //@Test
-    //void testModify() {
-//        fail("Not yet implemented");
-    //}  3
-  
 
 }
