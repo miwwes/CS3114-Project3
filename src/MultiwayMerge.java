@@ -328,7 +328,7 @@ public class MultiwayMerge {
             // print the first record of every block
             endFile.seek(BLOCK_LENGTH * i);
             toNumber(b);
-            // for every five records, print an end line
+            // for every five records, print an endline
             if (i % 5 == 0) {
                 System.out.println();
             }
@@ -345,9 +345,9 @@ public class MultiwayMerge {
      */
     private double toNumber(byte[] bytes) {
         byte[] idBytes = Arrays.copyOfRange(bytes, 0, 
-                            RECORD_LENGTH);
+                            RECORD_LENGTH / 2);
         byte[] keyBytes = Arrays.copyOfRange(bytes, 
-                            RECORD_LENGTH, RECORD_LENGTH * 2);
+                            RECORD_LENGTH / 2, RECORD_LENGTH);
         long id = ByteBuffer.wrap(idBytes).getLong();
         double key = ByteBuffer.wrap(keyBytes).getDouble();
         System.out.print(id + " " + key);
