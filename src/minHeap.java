@@ -276,8 +276,8 @@ public class minHeap {
         byte[] keyBytes = Arrays.copyOfRange(bytes, 8, 16);
         long id = ByteBuffer.wrap(idBytes).getLong();
         double key = ByteBuffer.wrap(keyBytes).getDouble();
-        System.out.println("id: " + id);
-        System.out.println("key: " + key);
+        //System.out.println("id: " + id);
+        //System.out.println("key: " + key);
         return key;
     }
     
