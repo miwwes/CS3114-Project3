@@ -47,7 +47,19 @@ public class MultiwayMergeTest extends TestCase {
         mMerge.execute();
         assertTrue(mMerge.pq.isEmpty());
         assertTrue(mMerge.runs.isEmpty());
-        assertTrue(sc.getHeap().empty());
+        assertTrue(sc.getInputBuffer().empty());
+        assertTrue(sc.getOutputBuffer().empty());
+        
+        String[] args2 = {"mm_test3.bin", "130"};
+        Genfile.main(args2);
+        SortContainer sc2 = new SortContainer("mm_test3.bin");
+        ReplacementSelection rSel2 = new ReplacementSelection(sc2);
+        rSel2.execute();
+
+        MultiwayMerge mMerge2 = new MultiwayMerge(sc2);
+        mMerge2.execute();
+        assertTrue(mMerge2.pq.isEmpty());
+        assertTrue(mMerge2.runs.isEmpty());
         assertTrue(sc.getInputBuffer().empty());
         assertTrue(sc.getOutputBuffer().empty());
     }
