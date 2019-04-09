@@ -6,7 +6,7 @@ import java.util.Arrays;
  * @version 2019-04-10
  *
  */
-public class minHeapTest extends TestCase {
+public class MinHeapTest extends TestCase {
     
     
     /**
