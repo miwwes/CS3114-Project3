@@ -1,14 +1,13 @@
-//import static org.junit.jupiter.api.Assertions.*;
 import student.TestCase;
 import java.nio.ByteBuffer;
-//import org.junit.jupiter.api.Test;
 
 /**
  * 
  */
 
 /**
- * @author jmkuz
+ * @author juliam8
+ * @author abbym1
  *
  */
 public class mergeNodeTest extends TestCase {
