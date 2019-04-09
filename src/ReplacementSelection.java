@@ -17,10 +17,11 @@ import java.util.LinkedList;
 public class ReplacementSelection {
 
     /**
-     * @param c
+     * @param c the variable containing data 
+     *          corresponding to sorting
      * @throws IOException 
      */
-    ReplacementSelection(SortContainer c) throws IOException{
+    ReplacementSelection(SortContainer c) throws IOException {
         runs = c.l;
         recordHeap = c.h;
         inFile = c.in;
@@ -29,12 +30,15 @@ public class ReplacementSelection {
         outBuffer = c.ob;
     }
    
+    /**
+     * @return true if the infile can be read from, false if not
+     */
     public boolean canRead() {
         try {
             boolean test = inFile.getFilePointer() != inFile.length();
             return test;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+        } 
+        catch (IOException e) {
             e.printStackTrace();
         }
         return false;
@@ -45,14 +49,12 @@ public class ReplacementSelection {
      */
     public void execute() {
         try {
-            long v = outFile.length();
-            
             // initialize helper variables
             long runStart = outFile.getFilePointer();
             int numRuns = 0;
             int addCount = 0;
         
-            while ( canRead() ) { 
+            while (canRead()) { 
                 inBuffer.clear();
                 long before = inFile.getFilePointer();
                 inFile.read(inBuffer.array());
@@ -60,10 +62,11 @@ public class ReplacementSelection {
                 inBuffer.loadBlock((int)(after - before));
                 
                 
-                while( !inBuffer.doneReading() ) {
+                while (!inBuffer.doneReading()) {
                 
-                    if( recordHeap.empty() ) {
-                        outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                    if (recordHeap.empty()) {
+                        outFile.write(Arrays.copyOfRange(outBuffer.array(), 
+                                        0, outBuffer.pos()));
                         outBuffer.clear();
                         
                         long end = outFile.getFilePointer();
@@ -76,12 +79,12 @@ public class ReplacementSelection {
                         recordHeap.buildHeap(MAX_REC_HEAP);
                         
                     }
-                    else if ( outBuffer.full() ) {
+                    else if (outBuffer.full()) {
                         outFile.write(outBuffer.array());
                         outBuffer.clear();
                     }
                     
-                    byte[] minVal = recordHeap.getRecord(0);    //get the minimum
+                    byte[] minVal = recordHeap.getRecord(0);
                     outBuffer.write(minVal);
                     byte[] buf = inBuffer.read();
                     if (comparerecordHeap(buf, minVal) > 0 ) {
@@ -96,13 +99,14 @@ public class ReplacementSelection {
                 
             } // inFile is empty
             // could still be stuff in the heap and outBuffer
-            if ( !outBuffer.empty() ) {
-                outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+            if (!outBuffer.empty()) {
+                outFile.write(Arrays.copyOfRange(outBuffer.array(), 
+                                0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
-            while ( !recordHeap.empty() ) {
-                if ( outBuffer.full() ) {
+            while (!recordHeap.empty()) {
+                if (outBuffer.full()) {
                     outFile.write(outBuffer.array());
                     outBuffer.clear();
                     
@@ -110,8 +114,9 @@ public class ReplacementSelection {
                 outBuffer.write(recordHeap.removemin());
             }
             
-            if ( !outBuffer.empty() ) {
-                outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+            if (!outBuffer.empty()) {
+                outFile.write(Arrays.copyOfRange(outBuffer.array(), 
+                                0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
@@ -128,8 +133,8 @@ public class ReplacementSelection {
                 recordHeap.buildHeap(addCount);
             }
             
-            while ( !recordHeap.empty() ) {
-                if ( outBuffer.full() ) {
+            while (!recordHeap.empty()) {
+                if (outBuffer.full()) {
                     outFile.write(outBuffer.array());
                     outBuffer.clear();
                 }
@@ -137,7 +142,8 @@ public class ReplacementSelection {
             }
             
             if (!outBuffer.empty()) {
-                outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                outFile.write(Arrays.copyOfRange(outBuffer.array(), 
+                                0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
@@ -154,9 +160,10 @@ public class ReplacementSelection {
     }
     
     /**
-     * @param rec1
-     * @param rec2
-     * @return
+     * Compares two records
+     * @param rec1 the first record to compare
+     * @param rec2 the second record to compare
+     * @return the comparison value
      */
     int comparerecordHeap(byte[] rec1, byte[] rec2) {
         ByteBuffer buffer1 = ByteBuffer.wrap(Arrays.copyOfRange(rec1, 8, 16));
@@ -167,33 +174,33 @@ public class ReplacementSelection {
     }
     
     /**
-     * 
+     * Named constant for maximum heap size
      */
     private static final int MAX_REC_HEAP = 4096;
 
     /**
-     * 
+     * Private variable for the 8 block heap
      */
     private MinHeap recordHeap;
     
     /**
-     * 
+     * Private variable holding the runs going into the outfile
      */
     private LinkedList<RunNode> runs;
     /**
-     * 
+     * Input buffer to aid in replacement selection
      */
     private Buffer inBuffer;
     /**
-     * 
+     * Output buffer to aid in replacement selection
      */
     private Buffer outBuffer;
     /**
-     * 
+     * File from which the raw data is being read from
      */
     private RandomAccessFile inFile;
     /**
-     * 
+     * File into which the original runs are put
      */
     private RandomAccessFile outFile;
 
