@@ -32,8 +32,15 @@ public class runNode {
     /**
      * @return
      */
-    public boolean getMerged() {
+    public boolean gotMerged() {
         return hasBeenMerged;
+    }
+    
+    /**
+     * @return
+     */
+    public void setMerged(boolean isMerged) {
+        hasBeenMerged = isMerged;
     }
     
     /**
