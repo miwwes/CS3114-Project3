@@ -28,7 +28,13 @@ public class MultiwayMerge {
      */
     public static final int RECORD_LENGTH = 16;
     
-    MultiwayMerge(SortContainer c) throws IOException{
+    /**
+     * Constructor for the merge class
+     * @param c the container for all shared objects 
+     * between merge and replacement selection
+     * @throws IOException
+     */
+    MultiwayMerge(SortContainer c) throws IOException {
         runs = c.l;
         heap = c.h;
         readFile = c.runs;
@@ -44,19 +50,22 @@ public class MultiwayMerge {
         
     }
     
-    public void execute() throws IOException {   
-        long val = readFile.length();
+
+    /**
+     * Primary method for performing the merge operation
+     * @throws IOException
+     */
+    public void execute() throws IOException {        
         
         if (numberOfRuns == 1) {
             printToStandardOutput(readFile);
-            if(printFile != originalInputFile) {
+            if (printFile != originalInputFile) {
                 originalInputFile.seek(0);
                 int length;
-                while ((length = printFile.read(heap.arr())) > 0){
+                while ((length = printFile.read(heap.arr())) > 0) {
                     originalInputFile.write(heap.arr(), 0, length);
                 }
             }
-            //System.out.println();
             //System.out.print(originalInputFile.getFilePointer());
         }
         else {
@@ -79,11 +88,12 @@ public class MultiwayMerge {
             RunNode fileNode = runs.get(i); 
             loadNextBlock(fileNode);
         }
-        //makePriorityQueue();
         merge(pq, numOfRuns);
     }
     
     /**
+<<<<<<< HEAD
+=======
      * @throws IOException
      */
     /*public void makePriorityQueue() throws IOException {
@@ -102,14 +112,16 @@ public class MultiwayMerge {
     }*/
     
     /**
+>>>>>>> b36ca8d6fb91e6159afcfa110d1ff38ca87b50f0
      * @param pq
      * @throws IOException
      */
-    public void merge(PriorityQueue<BlockNode> pq, int nRuns) throws IOException {
+    public void merge(PriorityQueue<BlockNode> pq, int nRuns) 
+            throws IOException {
         long nextStartPos = printFile.getFilePointer();
         outputBuffer.clear();
         int k = 0;
-        while (curRuns.size() > 0) {   //all 8 (or however many) runs are exhausted
+        while (curRuns.size() > 0) {   //all runs are exhausted
             BlockNode minNode = pq.poll();
             outputBuffer.write(minNode.getRecord());
             //toNumber(minNode.getRecord());
@@ -124,7 +136,7 @@ public class MultiwayMerge {
                             outputBuffer.array(), 0, outputBuffer.pos()));
                 outputBuffer.clear();
             }
-            // need to change record in the minNode and increment its current Position
+            // change minNode record and increment its current Position
             int blockToRead = minNode.getBlockNumber();
             if (blockToRead == 0) {
                 k++;
@@ -145,9 +157,10 @@ public class MultiwayMerge {
                 blockReloaded = true;
                 //need to get a new block!
                 if (runLength < BLOCK_LENGTH) {
-                    minNode.setEndPos((int)((blockToRead *  BLOCK_LENGTH) + runLength));
+                    long end = (blockToRead * BLOCK_LENGTH) + runLength;
+                    minNode.setEndPos((int)end);
                 }
-                if (runLength == 0) {//BLOCK_LENGTH) {
+                if (runLength == 0) { 
                     // need to remove that run from linked list
                     curRuns.remove((Integer)blockToRead);
                     canReadFromRun = false;
@@ -161,13 +174,18 @@ public class MultiwayMerge {
                     minNode.getCurPos(), minNode.getEndPos());
             }
         }
-        for (int i = nRuns-1; i >= 0; i--) {
+        for (int i = nRuns - 1; i >= 0; i--) {
             runs.remove(i);
         }
-        checkAftermath(nextStartPos);
+        checkIfFinished(nextStartPos);
     }
     
-    public void checkAftermath(long nextStart) throws IOException {
+    /**
+     * Last steps in the merge
+     * @param nextStart
+     * @throws IOException
+     */
+    public void checkIfFinished(long nextStart) throws IOException {
         // print whats left in the output buffer
         if (!outputBuffer.empty()) {
             printFile.write(Arrays.copyOfRange(
@@ -198,6 +216,10 @@ public class MultiwayMerge {
         }   
     }
     
+    /**
+     * @param n
+     * @throws IOException
+     */
     public void multipleRunsLeft(RunNode n) throws IOException {
         int numberOfRunsLeft = 0;
         Iterator<RunNode> j = runs.iterator(); 
@@ -241,12 +263,15 @@ public class MultiwayMerge {
         loadBlocks(numOfRuns);
     }
     
+    //merge nodes correspond to each run that has a block in working memory
     /**
      * @param runNum
+     * @param cur
+     * @param end
      * @throws IOException
      */
-    //merge nodes correspond to each run that has a block in working memory
-    public void loadRecordFromHeap(int runNum, int cur, int end) throws IOException {
+    public void loadRecordFromHeap(int runNum, int cur, int end) 
+            throws IOException {
         // need to remove that record from the heap
         // get the current location of the record removed from working memory
         // and when you add the next record into the priority queue make sure
@@ -256,7 +281,7 @@ public class MultiwayMerge {
         try {
             System.arraycopy(heap.arr(), cur, myRecord, 0, 16);
         }
-        catch(ArrayIndexOutOfBoundsException exception) {
+        catch (ArrayIndexOutOfBoundsException exception) {
             System.out.println(exception);
         }
         
@@ -265,7 +290,7 @@ public class MultiwayMerge {
     }
     
     /**
-     * @param runNum
+     * @param fileNode
      * @throws IOException
      */
     // need to check if you can load the next block
@@ -277,7 +302,7 @@ public class MultiwayMerge {
         if (runLength < BLOCK_LENGTH) {
             // (buffer to read), (position to start reading from), (length read)
             readFile.seek(fileNode.getCurPos());
-            readFile.read(heap.arr(), (int)(BLOCK_LENGTH*runNum), (int)runLength);
+            readFile.read(heap.arr(), (int)(BLOCK_LENGTH * runNum), (int)runLength);
             fileNode.setCurPos(readFile.getFilePointer());
             int start = (int)(BLOCK_LENGTH*runNum);
             int end = (int)(BLOCK_LENGTH*runNum + runLength);
@@ -285,7 +310,7 @@ public class MultiwayMerge {
         }
         else {
             readFile.seek(fileNode.getCurPos());
-            readFile.read(heap.arr(), (int)(BLOCK_LENGTH*runNum), BLOCK_LENGTH);
+            readFile.read(heap.arr(), (int)(BLOCK_LENGTH * runNum), BLOCK_LENGTH);
             fileNode.setCurPos(readFile.getFilePointer());
             int start = (int)(BLOCK_LENGTH*runNum);
             int end = (int)(BLOCK_LENGTH*runNum + BLOCK_LENGTH);
@@ -295,11 +320,11 @@ public class MultiwayMerge {
     
     
     /**
-     * @param endFile
+     * @param endFile the sorted data will be printed
      * @throws IOException
      */
-    public void printToStandardOutput(RandomAccessFile endFile) throws IOException {
-        String line;// = null;
+    public void printToStandardOutput(RandomAccessFile endFile) 
+            throws IOException {
         endFile.seek(0);
         int i = 0;
         long val = endFile.length();
@@ -318,6 +343,10 @@ public class MultiwayMerge {
         }
     }
     
+    /**
+     * @param bytes
+     * @return
+     */
     private double toNumber(byte[] bytes) {
         byte[] idBytes = Arrays.copyOfRange(bytes, 0, 8);
         byte[] keyBytes = Arrays.copyOfRange(bytes, 8, 16);
@@ -326,6 +355,11 @@ public class MultiwayMerge {
         System.out.print(id + " " + key);
         return key;
     }
+    /**
+     * @param id
+     * @param key
+     * @return
+     */
     public byte[] toByteArray(long id, double key) {
         byte[] bytes1 = new byte[8];
         byte[] bytes2 = new byte[8];
@@ -337,14 +371,43 @@ public class MultiwayMerge {
         return record;
     }
     
+    /**
+     * priority queue used to sort 8 records at a time
+     */
     private PriorityQueue<BlockNode> pq;
+    /**
+     * number of runs left to merge
+     */
     private int numberOfRuns;
+
+    /**
+     * Linked list storing run information
+     */
     private LinkedList<RunNode> runs;
+    /**
+     * Linked list storing current run information
+     */
+
     private LinkedList<Integer> curRuns;
+    /**
+     * The heap which contains the 8 block array
+     */
     private MinHeap heap;
+    /**
+     * file runs are read from
+     */
     private RandomAccessFile readFile;
+    /**
+     * reference to original input file
+     */
     private RandomAccessFile originalInputFile;
+    /**
+     * The file results are printed to
+     */
     private RandomAccessFile printFile;
+    /**
+     * The output 1 block byte array
+     */
     private Buffer outputBuffer;
 }
  
