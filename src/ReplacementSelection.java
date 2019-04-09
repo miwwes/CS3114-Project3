@@ -71,8 +71,8 @@ public class ReplacementSelection {
                 while (!inBuffer.doneReading()) {
                 
                     if (recordHeap.empty()) {
-                        outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                        //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                        outFile.write(Arrays.copyOfRange(outBuffer.array(), 
+                                        0, outBuffer.pos()));
                         outBuffer.clear();
                         
                         long end = outFile.getFilePointer();
@@ -87,11 +87,10 @@ public class ReplacementSelection {
                     }
                     else if (outBuffer.full()) {
                         outFile.write(outBuffer.array());
-                        //out.write(outBuffer.array());
                         outBuffer.clear();
                     }
                     
-                    byte[] minVal = recordHeap.getRecord(0);    //get the minimum
+                    byte[] minVal = recordHeap.getRecord(0);
                     outBuffer.write(minVal);
                     byte[] buf = inBuffer.read();
                     if (comparerecordHeap(buf, minVal) > 0 ) {
@@ -107,15 +106,14 @@ public class ReplacementSelection {
             } // inFile is empty
             // could still be stuff in the heap and outBuffer
             if (!outBuffer.empty()) {
-                outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                outFile.write(Arrays.copyOfRange(outBuffer.array(), 
+                                0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
             while (!recordHeap.empty()) {
                 if (outBuffer.full()) {
                     outFile.write(outBuffer.array());
-                    //out.write(outBuffer.array());
                     outBuffer.clear();
                     
                 }
@@ -123,8 +121,8 @@ public class ReplacementSelection {
             }
             
             if (!outBuffer.empty()) {
-                outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                outFile.write(Arrays.copyOfRange(outBuffer.array(), 
+                                0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
@@ -144,15 +142,14 @@ public class ReplacementSelection {
             while (!recordHeap.empty()) {
                 if (outBuffer.full()) {
                     outFile.write(outBuffer.array());
-                    //out.write(outBuffer.array());
                     outBuffer.clear();
                 }
                 outBuffer.write(recordHeap.removemin());
             }
             
             if (!outBuffer.empty()) {
-                outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
-                //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
+                outFile.write(Arrays.copyOfRange(outBuffer.array(), 
+                                0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
