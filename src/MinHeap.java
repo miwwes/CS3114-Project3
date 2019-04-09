@@ -327,11 +327,12 @@ public class MinHeap {
     
     /**
      * Testing function
-     * @param bytes
+     * @param bytes the bytes to convert into a key value
      * @return the key as a double
      */
     public double toNumber(byte[] bytes) {
-        byte[] keyBytes = Arrays.copyOfRange(bytes, RECORD_SIZE / 2, RECORD_SIZE);
+        byte[] keyBytes = Arrays.copyOfRange(bytes, 
+                        RECORD_SIZE / 2, RECORD_SIZE);
         double key = ByteBuffer.wrap(keyBytes).getDouble();
         return key;
     }

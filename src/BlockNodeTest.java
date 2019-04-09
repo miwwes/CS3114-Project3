@@ -134,8 +134,8 @@ public class BlockNodeTest extends TestCase {
     public void testSetEndPos() {
         byte[] b = toByteArray(9, 58);
         BlockNode mn = new BlockNode(1, b, BLOCK_LENGTH, BLOCK_LENGTH * 2);
-        mn.setEndPos(BLOCK_LENGTH + (BLOCK_LENGTH/2));
-        assertEquals(mn.getEndPos(), BLOCK_LENGTH + (BLOCK_LENGTH/2));
+        mn.setEndPos(BLOCK_LENGTH + (BLOCK_LENGTH / 2));
+        assertEquals(mn.getEndPos(), BLOCK_LENGTH + (BLOCK_LENGTH / 2));
     }
 
 

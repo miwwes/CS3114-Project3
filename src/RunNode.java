@@ -17,11 +17,13 @@
 public class RunNode {
     
     /**
-     * @param run
-     * @param start
-     * @param end
+     * Constructor for a node class that holds the run data
+     * @param run the run number corresponding to this run
+     * @param start the starting place in the file of this run
+     * @param end the ending position in the file of this run
+     * @param merged whether this run was a result of a multiway merge
      */
-    RunNode(int run, long start, long end, boolean merged){
+    RunNode(int run, long start, long end, boolean merged) {
         runNumber = run;
         curPos = start;
         startPos = start;
@@ -30,84 +32,97 @@ public class RunNode {
     }
     
     /**
-     * @return
+     * Returns whether this run was a result of a multiway merge
+     * @return true if this run was merged, false if not
      */
     public boolean gotMerged() {
         return hasBeenMerged;
     }
     
     /**
-     * @return
+     * Sets whether this run needs to be merged again
+     * @param isMerged sets whether this run was merged
      */
     public void setMerged(boolean isMerged) {
         hasBeenMerged = isMerged;
     }
     
     /**
-     * @return
+     * Gets the run number of this run node
+     * @return the value of the run number
      */
     public long getRunNumber() {
         return runNumber;
     }
     
-    
     /**
-     * @param run
+     * Sets the run value of this run node
+     * @param run the number to set it to
      */
     public void setRunNumber(int run) {
         runNumber = run;
     }
     
     /**
-     * @return
+     * Get the current position within the run within the file
+     * @return the current position within the file
      */
     public long getCurPos() {
         return curPos;
     }
     
     /**
-     * @param l
+     * Sets the current position within the run within the file
+     * @param l the location within the file
      */
     public void setCurPos(long l) {
         curPos = l;
     }
     
     /**
-     * @param inc
+     * Increment the current position by a certain amount
+     * @param inc the value to increment the current position by
      */
     public void incrementCurPos(int inc) {
         curPos += inc;
     }
     
     /**
-     * @return
+     * Get the starting position of the run
+     * @return the starting position of the run within the file
      */
     public long getStartPos() {
         return startPos;
     }
     
     /**
-     * @param start
+     * Set the starting position of the run within the file
+     * @param start the value to set the starting position to
      */
     public void setStartPos(int start) {
         startPos = start;
     }
     
     /**
-     * @return
+     * Get the ending position of the run
+     * @return the ending position of the run within the file
      */
     public long getEndPos() {
         return endPos;
     }
     
     /**
-     * @param end
+     * Sets the ending position of the run node within the file
+     * @param end the ending position to set
      */
     public void setEndPos(int end) {
         endPos = end;
     }
     
     
+    /**
+     * whether this run has been merged
+     */
     private boolean hasBeenMerged;
     /**
      * identifying number in the sequence of runs
