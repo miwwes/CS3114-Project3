@@ -202,17 +202,38 @@ public class multiwayMerge {
     }
     
     public void multipleRunsLeft() throws IOException {
-        int numberOfRunsLeft = runs.size();
+        int numberOfRunsLeft = 0;
+        Iterator<runNode> j = runs.iterator(); 
+        while (j.hasNext()) { 
+            if (!j.next().gotMerged()) {
+                numberOfRunsLeft++;
+            }
+        }
         // if heap is empty, then up to 8 runs are exhausted.
         long end = printFile.getFilePointer();
         boolean merged = true;
         runNode n = new runNode(numberOfRunsLeft, 0, end, merged);  // add to the end 
         runs.add(n);
         //switch input and output
-        RandomAccessFile temp = readFile;
-        readFile = printFile;
-        printFile = temp;
-        this.numberOfRuns = runs.size();
+        if (numberOfRunsLeft == 0) { // won't go here first time through, because 
+                                //of previous runs.size() == 0 check
+            // if all nodes are merged, need to set them all to not merged
+            Iterator<runNode> k = runs.iterator(); 
+            while (k.hasNext()) { 
+                k.next().setMerged(false);
+            } 
+            //reset like nothing happened lolol
+            numberOfRunsLeft = runs.size();
+            RandomAccessFile temp = readFile;
+            readFile = printFile;
+            printFile = temp;
+            this.numberOfRuns = runs.size();
+            //loadBlocks();
+        }
+        //else {
+        //    loadBlocks();
+        //}
+        
         loadBlocks();
     }
     
