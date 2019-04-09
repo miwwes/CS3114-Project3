@@ -187,7 +187,7 @@ public class replacementSelection {
     /**
      * 
      */
-    private minHeap recordHeap;
+    private MinHeap recordHeap;
     
     /**
      * 
@@ -196,11 +196,11 @@ public class replacementSelection {
     /**
      * 
      */
-    private buffer inBuffer;
+    private Buffer inBuffer;
     /**
      * 
      */
-    private buffer outBuffer;
+    private Buffer outBuffer;
     // private FileOutputStream out;
     /**
      * 

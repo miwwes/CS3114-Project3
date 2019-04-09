@@ -47,8 +47,8 @@ public class multiwayMerge {
             if(printFile != originalInputFile) {
                 originalInputFile.seek(0);
                 int length;
-                while ((length = printFile.read(heap.arr)) > 0){
-                    originalInputFile.write(heap.arr, 0, length);
+                while ((length = printFile.read(heap.arr())) > 0){
+                    originalInputFile.write(heap.arr(), 0, length);
                 }
             }
             //System.out.println();
@@ -68,7 +68,7 @@ public class multiwayMerge {
      * @throws IOException
      */
     public void loadBlocks(int numOfRuns) throws IOException {
-        pq = new PriorityQueue<blockNode>(numOfRuns, new blockNodeComparator());
+        pq = new PriorityQueue<BlockNode>(numOfRuns, new BlockNodeComparator());
         for (int i = 0; i < numOfRuns; i++) {
             curRuns.add(i);
             runNode fileNode = runs.get(i); 
@@ -100,12 +100,12 @@ public class multiwayMerge {
      * @param pq
      * @throws IOException
      */
-    public void merge(PriorityQueue<blockNode> pq, int nRuns) throws IOException {
+    public void merge(PriorityQueue<BlockNode> pq, int nRuns) throws IOException {
         long nextStartPos = printFile.getFilePointer();
         outputBuffer.clear();
         int k = 0;
         while (curRuns.size() > 0) {   //all 8 (or however many) runs are exhausted
-            blockNode minNode = pq.poll();
+            BlockNode minNode = pq.poll();
             outputBuffer.write(minNode.getRecord());
             //toNumber(minNode.getRecord());
             //System.out.println();
@@ -169,9 +169,9 @@ public class multiwayMerge {
                         outputBuffer.array(), 0, outputBuffer.pos()));
             outputBuffer.clear();
         }
-        Iterator<blockNode> i = pq.iterator(); 
+        Iterator<BlockNode> i = pq.iterator(); 
         while (i.hasNext()) { 
-            blockNode minNode = pq.poll();
+            BlockNode minNode = pq.poll();
             outputBuffer.write(minNode.getRecord());
         } 
         if (!outputBuffer.empty()) {
@@ -187,8 +187,8 @@ public class multiwayMerge {
             /*if(printFile != originalInputFile) {
                 originalInputFile.seek(0);
                 int length;
-                while ((length = printFile.read(heap.arr)) > 0){
-                    originalInputFile.write(heap.arr, 0, length);
+                while ((length = printFile.read(heap.arr())) > 0){
+                    originalInputFile.write(heap.arr(), 0, length);
                 }
             }*/
         }
@@ -257,13 +257,13 @@ public class multiwayMerge {
         // from the corresponding block
         byte[] myRecord = new byte[16];
         try {
-            System.arraycopy(heap.arr, cur, myRecord, 0, 16);
+            System.arraycopy(heap.arr(), cur, myRecord, 0, 16);
         }
         catch(ArrayIndexOutOfBoundsException exception) {
             System.out.println(exception);
         }
         
-        blockNode mNode = new blockNode(runNum, myRecord, cur, end);
+        BlockNode mNode = new BlockNode(runNum, myRecord, cur, end);
         pq.add(mNode);
     }
     
@@ -280,7 +280,7 @@ public class multiwayMerge {
         if (runLength < blockLength) {
             // (buffer to read), (position to start reading from), (length read)
             readFile.seek(fileNode.getCurPos());
-            readFile.read(heap.arr, (int)(blockLength*runNum), (int)runLength);
+            readFile.read(heap.arr(), (int)(blockLength*runNum), (int)runLength);
             fileNode.setCurPos(readFile.getFilePointer());
             int start = (int)(blockLength*runNum);
             int end = (int)(blockLength*runNum + runLength);
@@ -288,7 +288,7 @@ public class multiwayMerge {
         }
         else {
             readFile.seek(fileNode.getCurPos());
-            readFile.read(heap.arr, (int)(blockLength*runNum), blockLength);
+            readFile.read(heap.arr(), (int)(blockLength*runNum), blockLength);
             fileNode.setCurPos(readFile.getFilePointer());
             int start = (int)(blockLength*runNum);
             int end = (int)(blockLength*runNum + blockLength);
@@ -337,14 +337,14 @@ public class multiwayMerge {
         return record;
     }
     
-    private PriorityQueue<blockNode> pq;
+    private PriorityQueue<BlockNode> pq;
     private int numberOfRuns;
     private LinkedList<runNode> runs;
     private LinkedList<Integer> curRuns;
-    private minHeap heap;
+    private MinHeap heap;
     private RandomAccessFile readFile;
     private RandomAccessFile originalInputFile;
     private RandomAccessFile printFile;
-    private buffer outputBuffer;
+    private Buffer outputBuffer;
 }
  

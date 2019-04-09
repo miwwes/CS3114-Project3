@@ -17,14 +17,14 @@ import java.util.Arrays;
  *  remove, etc.
  *
  */
-public class buffer {
+public class Buffer {
     
     /**
      *  Default constructor: declares a constant
      *  numRecords byte array and initializes helper variables
      *  to zero.
      */
-    public buffer() {
+    public Buffer() {
         byteArray = new byte[BUFFER_SIZE];
         numRecords = 0;
         pos = 0;
@@ -39,12 +39,13 @@ public class buffer {
     }
     
     /**
+     * @param amount of records loaded
      * used when new data is written into the array
      * resets read position and calculates number of 
      * records
      */
     public void loadBlock(int amount) {
-        numRecords = amount/RECORD_SIZE;
+        numRecords = amount / RECORD_SIZE;
         pos = 0;
     }
     
@@ -53,7 +54,7 @@ public class buffer {
      * position if there is space
      */
     public void write(byte[] record) {
-        if( !full() ) {
+        if (!full()) {
             System.arraycopy(record, 0, byteArray, pos, RECORD_SIZE);
             pos += RECORD_SIZE;
             numRecords++;
@@ -65,8 +66,9 @@ public class buffer {
      * and increment the position
      */
     public byte[] read() {
-        if (pos >= BUFFER_SIZE || pos < 0)
+        if (pos >= BUFFER_SIZE || pos < 0) {
             return null;
+        }
         pos += RECORD_SIZE;
         return Arrays.copyOfRange(byteArray, pos - RECORD_SIZE, pos);
     }
@@ -116,7 +118,7 @@ public class buffer {
     /**
      * The constant number of bytes per record
      */
-    private static int RECORD_SIZE = 16;
+    private static final int RECORD_SIZE = 16;
     
     /**
      * byte array storing max BUFFER_SIZE/RECORD_SIZE 
