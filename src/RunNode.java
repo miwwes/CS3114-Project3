@@ -14,14 +14,14 @@
  *      and current position in the run.
  *
  */
-public class runNode {
+public class RunNode {
     
     /**
      * @param run
      * @param start
      * @param end
      */
-    runNode(int run, long start, long end, boolean merged){
+    RunNode(int run, long start, long end, boolean merged){
         runNumber = run;
         curPos = start;
         startPos = start;

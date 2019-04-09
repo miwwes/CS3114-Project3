@@ -70,9 +70,9 @@ public class Externalsort {
      */
     public static void main(String[] args) throws IOException {
         
-        extSort = new sortContainer(args[0]);
+        extSort = new SortContainer(args[0]);
         
-        replacementSelection rSel = new replacementSelection(extSort);
+        ReplacementSelection rSel = new ReplacementSelection(extSort);
         rSel.execute();
 
         MultiwayMerge mMerge = new MultiwayMerge(extSort);
@@ -88,7 +88,7 @@ public class Externalsort {
      * to the heap array, input and output files, etc
      * for testing purposes
      */
-    public static sortContainer getSortContainer() {
+    public static SortContainer getSortContainer() {
         return extSort;
     }
     
@@ -96,5 +96,5 @@ public class Externalsort {
      * This object stores all data and structures necessary
      * for both replacement selection and multi-way merge
      */
-    private static sortContainer extSort;
+    private static SortContainer extSort;
 }

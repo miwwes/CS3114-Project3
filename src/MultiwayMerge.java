@@ -34,7 +34,7 @@ public class MultiwayMerge {
      * between merge and replacement selection
      * @throws IOException
      */
-    MultiwayMerge(sortContainer c) throws IOException {
+    MultiwayMerge(SortContainer c) throws IOException {
         runs = c.l;
         heap = c.h;
         readFile = c.runs;
@@ -82,7 +82,7 @@ public class MultiwayMerge {
         pq = new PriorityQueue<BlockNode>(numOfRuns, new BlockNodeComparator());
         for (int i = 0; i < numOfRuns; i++) {
             curRuns.add(i);
-            runNode fileNode = runs.get(i); 
+            RunNode fileNode = runs.get(i); 
             loadNextBlock(fileNode);
         }
         merge(pq, numOfRuns);
@@ -127,7 +127,7 @@ public class MultiwayMerge {
             //if (minNode.getEndPos() < minNode.getStartPos()) {
             //    System.out.print('d');
             //}
-            runNode fileNode = runs.get(blockToRead); //getting data from disk
+            RunNode fileNode = runs.get(blockToRead); //getting data from disk
             long runLength = fileNode.getEndPos() - fileNode.getCurPos();
             if (blockSpace == 0 && curRuns.contains(blockToRead)) {  
                 blockReloaded = true;
@@ -194,7 +194,7 @@ public class MultiwayMerge {
         else {
             long end = printFile.getFilePointer();
             boolean merged = true;
-            runNode n = new runNode(runs.size(), nextStart, end, merged);  // add to the end 
+            RunNode n = new RunNode(runs.size(), nextStart, end, merged);  // add to the end 
             multipleRunsLeft(n);
             
         }   
@@ -204,12 +204,12 @@ public class MultiwayMerge {
      * @param n
      * @throws IOException
      */
-    public void multipleRunsLeft(runNode n) throws IOException {
+    public void multipleRunsLeft(RunNode n) throws IOException {
         int numberOfRunsLeft = 0;
-        Iterator<runNode> j = runs.iterator(); 
+        Iterator<RunNode> j = runs.iterator(); 
         int i = 0;
         while (j.hasNext()) { 
-            runNode r = j.next();
+            RunNode r = j.next();
             if (!r.gotMerged()) {
                 r.setRunNumber(i);
                 numberOfRunsLeft++;
@@ -221,10 +221,10 @@ public class MultiwayMerge {
         if (numberOfRunsLeft == 0) { // won't go here first time through, because 
                                 //of previous runs.size() == 0 check
             // if all nodes are merged, need to set them all to not merged
-            Iterator<runNode> k = runs.iterator(); 
+            Iterator<RunNode> k = runs.iterator(); 
             int count = 0;
             while (k.hasNext()) { 
-                runNode nNode = k.next();
+                RunNode nNode = k.next();
                 nNode.setRunNumber(count);
                 nNode.setMerged(false);
                 count++;
@@ -279,7 +279,7 @@ public class MultiwayMerge {
      */
     // need to check if you can load the next block
     // need to reset the curPos for the next block that is read in
-    public void loadNextBlock(runNode fileNode) throws IOException {
+    public void loadNextBlock(RunNode fileNode) throws IOException {
         long runLength = fileNode.getEndPos() - fileNode.getCurPos();
         long runNum = fileNode.getRunNumber();
         
@@ -363,7 +363,7 @@ public class MultiwayMerge {
     /**
      * Linked list storing run information
      */
-    private LinkedList<runNode> runs;
+    private LinkedList<RunNode> runs;
     /**
      * Linked list storing current run information
      */

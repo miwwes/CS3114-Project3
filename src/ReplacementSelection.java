@@ -14,13 +14,13 @@ import java.util.LinkedList;
  * @version 2019-04-10
  *
  */
-public class replacementSelection {
+public class ReplacementSelection {
 
     /**
      * @param c
      * @throws IOException 
      */
-    replacementSelection(sortContainer c) throws IOException{
+    ReplacementSelection(SortContainer c) throws IOException{
         runs = c.l;
         recordHeap = c.h;
         inFile = c.in;
@@ -74,7 +74,7 @@ public class replacementSelection {
                         outBuffer.clear();
                         
                         long end = outFile.getFilePointer();
-                        runNode n = new runNode(numRuns, runStart, end, false);
+                        RunNode n = new RunNode(numRuns, runStart, end, false);
                         runs.add(n);
                         
                         numRuns++;
@@ -129,7 +129,7 @@ public class replacementSelection {
             long end = outFile.getFilePointer();
             
             if(runStart != end) {
-                runNode n = new runNode(numRuns, runStart, end, false);
+                RunNode n = new RunNode(numRuns, runStart, end, false);
                 runs.add(n);
                 numRuns++;
                 runStart = end;
@@ -156,7 +156,7 @@ public class replacementSelection {
             
             end = outFile.getFilePointer();
             if(runStart != end) {
-                runNode n2 = new runNode(numRuns, runStart, end, false);
+                RunNode n2 = new RunNode(numRuns, runStart, end, false);
                 runs.add(n2);     
             }
             inBuffer.clear();
@@ -192,7 +192,7 @@ public class replacementSelection {
     /**
      * 
      */
-    private LinkedList<runNode> runs;
+    private LinkedList<RunNode> runs;
     /**
      * 
      */
