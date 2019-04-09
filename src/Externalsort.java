@@ -77,8 +77,8 @@ public class Externalsort {
         MultiwayMerge mMerge = new MultiwayMerge(extSort);
         mMerge.execute();
         
-        extSort.getInFile().close();
-        extSort.getRunsFile().close();
+        extSort.inFile().close();
+        extSort.runsFile().close();
 
     }
     

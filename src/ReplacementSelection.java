@@ -29,12 +29,12 @@ public class ReplacementSelection {
      * @throws IOException 
      */
     ReplacementSelection(SortContainer c) throws IOException {
-        runs = c.getRunsList();
-        recordHeap = c.getHeap();
-        inFile = c.getInFile();
-        outFile = c.getRunsFile();
-        inBuffer = c.getInputBuffer();
-        outBuffer = c.getOutputBuffer();
+        runs = c.runsList();
+        recordHeap = c.heap();
+        inFile = c.inFile();
+        outFile = c.runsFile();
+        inBuffer = c.inputBuffer();
+        outBuffer = c.outputBuffer();
         runStartPos = 0;
         runEndPos = 0;
     }
