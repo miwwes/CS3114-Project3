@@ -316,9 +316,11 @@ public class MultiwayMerge {
             endFile.seek(BLOCK_LENGTH * i);
             toNumber(b);
             if (i % 5 == 0) {
-                System.out.println('\n');
+                System.out.println();
             }
-            System.out.print(' ');
+            else {
+                System.out.print(' ');
+            }
         }
     }
     
