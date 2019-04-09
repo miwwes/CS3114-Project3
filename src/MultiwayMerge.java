@@ -17,7 +17,7 @@ import java.util.*;
  *  data file for that run.
  */
 public class MultiwayMerge {
-    
+
     /**
      * Constant number of bytes in a block
      */
@@ -40,6 +40,8 @@ public class MultiwayMerge {
         readFile = c.runs;
         printFile = c.in;
         originalInputFile = c.in;
+        c.ib.clear();
+        //printFile = new RandomAccessFile("test.bin", "rw");
         numberOfRuns = runs.size();
         outputBuffer = c.ob;
         curRuns = new LinkedList<Integer>();
@@ -89,6 +91,27 @@ public class MultiwayMerge {
     }
     
     /**
+<<<<<<< HEAD
+=======
+     * @throws IOException
+     */
+    /*public void makePriorityQueue() throws IOException {
+        for (int i = 0; i < 2; i++) { //get first record from each block
+            //each run would start from a specified point in heap
+            int end = (i + 1) * BLOCK_LENGTH;
+            RunNode f = runs.get(i);
+            long runLength = f.getEndPos() - f.getCurPos();
+            if (runLength < BLOCK_LENGTH) {
+                end = (int)((i *  BLOCK_LENGTH) + runLength);
+            }
+            loadRecordFromHeap(i, BLOCK_LENGTH*i, end);
+        }
+        // priority queue is now full with the first record from 8 runs
+        //merge(pq, numOfRuns);
+    }*/
+    
+    /**
+>>>>>>> b36ca8d6fb91e6159afcfa110d1ff38ca87b50f0
      * @param pq
      * @throws IOException
      */
@@ -318,9 +341,11 @@ public class MultiwayMerge {
             endFile.seek(BLOCK_LENGTH * i);
             toNumber(b);
             if (i % 5 == 0) {
-                System.out.println('\n');
+                System.out.println();
             }
-            System.out.print(' ');
+            else {
+                System.out.print(' ');
+            }
         }
     }
     
@@ -360,6 +385,7 @@ public class MultiwayMerge {
      * number of runs left to merge
      */
     private int numberOfRuns;
+
     /**
      * Linked list storing run information
      */
@@ -367,6 +393,7 @@ public class MultiwayMerge {
     /**
      * Linked list storing current run information
      */
+
     private LinkedList<Integer> curRuns;
     /**
      * The heap which contains the 8 block array
