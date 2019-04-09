@@ -4,9 +4,6 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-/**
- * 
- */
 
 /**
  * @author juliam8
