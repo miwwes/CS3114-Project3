@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
  * @author abbym1
  * @version 4-4-19
  * 
- * ***Description***
+ * This is the testing class for BlockNode
  *
  */
 public class BlockNodeTest extends TestCase {

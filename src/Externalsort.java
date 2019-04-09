@@ -60,12 +60,11 @@ public class Externalsort {
      * Compiler: javac
      * JDK: 11.0.2
      * OS: Windows 10
-     * Completed: _________________
+     * Completed: 4/9/2019
      * 
      * @param args
      *            input string array
      * @throws IOException 
-     * @throws FileNotFoundException
      * 
      */
     public static void main(String[] args) throws IOException {

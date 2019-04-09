@@ -8,13 +8,17 @@ import java.util.*;
  * @author abbym1
  * @version 2019-04-10
  *
- * Need to place 8 blocks into working memory
- * Take the first record from each block and put into
- *  8 record heap
- * Get the minimum value from the 8 record heap and place
- *  into output buffer
- * If a run is exhausted, then get the next block from the
- *  data file for that run.
+ *  Takes a random access file holding sorted runs
+ *      and uses the working memory to sort all of 
+ *      the runs into one sorted run. Blocks of 
+ *      length 8192 bytes are taken from the file
+ *      and placed into working memory where one record
+ *      at a time is taken from each block and
+ *      sorted in a priority queue. The resulting run(s)
+ *      are printed into the input file. If there
+ *      is more than one resulting run from the first
+ *      multiway merge pass, then the process begins 
+ *      again with using the output file as the end file.
  */
 public class MultiwayMerge {
 

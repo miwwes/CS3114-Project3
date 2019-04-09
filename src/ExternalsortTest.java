@@ -11,7 +11,7 @@ import student.TestCase;
  * @author juliam8
  * @version 4-8-19
  * 
- * This is the test file for the overarching Externalsort class
+ * This is the test file for the over-arching Externalsort class
  *
  */
 public class ExternalsortTest extends TestCase {

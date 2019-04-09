@@ -13,6 +13,8 @@ import java.math.*;
     Each record is one long and one double.
  * @author CS 3114 Professors Spring 2019
  * @version 4-4-19
+ * 
+ * This is a provided file to generate bin files for testing
  *
  */
 public class Genfile {

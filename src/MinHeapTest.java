@@ -4,7 +4,8 @@ import java.util.Arrays;
  * @author juliam8
  * @author abbym1
  * @version 2019-04-10
- * Test class for MinHeap
+ * 
+ *  Test class for MinHeap
  */
 public class MinHeapTest extends TestCase {
     
