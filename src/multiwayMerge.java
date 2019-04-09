@@ -41,6 +41,7 @@ public class multiwayMerge {
     }
     
     public void execute() throws IOException {        
+        
         if (numberOfRuns == 1) {
             printToStandardOutput(readFile);
             if(printFile != originalInputFile) {
@@ -89,7 +90,7 @@ public class multiwayMerge {
             runNode f = runs.get(i);
             long runLength = f.getEndPos() - f.getCurPos();
             if (runLength < blockLength) {
-                end = (int)runLength;
+                end = (int)((i *  blockLength) + runLength);
             }
             loadRecordFromHeap(i, blockLength*i, end);
         }
@@ -108,6 +109,8 @@ public class multiwayMerge {
         while (curRuns.size() > 0) {   //all 8 (or however many) runs are exhausted
             mergeNode minNode = pq.poll();
             outputBuffer.insert(minNode.getRecord());
+            //toNumber(minNode.getRecord());
+            //System.out.println();
             if (Arrays.equals(minNode.getRecord(), toByteArray(0, 0))) {
                 System.out.print("STOP");
             }
@@ -120,6 +123,9 @@ public class multiwayMerge {
             }
             // need to change record in the minNode and increment its current Position
             int blockToRead = minNode.getBlockNumber();
+            if (blockToRead == 0) {
+                k++;
+            }
             int blockSpace = minNode.getEndPos() - minNode.getCurPos(); 
             if (blockSpace < 0) {
                 System.out.print("STOP2");
