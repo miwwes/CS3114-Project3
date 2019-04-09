@@ -29,12 +29,15 @@ public class ReplacementSelection {
      * @throws IOException 
      */
     ReplacementSelection(SortContainer c) throws IOException {
+        // set the private variables to the shared 
+        // resources from the SortContainer
         runs = c.runsList();
         recordHeap = c.heap();
         inFile = c.inFile();
         outFile = c.runsFile();
         inBuffer = c.inputBuffer();
         outBuffer = c.outputBuffer();
+        // initialize start and end run positions to zero
         runStartPos = 0;
         runEndPos = 0;
     }
@@ -43,6 +46,7 @@ public class ReplacementSelection {
      * @return true if the inFile can be read from, false if not
      */
     public boolean canRead() throws IOException {
+        // if these are equal, we are at the end of the file
         return inFile.getFilePointer() != inFile.length();
     }
     
@@ -54,21 +58,31 @@ public class ReplacementSelection {
      * @throws IOException 
      */
     public void execute() throws IOException {
-        // initialize helper variables
+        // set the start to the current pos
         runStartPos = outFile.getFilePointer();
+        
+        // this tracks how many values have been
+        // stored in the heap for processing in
+        // the next run (needed to heapify)
         int nextRunCount = 0;
     
         while (canRead()) { 
             
+            // load the next block of records
             inBuffer.loadBlock(inFile);
             
             while (!inBuffer.doneReading()) {
-            
+                // there are still records to process
+                
                 if (recordHeap.empty()) {
+                    // if the heap is empty, that is the end of a run
                     writeBufferToFile();           
                     createRun();
-                    nextRunCount = 0;
+                    
+                    // heap array is full of records for next run
                     recordHeap.buildHeap(MAX_REC_HEAP);
+                    // reset to zero
+                    nextRunCount = 0;
                 }
                 else if (outBuffer.full()) {
                     writeBufferToFile();
@@ -81,9 +95,14 @@ public class ReplacementSelection {
                 outBuffer.write(minVal);
                 byte[] buf = inBuffer.read();
                 if (comparerecordHeap(buf, minVal) > 0 ) {
+                    // replace the minVal with the record
+                    // from the inBuffer and siftdown
                     recordHeap.modify(0, buf);
                 }
                 else {
+                    // remove the minVal you added to output
+                    // and store the too small inBuffer value
+                    // for processing in the next run
                     recordHeap.removemin(buf);
                     nextRunCount++;
                 } 
@@ -92,6 +111,9 @@ public class ReplacementSelection {
         
         writeBufferToFile();
         
+        // clear out the heap to finish the current run, and 
+        // if there are values that were too small stored, 
+        // create another run for those
         for (int i = 0; i <= nextRunCount; i += nextRunCount) {
             while (!recordHeap.empty()) {
                 if (outBuffer.full()) {
@@ -119,6 +141,8 @@ public class ReplacementSelection {
      * @throws IOException
      */
     private void writeBufferToFile() throws IOException {
+        // if there are records in the buffer write to file
+        // then clear the buffer
         if (!outBuffer.empty()) {
             outFile.write(Arrays.copyOfRange(outBuffer.array(), 
                             0, outBuffer.pos()));
@@ -132,12 +156,15 @@ public class ReplacementSelection {
      * @throws IOException
      */
     private void createRun() throws IOException {
+        // get the current position in outFile
         runEndPos = outFile.getFilePointer();
         
         if (runStartPos != runEndPos) {
+            // create a node and add to linked list
             RunNode n = new RunNode(numRuns, runStartPos, runEndPos, false);
             runs.add(n);
             numRuns++;
+            // set the start pos for next run
             runStartPos = runEndPos;
         }
     }
@@ -149,9 +176,12 @@ public class ReplacementSelection {
      * @return the comparison value
      */
     int comparerecordHeap(byte[] rec1, byte[] rec2) {
-        ByteBuffer buffer1 = ByteBuffer.wrap(Arrays.copyOfRange(rec1, 8, 16));
+        // convert both keys to Doubles and compare
+        ByteBuffer buffer1 = ByteBuffer.wrap(
+                Arrays.copyOfRange(rec1, RECORD_SIZE / 2, RECORD_SIZE));
         Double rec1Double = buffer1.getDouble();
-        ByteBuffer buffer2 = ByteBuffer.wrap(Arrays.copyOfRange(rec2, 8, 16));
+        ByteBuffer buffer2 = ByteBuffer.wrap(
+                Arrays.copyOfRange(rec2, RECORD_SIZE / 2, RECORD_SIZE));
         Double rec2Double = buffer2.getDouble();
         return rec1Double.compareTo(rec2Double);
     }
@@ -160,6 +190,11 @@ public class ReplacementSelection {
      * Named constant for maximum heap size
      */
     private static final int MAX_REC_HEAP = 4096;
+    
+    /**
+     * Number of bytes in a record
+     */
+    private static final int RECORD_SIZE = 16;
 
     /**
      * Private variable for the 8 block heap

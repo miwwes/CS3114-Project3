@@ -23,7 +23,7 @@ public class Buffer {
     
     /**
      *  Default constructor: declares a constant
-     *  numRecords byte array and initializes helper variables
+     *  size byte array and initializes private variables
      *  to zero.
      */
     public Buffer() {
@@ -33,7 +33,8 @@ public class Buffer {
     }
     
     /**
-     * resets all helper variables to zero
+     * resets current position and number of 
+     * records to zero
      */
     public void clear() {
         numRecords = 0;
@@ -41,7 +42,7 @@ public class Buffer {
     }
     
     /**
-     * @param raf to load from
+     * @param raf RandomAccessFile to load from
      * used when new data is written into the array
      * resets read position and calculates number of 
      * records
@@ -49,10 +50,13 @@ public class Buffer {
      */
     public void loadBlock(RandomAccessFile raf) throws IOException {
         clear();
+        // get the current position
         long before = raf.getFilePointer();
         raf.read(byteArray);
+        // calculate the byte difference
         long diff = raf.getFilePointer() - before;
         
+        // calculate number of records based on nex file pos
         numRecords = (int)diff / RECORD_SIZE;
         pos = 0;
     }
@@ -140,7 +144,7 @@ public class Buffer {
     private int numRecords;
     
     /**
-     * current position in the array
+     * current position from which you read/write in the array
      */
     private int pos;
     
