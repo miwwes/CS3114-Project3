@@ -14,7 +14,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ ExternalsortTest.class, BlockNodeTest.class, 
-                minHeapTest.class })
+                MinHeapTest.class })
 
 public class AllTests {
 

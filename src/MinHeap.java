@@ -17,68 +17,114 @@ import java.util.*;
  * array elements around at a time (records).
  *
  */
-public class minHeap {
+public class MinHeap {
 
-    public byte[] arr; // Pointer to the arr array
-    private int size; // Maximum number of records in arr
-    private int n; // Number of records now in arr
+    /**
+     * Constant number of max records in the heap
+     */
+    public static final int HEAP_SIZE = 4096;
+    
+    /**
+     * Constant number of bytes in a record
+     */
+    public static final int RECORD_SIZE = 16;
+    
+    /**
+     * Pointer to the arr array
+     */
+    private byte[] arr; 
+    /**
+     * Maximum number of records in arr
+     */
+    private int capacity;
+    /**
+     * Number of records now in arr
+     */
+    private int recordCount; 
 
-    // Constructor supporting preloading of arr contents
-    minHeap(byte[] h, int num, int largeness){ 
-        arr = h;  
-        n = num;  
-        size = largeness;
+    /**
+     * Constructor supporting pre-loading of arr contents
+     * @param memory the base array
+     * @param num the cur number of records 
+     * @param max the max number of records
+     */
+    MinHeap(byte[] memory, int num, int max) { 
+        arr = memory;  
+        recordCount = num;  
+        capacity = max;
         buildHeap(); 
-    }
-    // Constructor supporting preloading of arr contents
-    minHeap() { 
-        arr = new byte[4096];  
-        n = 4096;  
-        size = 4096;
-    }
-    
-    // Return current number of records in the arr
-    public byte[] getRecord(int pos) {
-        return Arrays.copyOfRange(arr, pos, pos + 16);
-    }
-
-    // Return current number of records in the arr
-    public int heapSize() {
-        return n;
-    }
-    
-    public int getLastPos() {
-        return n*16 - 16;
     }
     
     /**
+     * Constructor supporting preloading of arr contents
+     */
+    MinHeap() { 
+        arr = new byte[HEAP_SIZE];  
+        recordCount = HEAP_SIZE;  
+        capacity = HEAP_SIZE;
+    }
+    
+    /**
+     * @param pos
+     * @return the record at the given array position
+     */
+    public byte[] getRecord(int pos) {
+        return Arrays.copyOfRange(arr, pos, pos + RECORD_SIZE);
+    }
+
+    /**
+     * @return current number of records in the array
+     */
+    public int heapSize() {
+        return recordCount;
+    }
+    
+    /**
+     * @return the position of the last record
+     */
+    public int getLastPos() {
+        return recordCount * RECORD_SIZE - RECORD_SIZE;
+    }
+    
+    /**
+     * Compare records by key value
+     * must convert to doubles
      * @param rec1
      * @param rec2
-     * @return
+     * @return 0, -1, or 1 depending on the input
      */
     public int compareRecords(byte[] rec1, byte[] rec2) {
-        ByteBuffer buffer1 = ByteBuffer.wrap(Arrays.copyOfRange(rec1, 8, 16));
+        ByteBuffer buffer1 = ByteBuffer.wrap(Arrays.copyOfRange(rec1, 
+                RECORD_SIZE / 2, RECORD_SIZE));
         Double rec1Double = buffer1.getDouble();
-        ByteBuffer buffer2 = ByteBuffer.wrap(Arrays.copyOfRange(rec2, 8, 16));
+        ByteBuffer buffer2 = ByteBuffer.wrap(Arrays.copyOfRange(rec2, 
+                RECORD_SIZE / 2, RECORD_SIZE));
         Double rec2Double = buffer2.getDouble();
         return rec1Double.compareTo(rec2Double);
     }
 
-
-    // Return true if pos a leaf position, false otherwise
     /**
+     * @return the byte array
+     */
+    public byte[] arr() {
+        return arr;
+    }
+
+    /**
+     * Return true if pos a leaf position, false otherwise
      * @param pos
      * @return
      */
     public boolean isLeaf(int pos) {
-        return ((pos/16) >= n / 2) && ((pos/16) < n);
+        return ((pos / RECORD_SIZE) >= recordCount / 2) && 
+               ((pos / RECORD_SIZE) < recordCount);
     }
     
     /**
      * @return if the number of records in heap is zero
      */
     public boolean empty() {
-        return n == 0;
+        return recordCount == 0;
     }
 
     /**
@@ -87,10 +133,10 @@ public class minHeap {
      * @return the position of the left child
      */
     public int leftchild(int pos) {
-        if ((pos/16) >= n / 2) {
+        if ((pos / RECORD_SIZE) >= recordCount / 2) {
             return -1;
         }
-        return (2 * pos) + 16;
+        return (2 * pos) + RECORD_SIZE;
     }
 
     /**
@@ -99,10 +145,10 @@ public class minHeap {
      * @return the position of the right child
      */
     public int rightchild(int pos) {
-        if ((pos/16) >= (n - 1) / 2) {
+        if ((pos / RECORD_SIZE) >= (recordCount - 1) / 2) {
             return -1;
         }
-        return (2 * pos) + 32;
+        return (2 * pos) + 2 * RECORD_SIZE;
     }
 
     /**
@@ -111,34 +157,34 @@ public class minHeap {
      * @return the index of the parent
      */
     public int parent(int pos) {
-        if ((pos/16) <= 0) {
+        if ((pos / RECORD_SIZE) <= 0) {
             return -1;
         }
-        return (pos/16 - 1) / 2;
+        return (pos / RECORD_SIZE - 1) / 2;
     }
 
     /**
      * Heapify contents of heap
      */
     public void buildHeap() {
-        for (int i = (n / 2 - 1) * 16; i >= 0; i -= 16) {
+        int i = (recordCount / 2 - 1) * RECORD_SIZE;
+        for (; i >= 0; i -= RECORD_SIZE) {
             siftdown(i);
         }
     }
     
     /**
      * Heapify contents of heap of a specified size
-     * @param size the size of the heap to build
+     * @param recordsLeft the number of records in heap
      */
     public void buildHeap(int recordsLeft) {
-        //byte[] temp = Arrays.copyOfRange(arr, start, 65536);
-        //System.arraycopy(temp, 0, arr, 0, temp.length);
-        if(recordsLeft < size) {
-            int start = (size - recordsLeft) * 16;
-            System.arraycopy(arr, start, arr, 0, recordsLeft*16);
+        if (recordsLeft < capacity) {
+            int start = (capacity - recordsLeft) * RECORD_SIZE;
+            System.arraycopy(arr, start, arr, 0, recordsLeft * RECORD_SIZE);
         }
-        n = recordsLeft;
-        for (int i = (n / 2 - 1)*16; i >= 0; i -= 16) {
+        recordCount = recordsLeft;
+        int i = (recordCount / 2 - 1) * RECORD_SIZE;
+        for (; i >= 0; i -= RECORD_SIZE) {
             siftdown(i);
         }
     }
@@ -149,18 +195,18 @@ public class minHeap {
      * @param pos the current position to check for sifting down
      */
     private void siftdown(int pos) {
-        if ((pos < 0) || ((pos/16) >= n)) {
+        if ((pos < 0) || ((pos / RECORD_SIZE) >= recordCount)) {
             return; // Illegal position
         }
         while (!isLeaf(pos)) {
             int j = leftchild(pos);
-            byte a[] = Arrays.copyOfRange(arr, j, j + 16);
-            byte b[] = Arrays.copyOfRange(arr, j + 16, j + 32);
-            if (((j/16) < (n - 1)) && (compareRecords(a, b) >= 0)) {
-                j += 16; // j is now index of child with lesser value
+            byte[] a = Arrays.copyOfRange(arr, j, j + RECORD_SIZE);
+            byte[] b = Arrays.copyOfRange(arr, j + RECORD_SIZE, j + 2 * RECORD_SIZE);
+            if (((j / RECORD_SIZE) < (recordCount - 1)) && (compareRecords(a, b) >= 0)) {
+                j += RECORD_SIZE; // j is now index of child with lesser value
             }
-            byte c[] = Arrays.copyOfRange(arr, pos, pos + 16);
-            byte d[] = Arrays.copyOfRange(arr, j, j + 16);
+            byte[] c = Arrays.copyOfRange(arr, pos, pos + RECORD_SIZE);
+            byte[] d = Arrays.copyOfRange(arr, j, j + RECORD_SIZE);
             if (compareRecords(c, d) <= 0) {
                 return;
             }
@@ -176,7 +222,7 @@ public class minHeap {
      * @param pos2 the second position to swap
      */
     private void swap(int pos1, int pos2) {
-        byte[] temp = Arrays.copyOfRange(arr, pos1, pos1 + 16);
+        byte[] temp = Arrays.copyOfRange(arr, pos1, pos1 + RECORD_SIZE);
         int i = pos1;
         int j = pos2;
         for (; i < pos1 + 16; i++, j++) {
@@ -184,7 +230,7 @@ public class minHeap {
         }
         i = 0;
         j = pos2; //reset parent value
-        for (; j < pos2 + 16; j++, i++) {
+        for (; j < pos2 + RECORD_SIZE; j++, i++) {
             arr[j] = temp[i];
         }  
     }
@@ -194,15 +240,17 @@ public class minHeap {
      * @return the minimum value of the heap
      */
     public byte[] removemin() {
-        if (n == 0) {
+        if (recordCount == 0) {
             return null; // Removing from empty arr
         }
-        swap(0, (--n) * 16); // Swap maximum with last value
-        if (n != 0) {// Not on last element
+        swap(0, (--recordCount) * RECORD_SIZE); // Swap maximum with last value
+        if (recordCount != 0) { // Not on last element
             siftdown(0); // Put new arr root val in correct place
         }
         
-        return Arrays.copyOfRange(arr, n*16, n*16 + 16);
+        return Arrays.copyOfRange(arr, 
+                                  recordCount * RECORD_SIZE, 
+                                  recordCount * RECORD_SIZE + RECORD_SIZE);
     }
     
 
@@ -212,15 +260,17 @@ public class minHeap {
      * @return the minimum value in byte array form
      */
     public byte[] removemin(byte[] b) {
-        if (n == 0) {
+        if (recordCount == 0) {
             return null; // Removing from empty arr
         }
-        swap(0, (--n) * 16); // Swap minimum with last value
-        if (n != 0) {// Not on last element
+        swap(0, (--recordCount) * RECORD_SIZE); // Swap minimum with last value
+        if (recordCount != 0) { // Not on last element
             siftdown(0); // Put new arr root val in correct place
         }
-        System.arraycopy(b, 0, arr, n*16, 16);
-        return Arrays.copyOfRange(arr, n*16, n*16 + 16);
+        System.arraycopy(b, 0, arr, recordCount * RECORD_SIZE, RECORD_SIZE);
+        return Arrays.copyOfRange(arr, 
+                                  recordCount * RECORD_SIZE, 
+                                  recordCount * RECORD_SIZE + RECORD_SIZE);
     }
 
     /**
@@ -229,11 +279,11 @@ public class minHeap {
      * @param newVal the new value to insert
      */
     public void modify(int pos, byte[] newVal) {
-      if ((pos < 0) || (pos >= n * 16)) {
-          return; // Illegal heap position
-      }
-      System.arraycopy(newVal, 0, arr, pos, 16);
-      update(pos);
+        if ((pos < 0) || (pos >= recordCount * RECORD_SIZE)) {
+            return; // Illegal heap position
+        }
+        System.arraycopy(newVal, 0, arr, pos, RECORD_SIZE);
+        update(pos);
     }
 
     /**
@@ -241,44 +291,47 @@ public class minHeap {
      * @param pos the position that has the changed value
      */
     private void update(int pos) {
-      // If it is a big value, push it up
-      while ((pos > 0) && (compareRecords(
-                      Arrays.copyOfRange(arr, pos, pos + 16), 
-                      Arrays.copyOfRange(arr, parent(pos), parent(pos) + 16)) < 0)) {
-          swap(pos, parent(pos));
-          pos = parent(pos);
-      }
-      if (n != 0) {
-          siftdown(pos); // If it is little, push down
-      }
+        // If it is a big value, push it up
+        while ((pos > 0) && 
+               (compareRecords(
+                      Arrays.copyOfRange(arr, pos, pos + RECORD_SIZE), 
+                      Arrays.copyOfRange(arr, parent(pos), 
+                      parent(pos) + RECORD_SIZE)) < 0)) {
+            swap(pos, parent(pos));
+            pos = parent(pos);
+        }
+        if (recordCount != 0) {
+            siftdown(pos); // If it is little, push down
+        }
     }
     
     /**
      * Helper function that takes a long and a double and returns a
-     * byte array
+     * byte array for testing
      * @param id the id 
      * @param key
-     * @return
+     * @return the record as a byte array
      */
     public byte[] toByteArray(long id, double key) {
-        byte[] bytes1 = new byte[8];
-        byte[] bytes2 = new byte[8];
+        byte[] bytes1 = new byte[RECORD_SIZE / 2];
+        byte[] bytes2 = new byte[RECORD_SIZE / 2];
         ByteBuffer.wrap(bytes1).putLong(id);
         ByteBuffer.wrap(bytes2).putDouble(key);
-        byte[] record = new byte[16];
-        System.arraycopy( bytes1, 0, record, 0, 8);
-        System.arraycopy( bytes2, 0, record, 8, 8);
+        byte[] record = new byte[RECORD_SIZE];
+        System.arraycopy( bytes1, 0, record, 0, RECORD_SIZE / 2);
+        System.arraycopy( bytes2, 0, record, RECORD_SIZE / 2, RECORD_SIZE / 2);
         return record;
     }
     
+    /**
+     * Testing function
+     * @param bytes
+     * @return the key as a double
+     */
     public double toNumber(byte[] bytes) {
-        byte[] idBytes = Arrays.copyOfRange(bytes, 0, 8);
-        byte[] keyBytes = Arrays.copyOfRange(bytes, 8, 16);
-        long id = ByteBuffer.wrap(idBytes).getLong();
+        byte[] keyBytes = Arrays.copyOfRange(bytes, RECORD_SIZE / 2, RECORD_SIZE);
         double key = ByteBuffer.wrap(keyBytes).getDouble();
-        //System.out.println("id: " + id);
-        //System.out.println("key: " + key);
         return key;
     }
     
-  }
+}
