@@ -65,7 +65,7 @@ public class MinHeap {
     }
     
     /**
-     * @param pos
+     * @param pos the position at which to get the record
      * @return the record at the given array position
      */
     public byte[] getRecord(int pos) {
@@ -89,8 +89,8 @@ public class MinHeap {
     /**
      * Compare records by key value
      * must convert to doubles
-     * @param rec1
-     * @param rec2
+     * @param rec1 the first record to compare
+     * @param rec2 the second record to compare
      * @return 0, -1, or 1 depending on the input
      */
     public int compareRecords(byte[] rec1, byte[] rec2) {
@@ -112,8 +112,8 @@ public class MinHeap {
 
     /**
      * Return true if pos a leaf position, false otherwise
-     * @param pos
-     * @return
+     * @param pos the position to check if a leaf node
+     * @return whether the node at that position is a leaf
      */
     public boolean isLeaf(int pos) {
         return ((pos / RECORD_SIZE) >= recordCount / 2) && 
@@ -201,8 +201,10 @@ public class MinHeap {
         while (!isLeaf(pos)) {
             int j = leftchild(pos);
             byte[] a = Arrays.copyOfRange(arr, j, j + RECORD_SIZE);
-            byte[] b = Arrays.copyOfRange(arr, j + RECORD_SIZE, j + 2 * RECORD_SIZE);
-            if (((j / RECORD_SIZE) < (recordCount - 1)) && (compareRecords(a, b) >= 0)) {
+            byte[] b = Arrays.copyOfRange(arr, 
+                                j + RECORD_SIZE, j + 2 * RECORD_SIZE);
+            if (((j / RECORD_SIZE) < (recordCount - 1)) 
+                            && (compareRecords(a, b) >= 0)) {
                 j += RECORD_SIZE; // j is now index of child with lesser value
             }
             byte[] c = Arrays.copyOfRange(arr, pos, pos + RECORD_SIZE);
@@ -308,8 +310,8 @@ public class MinHeap {
     /**
      * Helper function that takes a long and a double and returns a
      * byte array for testing
-     * @param id the id 
-     * @param key
+     * @param id the id to turn into a byte array
+     * @param key the key to turn into a byte array
      * @return the record as a byte array
      */
     public byte[] toByteArray(long id, double key) {

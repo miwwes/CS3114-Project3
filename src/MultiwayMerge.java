@@ -38,9 +38,9 @@ public class MultiwayMerge {
         runs = c.l;
         heap = c.h;
         readFile = c.runs;
-        long val = readFile.length();
+        //long val = readFile.length();
         printFile = c.in;
-        long b = printFile.length();
+        //long b = printFile.length();
         originalInputFile = c.in;
         c.ib.clear();
         //printFile = new RandomAccessFile("test.bin", "rw");
@@ -82,6 +82,7 @@ public class MultiwayMerge {
     
     /**
      * Loads the first 8 blocks from output file into working memory
+     * @param numOfRuns the number of runs for which to load blocks
      * @throws IOException
      */
     public void loadBlocks(int numOfRuns) throws IOException {
@@ -91,7 +92,7 @@ public class MultiwayMerge {
             RunNode fileNode = runs.get(i); 
             loadNextBlock(fileNode);
         }
-        merge(pq, numOfRuns);
+        merge(numOfRuns);
     }
     
     /**
@@ -115,23 +116,22 @@ public class MultiwayMerge {
     }*/
     
     /**
->>>>>>> b36ca8d6fb91e6159afcfa110d1ff38ca87b50f0
-     * @param pq
+     * Merges multiple blocks together in the working memory
+     * @param nRuns the number of runs for which to merge
      * @throws IOException
      */
-    public void merge(PriorityQueue<BlockNode> pq, int nRuns) 
-            throws IOException {
+    public void merge(int nRuns) throws IOException {
         long nextStartPos = printFile.getFilePointer();
         outputBuffer.clear();
-        int k = 0;
+        //int k = 0;
         while (curRuns.size() > 0) {   //all runs are exhausted
             BlockNode minNode = pq.poll();
             outputBuffer.write(minNode.getRecord());
             //toNumber(minNode.getRecord());
             //System.out.println();
-            if (Arrays.equals(minNode.getRecord(), toByteArray(0, 0))) {
-                System.out.print("STOP");
-            }
+            //if (Arrays.equals(minNode.getRecord(), toByteArray(0, 0))) {
+            //    System.out.print("STOP");
+            //}
             
             minNode.incrementCurPos(RECORD_LENGTH);
             if (outputBuffer.full()) {
@@ -141,13 +141,13 @@ public class MultiwayMerge {
             }
             // change minNode record and increment its current Position
             int blockToRead = minNode.getBlockNumber();
-            if (blockToRead == 0) {
-                k++;
-            }
+            //if (blockToRead == 0) {
+            //    k++;
+            //}
             int blockSpace = minNode.getEndPos() - minNode.getCurPos(); 
-            if (blockSpace < 0) {
-                System.out.print("STOP2");
-            }
+            //if (blockSpace < 0) {
+            //    System.out.print("STOP2");
+            //}
             boolean blockReloaded = false;
             boolean canReadFromRun = true;
             //boolean changeNodeEnd = false;
@@ -185,7 +185,8 @@ public class MultiwayMerge {
     
     /**
      * Last steps in the merge
-     * @param nextStart
+     * @param nextStart the starting position of the newly
+     *          created merged run
      * @throws IOException
      */
     public void checkIfFinished(long nextStart) throws IOException {
@@ -213,14 +214,15 @@ public class MultiwayMerge {
         else {
             long end = printFile.getFilePointer();
             boolean merged = true;
-            RunNode n = new RunNode(runs.size(), nextStart, end, merged);  // add to the end 
+            RunNode n = new RunNode(runs.size(), 
+                            nextStart, end, merged); 
             multipleRunsLeft(n);
             
         }   
     }
     
     /**
-     * @param n
+     * @param n the newly created merged node
      * @throws IOException
      */
     public void multipleRunsLeft(RunNode n) throws IOException {
@@ -237,8 +239,9 @@ public class MultiwayMerge {
         }
         runs.add(n);
         
-        if (numberOfRunsLeft == 0) { // won't go here first time through, because 
-                                //of previous runs.size() == 0 check
+        if (numberOfRunsLeft == 0) { 
+                    // won't go here first time through, because 
+                    //of previous runs.size() == 0 check
             // if all nodes are merged, need to set them all to not merged
             Iterator<RunNode> k = runs.iterator(); 
             int count = 0;
@@ -266,11 +269,11 @@ public class MultiwayMerge {
         loadBlocks(numOfRuns);
     }
     
-    //merge nodes correspond to each run that has a block in working memory
     /**
-     * @param runNum
-     * @param cur
-     * @param end
+     * Load a record from the corresponding place in working memory
+     * @param runNum the run number to load from
+     * @param cur the current position within the block
+     * @param end the end position of the data in the block
      * @throws IOException
      */
     public void loadRecordFromHeap(int runNum, int cur, int end) 
@@ -293,30 +296,33 @@ public class MultiwayMerge {
     }
     
     /**
-     * @param fileNode
+     * Load the next block from disk into the working memory
+     * @param fileNode the node containing the run data
      * @throws IOException
      */
-    // need to check if you can load the next block
-    // need to reset the curPos for the next block that is read in
     public void loadNextBlock(RunNode fileNode) throws IOException {
+        // need to check if you can load the next block
+        // need to reset the curPos for the next block that is read in
         long runLength = fileNode.getEndPos() - fileNode.getCurPos();
         long runNum = fileNode.getRunNumber();
         
         if (runLength < BLOCK_LENGTH) {
             // (buffer to read), (position to start reading from), (length read)
             readFile.seek(fileNode.getCurPos());
-            readFile.read(heap.arr(), (int)(BLOCK_LENGTH * runNum), (int)runLength);
+            readFile.read(heap.arr(), (int)(BLOCK_LENGTH * runNum), 
+                            (int)runLength);
             fileNode.setCurPos(readFile.getFilePointer());
-            int start = (int)(BLOCK_LENGTH*runNum);
-            int end = (int)(BLOCK_LENGTH*runNum + runLength);
+            int start = (int)(BLOCK_LENGTH * runNum);
+            int end = (int)(BLOCK_LENGTH * runNum + runLength);
             loadRecordFromHeap((int)runNum, start, end);
         }
         else {
             readFile.seek(fileNode.getCurPos());
-            readFile.read(heap.arr(), (int)(BLOCK_LENGTH * runNum), BLOCK_LENGTH);
+            readFile.read(heap.arr(), (int)(BLOCK_LENGTH * runNum), 
+                            BLOCK_LENGTH);
             fileNode.setCurPos(readFile.getFilePointer());
-            int start = (int)(BLOCK_LENGTH*runNum);
-            int end = (int)(BLOCK_LENGTH*runNum + BLOCK_LENGTH);
+            int start = (int)(BLOCK_LENGTH * runNum);
+            int end = (int)(BLOCK_LENGTH * runNum + BLOCK_LENGTH);
             loadRecordFromHeap((int)runNum, start, end);
         }
     }
@@ -330,7 +336,7 @@ public class MultiwayMerge {
             throws IOException {
         endFile.seek(0);
         int i = 0;
-        long val = endFile.length();
+        //long val = endFile.length();
         while (endFile.getFilePointer() != endFile.length()) {
             byte[] b = new byte[16];
             endFile.read(b);
@@ -347,8 +353,9 @@ public class MultiwayMerge {
     }
     
     /**
-     * @param bytes
-     * @return
+     * Helper function to convert bytes into ID and key
+     * @param bytes the byte array to convert
+     * @return the key value
      */
     private double toNumber(byte[] bytes) {
         byte[] idBytes = Arrays.copyOfRange(bytes, 0, 8);
@@ -359,9 +366,10 @@ public class MultiwayMerge {
         return key;
     }
     /**
-     * @param id
-     * @param key
-     * @return
+     * Helper function to turn two numbers into a byte array
+     * @param id the ID to turn into a byte array
+     * @param key the key to turn into a byte array
+     * @return the key value
      */
     public byte[] toByteArray(long id, double key) {
         byte[] bytes1 = new byte[8];
