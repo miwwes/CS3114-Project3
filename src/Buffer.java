@@ -41,7 +41,7 @@ public class Buffer {
     }
     
     /**
-     * @param raf amount of records loaded
+     * @param raf to load from
      * used when new data is written into the array
      * resets read position and calculates number of 
      * records

@@ -8,14 +8,24 @@ import java.util.LinkedList;
 /**
  * @author juliam8
  * @author abbym1
- * @version 2019-04-10
+ * @version 2019-04-9
+ * 
+ * This file performs replacement selection upon the given
+ * input RandomAccessFile. It uses an 8-block heap and two 
+ * 1-block buffers, one for input and one for output. The 
+ * input buffer records are compared to the minimum record
+ * from the heap, and either added into the heap (current 
+ * run) or stored in the back of the heap array to be processed 
+ * in the next run. Data about each run such as start and 
+ * end position within the output file is tracked in a 
+ * linked list for further sorting in mutiway merge.
  *
  */
 public class ReplacementSelection {
 
     /**
      * @param c the variable containing data 
-     *          corresponding to sorting
+     * corresponding to sorting
      * @throws IOException 
      */
     ReplacementSelection(SortContainer c) throws IOException {
@@ -32,19 +42,15 @@ public class ReplacementSelection {
     /**
      * @return true if the inFile can be read from, false if not
      */
-    public boolean canRead() {
-        try {
-            boolean test = inFile.getFilePointer() != inFile.length();
-            return test;
-        } 
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+    public boolean canRead() throws IOException {
+        return inFile.getFilePointer() != inFile.length();
     }
     
     /**
      * Executes the reading of the input file
+     * and creates runs of partially sorted data
+     * which are written to the outFile and tracked
+     * with the linked list
      * @throws IOException 
      */
     public void execute() throws IOException {
@@ -63,12 +69,14 @@ public class ReplacementSelection {
                     createRun();
                     nextRunCount = 0;
                     recordHeap.buildHeap(MAX_REC_HEAP);
-                    
                 }
                 else if (outBuffer.full()) {
                     writeBufferToFile();
                 }
                 
+                // compare the minimum heap value and the 
+                // next value from inBuffer, and apply
+                // the replacement selection algorithm
                 byte[] minVal = recordHeap.getRecord(0);
                 outBuffer.write(minVal);
                 byte[] buf = inBuffer.read();
@@ -79,9 +87,7 @@ public class ReplacementSelection {
                     recordHeap.removemin(buf);
                     nextRunCount++;
                 } 
-            
-            } // inBuffer is empty
-            
+            } // inBuffer is empty  
         } // inFile is empty
         
         writeBufferToFile();
@@ -107,6 +113,11 @@ public class ReplacementSelection {
         inBuffer.clear();
     }
     
+    /**
+     * Writes all the records currently in the outBuffer to the
+     * outFile
+     * @throws IOException
+     */
     private void writeBufferToFile() throws IOException {
         if (!outBuffer.empty()) {
             outFile.write(Arrays.copyOfRange(outBuffer.array(), 
@@ -115,8 +126,12 @@ public class ReplacementSelection {
         }
     }
     
+    /**
+     * Creates a runNode and adds it to the 
+     * linked list for later processing
+     * @throws IOException
+     */
     private void createRun() throws IOException {
-        
         runEndPos = outFile.getFilePointer();
         
         if (runStartPos != runEndPos) {
