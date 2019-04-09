@@ -26,7 +26,6 @@ public class ExternalsortTest extends TestCase {
         assertTrue(sc.h.empty());
         assertTrue(sc.ib.empty());
         assertTrue(sc.ob.empty());
-        assertEquals(sc.l.size(), 1);
     }
 
 }

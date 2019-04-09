@@ -8,22 +8,12 @@ import java.nio.ByteBuffer;
 /**
  * @author juliam8
  * @author abbym1
- * @version 4-9-19
- * 
- * This is the testing class for BlockNode
+ *
  */
 public class BlockNodeTest extends TestCase {
     
-    /**
-     * Constant representing block length
-     */
-    public static final int BLOCK_LENGTH = 8192;
+    static int blockLength = 8192;
     
-    /**
-     * @param id long value 
-     * @param key double key
-     * @return record as bytes
-     */
     public byte[] toByteArray(long id, double key) {
         byte[] bytes1 = new byte[8];
         byte[] bytes2 = new byte[8];
@@ -35,117 +25,117 @@ public class BlockNodeTest extends TestCase {
         return record;
     }
     /**
-     * Test method for MergeNode
+     * Test method for 
      */
     public void testMergeNode() {
         byte[] b = toByteArray(10, 4);
-        BlockNode mn = new BlockNode(0, b, 0, BLOCK_LENGTH);
+        BlockNode mn = new BlockNode(0, b, 0, blockLength);
         assertEquals(mn.getBlockNumber(), 0);
         assertEquals(mn.key(), 4, 0.1);
     }
 
 
     /**
-     * Test method for GetBlockNumber
+     * Test method for 
      */
     public void testGetBlockNumber() {
         byte[] b = toByteArray(1, 48);
-        BlockNode mn = new BlockNode(1, b, BLOCK_LENGTH, BLOCK_LENGTH * 2);
+        BlockNode mn = new BlockNode(1, b, blockLength, blockLength * 2);
         assertEquals(mn.getBlockNumber(), 1);
     }
 
 
     /**
-     * Test method for SetBlockNumber
+     * Test method for.
      */
     public void testSetBlockNumber() {
         byte[] b = toByteArray(51, 8);
-        BlockNode mn = new BlockNode(1, b, BLOCK_LENGTH, BLOCK_LENGTH * 2);
+        BlockNode mn = new BlockNode(1, b, blockLength, blockLength * 2);
         mn.setBlockNumber(4);
         assertEquals(mn.getBlockNumber(), 4);
     }
 
 
     /**
-     * Test method for GetRecord
+     * Test method for 
      */
     public void testGetRecord() {
         byte[] b = toByteArray(51, 8);
-        BlockNode mn = new BlockNode(1, b, BLOCK_LENGTH, BLOCK_LENGTH * 2);
+        BlockNode mn = new BlockNode(1, b, blockLength, blockLength * 2);
         assertEquals(mn.getRecord(), b);
     }
 
 
     /**
-     * Test method for GetCurPos
+     * Test method for 
      */
     void testGetCurPos() {
         byte[] b = toByteArray(51, 8);
-        BlockNode mn = new BlockNode(1, b, BLOCK_LENGTH, BLOCK_LENGTH * 2);
-        assertEquals(mn.getCurPos(), BLOCK_LENGTH);
+        BlockNode mn = new BlockNode(1, b, blockLength, blockLength * 2);
+        assertEquals(mn.getCurPos(), blockLength);
     }
 
 
     /**
-     * Test method for SetCurPos
+     * Test method for
      */
     void testSetCurPos() {
         byte[] b = toByteArray(5, 28);
-        BlockNode mn = new BlockNode(0, b, 0, BLOCK_LENGTH);
-        mn.setCurPos(BLOCK_LENGTH);
-        assertEquals(mn.getCurPos(), BLOCK_LENGTH);
+        BlockNode mn = new BlockNode(0, b, 0, blockLength);
+        mn.setCurPos(blockLength);
+        assertEquals(mn.getCurPos(), blockLength);
     }
 
 
     /**
-     * Test method for GetStartPos
+     * Test method for 
      */
     void testGetStartPos() {
         byte[] b = toByteArray(51, 8);
-        BlockNode mn = new BlockNode(1, b, BLOCK_LENGTH, BLOCK_LENGTH * 2);
-        assertEquals(mn.getStartPos(), BLOCK_LENGTH);
+        BlockNode mn = new BlockNode(1, b, blockLength, blockLength * 2);
+        assertEquals(mn.getStartPos(), blockLength);
     }
 
 
     /**
-     * Test method for SetStartPos
+     * Test method for 
      */
     void testSetStartPos() {
         byte[] b = toByteArray(51, 48);
-        BlockNode mn = new BlockNode(1, b, BLOCK_LENGTH, BLOCK_LENGTH * 2);
+        BlockNode mn = new BlockNode(1, b, blockLength, blockLength * 2);
         mn.setStartPos(0);
         assertEquals(mn.getStartPos(), 0);
     }
 
 
     /**
-     * Test method for GetEndPos
+     * Test method for 
      */
     void testGetEndPos() {
         byte[] b = toByteArray(61, 8);
-        BlockNode mn = new BlockNode(0, b, 0, BLOCK_LENGTH);
-        assertEquals(mn.getEndPos(), BLOCK_LENGTH);
+        BlockNode mn = new BlockNode(0, b, 0, blockLength);
+        assertEquals(mn.getEndPos(), blockLength);
     }
 
     /**
-     * Test method for SetEndPos
+     * Test method 
      */
     void testSetEndPos() {
         byte[] b = toByteArray(9, 58);
-        BlockNode mn = new BlockNode(1, b, BLOCK_LENGTH, BLOCK_LENGTH * 2);
-        mn.setEndPos(BLOCK_LENGTH + (BLOCK_LENGTH / 2));
-        assertEquals(mn.getEndPos(), BLOCK_LENGTH + (BLOCK_LENGTH / 2));
+        BlockNode mn = new BlockNode(1, b, blockLength, blockLength * 2);
+        mn.setEndPos(blockLength + (blockLength/2));
+        assertEquals(mn.getEndPos(), blockLength + (blockLength/2));
     }
 
 
     /**
-     * Test method for IncrementCurPos
+     * Test method for 
      */
     void testIncrementCurPos() {
         byte[] b = toByteArray(50, 88);
-        BlockNode mn = new BlockNode(1, b, BLOCK_LENGTH, BLOCK_LENGTH * 2);
+        BlockNode mn = new BlockNode(1, b, blockLength, blockLength * 2);
         mn.incrementCurPos(16);
-        assertEquals(mn.getBlockNumber(), BLOCK_LENGTH + 16);
+        assertEquals(mn.getBlockNumber(), blockLength + 16);
     }
 
 }
