@@ -50,13 +50,13 @@ public class Genfile {
     public static void main(String[] args) throws IOException {
         long val;
         double val2;
-        assert(args.length == 2):
+        assert (args.length == 2) :
              "\nUsage: Genfile <filename> <size>" +
-    	 "\nOptions \nSize is measured in blocks of 8192 bytes";
+             "\nOptions \nSize is measured in blocks of 8192 bytes";
     
         int filesize = Integer.parseInt(args[1]); // Size of file in blocks
         DataOutputStream file = new DataOutputStream(
-        new BufferedOutputStream(new FileOutputStream(args[0])));
+            new BufferedOutputStream(new FileOutputStream(args[0])));
     
         for (int i = 0; i < filesize; i++) {
             for (int j = 0; j < NUM_RECS; j++) {

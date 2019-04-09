@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import student.TestCase;
 
 /**
@@ -13,7 +12,7 @@ import student.TestCase;
  *
  *  Testing class for the MultiwayMerge class
  */
-public class MultiwayMergeTest extends TestCase{
+public class MultiwayMergeTest extends TestCase {
 
     /**
      * Test method for {@link MultiwayMerge#MultiwayMerge(SortContainer)}.

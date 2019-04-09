@@ -1,8 +1,5 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -24,7 +21,7 @@ public class SortContainer {
      * @param s the name of the input bin file
      * @throws IOException 
      */
-    SortContainer(String s) throws IOException{
+    SortContainer(String s) throws IOException {
         ib = new Buffer();
         ob = new Buffer();
         l = new LinkedList<RunNode>();
@@ -144,6 +141,6 @@ public class SortContainer {
     private Buffer ib;
     private Buffer ob;
     
-    private static final int HEAP_SIZE = 8*8192;
+    private static final int HEAP_SIZE = 8 * 8192;
     private static final int MAX_REC_HEAP = 4096;
 }
