@@ -159,6 +159,7 @@ public class replacementSelection {
                 runNode n2 = new runNode(numRuns, runStart, end, false);
                 runs.add(n2);     
             }
+            inBuffer.clear();
         }
         catch (IOException e) {
             System.err.println("IO error: " + e);

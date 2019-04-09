@@ -74,7 +74,8 @@ public class Externalsort {
         
         replacementSelection rSel = new replacementSelection(extSort);
         rSel.execute();
-
+        
+        extSort.ib.clear();
         multiwayMerge mMerge = new multiwayMerge(extSort);
         mMerge.execute();
         

@@ -55,7 +55,11 @@ public class multiwayMerge {
             //System.out.print(originalInputFile.getFilePointer());
         }
         else {
-            loadBlocks();
+            int numOfRuns = 8;
+            if (numberOfRuns < 8) {
+                numOfRuns = numberOfRuns;
+            }
+            loadBlocks(numOfRuns);
         }
     }
     
@@ -63,16 +67,9 @@ public class multiwayMerge {
      * Loads the first 8 blocks from output file into working memory
      * @throws IOException
      */
-    public void loadBlocks() throws IOException {
-        int numOfRuns = 8;
-        if (numberOfRuns < 8) {
-            numOfRuns = numberOfRuns;
-        }
+    public void loadBlocks(int numOfRuns) throws IOException {
         pq = new PriorityQueue<blockNode>(numOfRuns, new blockNodeComparator());
-        for (int i = 0; i < 8; i++) {
-            if (i == numberOfRuns) {
-                break;
-            }
+        for (int i = 0; i < numOfRuns; i++) {
             curRuns.add(i);
             runNode fileNode = runs.get(i); 
             loadNextBlock(fileNode);
@@ -104,7 +101,7 @@ public class multiwayMerge {
      * @throws IOException
      */
     public void merge(PriorityQueue<blockNode> pq, int nRuns) throws IOException {
-        printFile.seek(0);
+        long nextStartPos = printFile.getFilePointer();
         outputBuffer.clear();
         int k = 0;
         while (curRuns.size() > 0) {   //all 8 (or however many) runs are exhausted
@@ -162,10 +159,10 @@ public class multiwayMerge {
         for (int i = nRuns-1; i >= 0; i--) {
             runs.remove(i);
         }
-        checkAftermath();
+        checkAftermath(nextStartPos);
     }
     
-    public void checkAftermath() throws IOException {
+    public void checkAftermath(long nextStart) throws IOException {
         // print whats left in the output buffer
         if (!outputBuffer.empty()) {
             printFile.write(Arrays.copyOfRange(
@@ -187,54 +184,64 @@ public class multiwayMerge {
         if (runs.size() == 0) {
             printToStandardOutput(printFile);
             
-            if(printFile != originalInputFile) {
+            /*if(printFile != originalInputFile) {
                 originalInputFile.seek(0);
                 int length;
                 while ((length = printFile.read(heap.arr)) > 0){
                     originalInputFile.write(heap.arr, 0, length);
                 }
-            }
+            }*/
         }
         else {
-            multipleRunsLeft();
+            long end = printFile.getFilePointer();
+            boolean merged = true;
+            runNode n = new runNode(runs.size(), nextStart, end, merged);  // add to the end 
+            multipleRunsLeft(n);
             
         }   
     }
     
-    public void multipleRunsLeft() throws IOException {
+    public void multipleRunsLeft(runNode n) throws IOException {
         int numberOfRunsLeft = 0;
         Iterator<runNode> j = runs.iterator(); 
+        int i = 0;
         while (j.hasNext()) { 
-            if (!j.next().gotMerged()) {
+            runNode r = j.next();
+            if (!r.gotMerged()) {
+                r.setRunNumber(i);
                 numberOfRunsLeft++;
+                i++;
             }
         }
-        // if heap is empty, then up to 8 runs are exhausted.
-        long end = printFile.getFilePointer();
-        boolean merged = true;
-        runNode n = new runNode(numberOfRunsLeft, 0, end, merged);  // add to the end 
         runs.add(n);
-        //switch input and output
+        
         if (numberOfRunsLeft == 0) { // won't go here first time through, because 
                                 //of previous runs.size() == 0 check
             // if all nodes are merged, need to set them all to not merged
             Iterator<runNode> k = runs.iterator(); 
+            int count = 0;
             while (k.hasNext()) { 
-                k.next().setMerged(false);
+                runNode nNode = k.next();
+                nNode.setRunNumber(count);
+                nNode.setMerged(false);
+                count++;
             } 
-            //reset like nothing happened lolol
             numberOfRunsLeft = runs.size();
+            //switch input and output
             RandomAccessFile temp = readFile;
             readFile = printFile;
             printFile = temp;
+            readFile.seek(0);
+            printFile.seek(0);
             this.numberOfRuns = runs.size();
+            numberOfRunsLeft = this.numberOfRuns;
             //loadBlocks();
         }
-        //else {
-        //    loadBlocks();
-        //}
-        
-        loadBlocks();
+        int numOfRuns = 8;
+        if (numberOfRunsLeft < 8) {
+            numOfRuns = numberOfRunsLeft;
+        }
+        loadBlocks(numOfRuns);
     }
     
     /**
