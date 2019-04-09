@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
  * @author abbym1
  *
  */
-public class mergeNodeTest extends TestCase {
+public class blockNodeTest extends TestCase {
     
     static int blockLength = 8192;
     
@@ -29,7 +29,7 @@ public class mergeNodeTest extends TestCase {
      */
     public void testMergeNode() {
         byte[] b = toByteArray(10, 4);
-        mergeNode mn = new mergeNode(0, b, 0, blockLength);
+        blockNode mn = new blockNode(0, b, 0, blockLength);
         assertEquals(mn.getBlockNumber(), 0);
         assertEquals(mn.key, 4, 0.1);
     }
@@ -40,7 +40,7 @@ public class mergeNodeTest extends TestCase {
      */
     public void testGetBlockNumber() {
         byte[] b = toByteArray(1, 48);
-        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        blockNode mn = new blockNode(1, b, blockLength, blockLength * 2);
         assertEquals(mn.getBlockNumber(), 1);
     }
 
@@ -50,7 +50,7 @@ public class mergeNodeTest extends TestCase {
      */
     public void testSetBlockNumber() {
         byte[] b = toByteArray(51, 8);
-        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        blockNode mn = new blockNode(1, b, blockLength, blockLength * 2);
         mn.setBlockNumber(4);
         assertEquals(mn.getBlockNumber(), 4);
     }
@@ -61,7 +61,7 @@ public class mergeNodeTest extends TestCase {
      */
     public void testGetRecord() {
         byte[] b = toByteArray(51, 8);
-        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        blockNode mn = new blockNode(1, b, blockLength, blockLength * 2);
         assertEquals(mn.getRecord(), b);
     }
 
@@ -71,7 +71,7 @@ public class mergeNodeTest extends TestCase {
      */
     void testGetCurPos() {
         byte[] b = toByteArray(51, 8);
-        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        blockNode mn = new blockNode(1, b, blockLength, blockLength * 2);
         assertEquals(mn.getCurPos(), blockLength);
     }
 
@@ -81,7 +81,7 @@ public class mergeNodeTest extends TestCase {
      */
     void testSetCurPos() {
         byte[] b = toByteArray(5, 28);
-        mergeNode mn = new mergeNode(0, b, 0, blockLength);
+        blockNode mn = new blockNode(0, b, 0, blockLength);
         mn.setCurPos(blockLength);
         assertEquals(mn.getCurPos(), blockLength);
     }
@@ -92,7 +92,7 @@ public class mergeNodeTest extends TestCase {
      */
     void testGetStartPos() {
         byte[] b = toByteArray(51, 8);
-        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        blockNode mn = new blockNode(1, b, blockLength, blockLength * 2);
         assertEquals(mn.getStartPos(), blockLength);
     }
 
@@ -102,7 +102,7 @@ public class mergeNodeTest extends TestCase {
      */
     void testSetStartPos() {
         byte[] b = toByteArray(51, 48);
-        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        blockNode mn = new blockNode(1, b, blockLength, blockLength * 2);
         mn.setStartPos(0);
         assertEquals(mn.getStartPos(), 0);
     }
@@ -113,7 +113,7 @@ public class mergeNodeTest extends TestCase {
      */
     void testGetEndPos() {
         byte[] b = toByteArray(61, 8);
-        mergeNode mn = new mergeNode(0, b, 0, blockLength);
+        blockNode mn = new blockNode(0, b, 0, blockLength);
         assertEquals(mn.getEndPos(), blockLength);
     }
 
@@ -122,7 +122,7 @@ public class mergeNodeTest extends TestCase {
      */
     void testSetEndPos() {
         byte[] b = toByteArray(9, 58);
-        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        blockNode mn = new blockNode(1, b, blockLength, blockLength * 2);
         mn.setEndPos(blockLength + (blockLength/2));
         assertEquals(mn.getEndPos(), blockLength + (blockLength/2));
     }
@@ -133,7 +133,7 @@ public class mergeNodeTest extends TestCase {
      */
     void testIncrementCurPos() {
         byte[] b = toByteArray(50, 88);
-        mergeNode mn = new mergeNode(1, b, blockLength, blockLength * 2);
+        blockNode mn = new blockNode(1, b, blockLength, blockLength * 2);
         mn.incrementCurPos(16);
         assertEquals(mn.getBlockNumber(), blockLength + 16);
     }
