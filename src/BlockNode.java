@@ -17,12 +17,12 @@ import java.util.Comparator;
  *  start, end, and current positions within the block,
  *  as well as a block ID number.
  */
-class blockNode {
+public class BlockNode {
     
     /**
      * Static macro to hold the block length
      */
-    static int blockLength = 8192;
+    public static final int BLOCK_LENGTH = 8192;
     
     /**
      * Constructor for a merge node, which holds the data for the 
@@ -32,15 +32,15 @@ class blockNode {
      * @param cur the current place in the block
      * @param end the end of the data in that block
      */
-    blockNode(int block, byte[] arr, int cur, int end){
-        this.blockNumber = block;
-        this.startPos = block * blockLength;
-        this.endPos = end;
+    BlockNode(int block, byte[] arr, int cur, int end) {
+        blockNumber = block;
+        startPos = block * BLOCK_LENGTH;
+        endPos = end;
         byte[] keyBytes = Arrays.copyOfRange(arr, 8, 16);
         double keyVal = ByteBuffer.wrap(keyBytes).getDouble();
-        this.key = keyVal;
-        this.record = arr;
-        this.curPos = cur;
+        key = keyVal;
+        record = arr;
+        curPos = cur;
     }
     
     /**
@@ -124,6 +124,13 @@ class blockNode {
     }
     
     /**
+     * @return the key value
+     */
+    public double key() {
+        return key;
+    }
+    
+    /**
      * Private variable holding the block corresponding to the node
      */
     private int blockNumber;
@@ -142,7 +149,7 @@ class blockNode {
     /**
      * Private variable holding the node's key value within the record
      */
-    double key;
+    private double key;
     /**
      * Private variable holding the node's entire record
      */
@@ -157,14 +164,14 @@ class blockNode {
  *  blockNodeComparator class
  *      Used in the priority queue 
  */
-class blockNodeComparator implements Comparator<blockNode>{ 
+class BlockNodeComparator implements Comparator<BlockNode> { 
     /* (non-Javadoc)
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     @Override
-    public int compare(blockNode o1, blockNode o2) {
-        Double key1 = o1.key;
-        Double key2 = o2.key;
+    public int compare(BlockNode o1, BlockNode o2) {
+        Double key1 = o1.key();
+        Double key2 = o2.key();
         return key1.compareTo(key2);
     } 
 } 

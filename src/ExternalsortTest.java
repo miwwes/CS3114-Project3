@@ -16,6 +16,9 @@ import student.TestCase;
  */
 public class ExternalsortTest extends TestCase {
     
+    /**
+     * @throws IOException
+     */
     public void test() throws IOException {
         String[] args = {"src//sampleInput16.bin"};
         Externalsort.main(args);
@@ -23,7 +26,7 @@ public class ExternalsortTest extends TestCase {
         assertTrue(sc.h.empty());
         assertTrue(sc.ib.empty());
         assertTrue(sc.ob.empty());
-        assertTrue(sc.l.size() == 1);
+        assertEquals(sc.l.size(), 1);
     }
 
 }

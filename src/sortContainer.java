@@ -41,7 +41,7 @@ public class sortContainer {
             
             byte[] heapArray = new byte[HEAP_SIZE];
             in.read(heapArray);
-            h = new minHeap(heapArray, MAX_REC_HEAP, MAX_REC_HEAP);
+            h = new MinHeap(heapArray, MAX_REC_HEAP, MAX_REC_HEAP);
 
             
         } catch (FileNotFoundException e) {
@@ -55,7 +55,7 @@ public class sortContainer {
     
     public RandomAccessFile in;
     public RandomAccessFile runs;
-    public minHeap h;
+    public MinHeap h;
     public LinkedList<runNode> l;
     public Buffer ib;
     public Buffer ob;

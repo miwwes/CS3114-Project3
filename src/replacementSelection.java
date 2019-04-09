@@ -186,7 +186,7 @@ public class replacementSelection {
     /**
      * 
      */
-    private minHeap recordHeap;
+    private MinHeap recordHeap;
     
     /**
      * 
