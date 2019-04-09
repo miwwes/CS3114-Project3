@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Arrays;
 
 /**
@@ -43,9 +45,15 @@ public class Buffer {
      * used when new data is written into the array
      * resets read position and calculates number of 
      * records
+     * @throws IOException 
      */
-    public void loadBlock(int amount) {
-        numRecords = amount / RECORD_SIZE;
+    public void loadBlock(RandomAccessFile raf) throws IOException {
+        clear();
+        long before = raf.getFilePointer();
+        raf.read(byteArray);
+        long diff = raf.getFilePointer() - before;
+        
+        numRecords = (int)diff / RECORD_SIZE;
         pos = 0;
     }
     
