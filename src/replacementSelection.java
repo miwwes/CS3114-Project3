@@ -74,7 +74,7 @@ public class replacementSelection {
                         outBuffer.clear();
                         
                         long end = outFile.getFilePointer();
-                        runNode n = new runNode(numRuns, runStart, end);
+                        runNode n = new runNode(numRuns, runStart, end, false);
                         runs.add(n);
                         
                         numRuns++;
@@ -129,7 +129,7 @@ public class replacementSelection {
             long end = outFile.getFilePointer();
             
             if(runStart != end) {
-                runNode n = new runNode(numRuns, runStart, end);
+                runNode n = new runNode(numRuns, runStart, end, false);
                 runs.add(n);
                 numRuns++;
                 runStart = end;
@@ -156,7 +156,7 @@ public class replacementSelection {
             
             end = outFile.getFilePointer();
             if(runStart != end) {
-                runNode n2 = new runNode(numRuns, runStart, end);
+                runNode n2 = new runNode(numRuns, runStart, end, false);
                 runs.add(n2);     
             }
         }

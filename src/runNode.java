@@ -21,11 +21,19 @@ public class runNode {
      * @param start
      * @param end
      */
-    runNode(int run, long start, long end){
+    runNode(int run, long start, long end, boolean merged){
         runNumber = run;
         curPos = start;
         startPos = start;
         endPos = end;
+        hasBeenMerged = merged;
+    }
+    
+    /**
+     * @return
+     */
+    public boolean getMerged() {
+        return hasBeenMerged;
     }
     
     /**
@@ -92,6 +100,8 @@ public class runNode {
         endPos = end;
     }
     
+    
+    private boolean hasBeenMerged;
     /**
      * identifying number in the sequence of runs
      */
