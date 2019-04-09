@@ -22,7 +22,7 @@ public class ExternalsortTest extends TestCase {
     public void test() throws IOException {
         String[] args = {"src//sampleInput16.bin"};
         Externalsort.main(args);
-        sortContainer sc = Externalsort.getSortContainer();
+        SortContainer sc = Externalsort.getSortContainer();
         assertTrue(sc.h.empty());
         assertTrue(sc.ib.empty());
         assertTrue(sc.ob.empty());

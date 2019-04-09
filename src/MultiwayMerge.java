@@ -1,5 +1,3 @@
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -10,8 +8,6 @@ import java.util.*;
  * @author abbym1
  * @version 2019-04-10
  *
- */
-/** 
  * Need to place 8 blocks into working memory
  * Take the first record from each block and put into
  *  8 record heap
@@ -21,9 +17,16 @@ import java.util.*;
  *  data file for that run.
  */
 public class MultiwayMerge {
+
+    /**
+     * Constant number of bytes in a block
+     */
+    public static final int BLOCK_LENGTH = 8192;
     
-    static int blockLength = 8192;
-    static int recordLength = 16;
+    /**
+     * Constant number of bytes in a record
+     */
+    public static final int RECORD_LENGTH = 16;
     
     MultiwayMerge(SortContainer c) throws IOException{
         runs = c.l;
@@ -72,7 +75,7 @@ public class MultiwayMerge {
         pq = new PriorityQueue<BlockNode>(numOfRuns, new BlockNodeComparator());
         for (int i = 0; i < numOfRuns; i++) {
             curRuns.add(i);
-            runNode fileNode = runs.get(i); 
+            RunNode fileNode = runs.get(i); 
             loadNextBlock(fileNode);
         }
         //makePriorityQueue();
@@ -85,13 +88,13 @@ public class MultiwayMerge {
     /*public void makePriorityQueue() throws IOException {
         for (int i = 0; i < 2; i++) { //get first record from each block
             //each run would start from a specified point in heap
-            int end = (i + 1) * blockLength;
-            runNode f = runs.get(i);
+            int end = (i + 1) * BLOCK_LENGTH;
+            RunNode f = runs.get(i);
             long runLength = f.getEndPos() - f.getCurPos();
-            if (runLength < blockLength) {
-                end = (int)((i *  blockLength) + runLength);
+            if (runLength < BLOCK_LENGTH) {
+                end = (int)((i *  BLOCK_LENGTH) + runLength);
             }
-            loadRecordFromHeap(i, blockLength*i, end);
+            loadRecordFromHeap(i, BLOCK_LENGTH*i, end);
         }
         // priority queue is now full with the first record from 8 runs
         //merge(pq, numOfRuns);
@@ -114,7 +117,7 @@ public class MultiwayMerge {
                 System.out.print("STOP");
             }
             
-            minNode.incrementCurPos(recordLength);
+            minNode.incrementCurPos(RECORD_LENGTH);
             if (outputBuffer.full()) {
                 printFile.write(Arrays.copyOfRange(
                             outputBuffer.array(), 0, outputBuffer.pos()));
@@ -140,10 +143,10 @@ public class MultiwayMerge {
             if (blockSpace == 0 && curRuns.contains(blockToRead)) {  
                 blockReloaded = true;
                 //need to get a new block!
-                if (runLength < blockLength) {
-                    minNode.setEndPos((int)((blockToRead *  blockLength) + runLength));
+                if (runLength < BLOCK_LENGTH) {
+                    minNode.setEndPos((int)((blockToRead *  BLOCK_LENGTH) + runLength));
                 }
-                if (runLength == 0) {//blockLength) {
+                if (runLength == 0) {//BLOCK_LENGTH) {
                     // need to remove that run from linked list
                     curRuns.remove((Integer)blockToRead);
                     canReadFromRun = false;
@@ -196,18 +199,18 @@ public class MultiwayMerge {
         else {
             long end = printFile.getFilePointer();
             boolean merged = true;
-            runNode n = new runNode(runs.size(), nextStart, end, merged);  // add to the end 
+            RunNode n = new RunNode(runs.size(), nextStart, end, merged);  // add to the end 
             multipleRunsLeft(n);
             
         }   
     }
     
-    public void multipleRunsLeft(runNode n) throws IOException {
+    public void multipleRunsLeft(RunNode n) throws IOException {
         int numberOfRunsLeft = 0;
-        Iterator<runNode> j = runs.iterator(); 
+        Iterator<RunNode> j = runs.iterator(); 
         int i = 0;
         while (j.hasNext()) { 
-            runNode r = j.next();
+            RunNode r = j.next();
             if (!r.gotMerged()) {
                 r.setRunNumber(i);
                 numberOfRunsLeft++;
@@ -219,10 +222,10 @@ public class MultiwayMerge {
         if (numberOfRunsLeft == 0) { // won't go here first time through, because 
                                 //of previous runs.size() == 0 check
             // if all nodes are merged, need to set them all to not merged
-            Iterator<runNode> k = runs.iterator(); 
+            Iterator<RunNode> k = runs.iterator(); 
             int count = 0;
             while (k.hasNext()) { 
-                runNode nNode = k.next();
+                RunNode nNode = k.next();
                 nNode.setRunNumber(count);
                 nNode.setMerged(false);
                 count++;
@@ -274,25 +277,25 @@ public class MultiwayMerge {
      */
     // need to check if you can load the next block
     // need to reset the curPos for the next block that is read in
-    public void loadNextBlock(runNode fileNode) throws IOException {
+    public void loadNextBlock(RunNode fileNode) throws IOException {
         long runLength = fileNode.getEndPos() - fileNode.getCurPos();
         long runNum = fileNode.getRunNumber();
         
-        if (runLength < blockLength) {
+        if (runLength < BLOCK_LENGTH) {
             // (buffer to read), (position to start reading from), (length read)
             readFile.seek(fileNode.getCurPos());
-            readFile.read(heap.arr(), (int)(blockLength*runNum), (int)runLength);
+            readFile.read(heap.arr(), (int)(BLOCK_LENGTH*runNum), (int)runLength);
             fileNode.setCurPos(readFile.getFilePointer());
-            int start = (int)(blockLength*runNum);
-            int end = (int)(blockLength*runNum + runLength);
+            int start = (int)(BLOCK_LENGTH*runNum);
+            int end = (int)(BLOCK_LENGTH*runNum + runLength);
             loadRecordFromHeap((int)runNum, start, end);
         }
         else {
             readFile.seek(fileNode.getCurPos());
-            readFile.read(heap.arr(), (int)(blockLength*runNum), blockLength);
+            readFile.read(heap.arr(), (int)(BLOCK_LENGTH*runNum), BLOCK_LENGTH);
             fileNode.setCurPos(readFile.getFilePointer());
-            int start = (int)(blockLength*runNum);
-            int end = (int)(blockLength*runNum + blockLength);
+            int start = (int)(BLOCK_LENGTH*runNum);
+            int end = (int)(BLOCK_LENGTH*runNum + BLOCK_LENGTH);
             loadRecordFromHeap((int)runNum, start, end);
         }
     }
@@ -310,7 +313,7 @@ public class MultiwayMerge {
             byte[] b = new byte[16];
             endFile.read(b);
             i++;
-            endFile.seek(blockLength*i);
+            endFile.seek(BLOCK_LENGTH * i);
             toNumber(b);
             if (i % 5 == 0) {
                 System.out.println('\n');
@@ -340,7 +343,7 @@ public class MultiwayMerge {
     
     private PriorityQueue<BlockNode> pq;
     private int numberOfRuns;
-    private LinkedList<runNode> runs;
+    private LinkedList<RunNode> runs;
     private LinkedList<Integer> curRuns;
     private MinHeap heap;
     private RandomAccessFile readFile;
