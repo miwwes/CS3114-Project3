@@ -83,7 +83,7 @@ public class multiwayMerge {
         if (numberOfRuns < 8) {
             numOfRuns = numberOfRuns;
         }
-        pq = new PriorityQueue<mergeNode>(numOfRuns, new mergeNodeComparator());
+        pq = new PriorityQueue<blockNode>(numOfRuns, new blockNodeComparator());
         for (int i = 0; i < numOfRuns; i++) { //get first record from each block
             //each run would start from a specified point in heap
             int end = (i + 1) * blockLength;
@@ -102,13 +102,13 @@ public class multiwayMerge {
      * @param pq
      * @throws IOException
      */
-    public void merge(PriorityQueue<mergeNode> pq, int nRuns) throws IOException {
+    public void merge(PriorityQueue<blockNode> pq, int nRuns) throws IOException {
         printFile.seek(0);
         outputBuffer.clear();
         int k = 0;
         while (curRuns.size() > 0) {   //all 8 (or however many) runs are exhausted
-            mergeNode minNode = pq.poll();
-            outputBuffer.insert(minNode.getRecord());
+            blockNode minNode = pq.poll();
+            outputBuffer.write(minNode.getRecord());
             //toNumber(minNode.getRecord());
             //System.out.println();
             if (Arrays.equals(minNode.getRecord(), toByteArray(0, 0))) {
@@ -181,10 +181,10 @@ public class multiwayMerge {
                         outputBuffer.array(), 0, outputBuffer.pos()));
             outputBuffer.clear();
         }
-        Iterator<mergeNode> i = pq.iterator(); 
+        Iterator<blockNode> i = pq.iterator(); 
         while (i.hasNext()) { 
-            mergeNode minNode = pq.poll();
-            outputBuffer.insert(minNode.getRecord());
+            blockNode minNode = pq.poll();
+            outputBuffer.write(minNode.getRecord());
         } 
         if (!outputBuffer.empty()) {
             printFile.write(Arrays.copyOfRange(
@@ -239,7 +239,7 @@ public class multiwayMerge {
             System.out.println(exception);
         }
         
-        mergeNode mNode = new mergeNode(runNum, myRecord, cur, end);
+        blockNode mNode = new blockNode(runNum, myRecord, cur, end);
         pq.add(mNode);
     }
     
@@ -307,7 +307,7 @@ public class multiwayMerge {
         return record;
     }
     
-    private PriorityQueue<mergeNode> pq;
+    private PriorityQueue<blockNode> pq;
     private int numberOfRuns;
     private LinkedList<runNode> runs;
     private LinkedList<Integer> curRuns;

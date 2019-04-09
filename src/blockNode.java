@@ -13,7 +13,7 @@ import java.util.Comparator;
  *
  *  ~description~
  */
-class mergeNode {
+class blockNode {
     
     /**
      * Static macro to hold the block length
@@ -28,7 +28,7 @@ class mergeNode {
      * @param cur the current place in the block
      * @param end the end of the data in that block
      */
-    mergeNode(int block, byte[] arr, int cur, int end){
+    blockNode(int block, byte[] arr, int cur, int end){
         this.blockNumber = block;
         this.startPos = block * blockLength;
         this.endPos = end;
@@ -150,15 +150,15 @@ class mergeNode {
  * @author abbym1
  * @version 2019-04-10
  *
- *  mergeNodeComparator class
+ *  blockNodeComparator class
  *      Used in the priority queue 
  */
-class mergeNodeComparator implements Comparator<mergeNode>{ 
+class blockNodeComparator implements Comparator<blockNode>{ 
     /* (non-Javadoc)
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     @Override
-    public int compare(mergeNode o1, mergeNode o2) {
+    public int compare(blockNode o1, blockNode o2) {
         Double key1 = o1.key;
         Double key2 = o2.key;
         return key1.compareTo(key2);

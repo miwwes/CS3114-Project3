@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.IOException;
 import student.TestCase;
 
@@ -10,27 +9,22 @@ import student.TestCase;
 /**
  * @author abbym1
  * @author juliam8
+ * @version 4-8-19
+ * 
+ * This is the test file for the overarching Externalsort class
  *
  */
 public class ExternalsortTest extends TestCase {
     
-    public final void test() throws IOException {
+    public void test() throws IOException {
         String[] args = {"src//sampleInput16.bin"};
-        long startLength = 0;
-        File in = new File("src//sampleInput16.bin");
-        startLength = in.length();
         Externalsort.main(args);
         sortContainer sc = Externalsort.getSortContainer();
-        long endLength = 0;
-        //try {
-            //endLength = sc.in.length();
-        //}
-        //catch (IOException e) {
-            // Auto-generated catch block
-        //    e.printStackTrace();
-        //}
-        //assertEquals(startLength, endLength);
-        
+        assertTrue(sc.h.empty());
+        assertTrue(sc.ib.empty());
+        assertTrue(sc.ob.empty());
+        assertTrue(sc.l.size() == 1);
     }
 
 }
+

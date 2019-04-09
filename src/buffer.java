@@ -12,128 +12,126 @@ import java.util.Arrays;
  *  This class is to help interface with the byte
  *  arrays that are used to store the 16 byte records.
  *  Can be used for both input and output buffers.
+ *  Provides methods to check if the buffer is empty,
+ *  full, return the numRecords, clear the buffer, insert, 
+ *  remove, etc.
  *
  */
 public class buffer {
     
     /**
-     *  Default constructor
+     *  Default constructor: declares a constant
+     *  numRecords byte array and initializes helper variables
+     *  to zero.
      */
     public buffer() {
         byteArray = new byte[BUFFER_SIZE];
-        size = 0;
+        numRecords = 0;
         pos = 0;
-        readPos = 0;
     }
     
     /**
-     * resets the helper variables to zero
+     * resets all helper variables to zero
      */
     public void clear() {
-        size = 0;
+        numRecords = 0;
         pos = 0;
-        readPos = 0;
     }
     
     /**
      * used when new data is written into the array
+     * resets read position and calculates number of 
+     * records
      */
-    public void update(int amount) {
-        size = amount/16;
-        pos = amount;
-        readPos = 0;
+    public void loadBlock(int amount) {
+        numRecords = amount/RECORD_SIZE;
+        pos = 0;
     }
     
     /**
-     * @param b
+     * @param record is a new record to add at the current
+     * position if there is space
      */
-    public void insert(byte[] b) {
+    public void write(byte[] record) {
         if( !full() ) {
-            System.arraycopy(b, 0, byteArray, pos, 16);
-            pos += 16;
-            size++;
+            System.arraycopy(record, 0, byteArray, pos, RECORD_SIZE);
+            pos += RECORD_SIZE;
+            numRecords++;
         }
     }
     
     /**
-     * @return the record being removed
-     */
-    public byte[] remove() {
-        byte[] last = null;
-        if( !empty() ) {
-            last = Arrays.copyOfRange(byteArray, pos, pos + 16);
-            pos -= 16;
-            size--;
-        }
-        return last;
-    }
-    
-    /**
-     * @return the record at readPos
+     * @return the record at the current position
+     * and increment the position
      */
     public byte[] read() {
-        if (readPos >= BUFFER_SIZE)
+        if (pos >= BUFFER_SIZE || pos < 0)
             return null;
-        readPos += 16;
-        return Arrays.copyOfRange(byteArray, readPos - 16, readPos);
-    }
-    
-    public boolean doneReading() {
-        return readPos == BUFFER_SIZE;
+        pos += RECORD_SIZE;
+        return Arrays.copyOfRange(byteArray, pos - RECORD_SIZE, pos);
     }
     
     /**
-     * @return true if array is full, else false
+     * @return boolean indicating if the current
+     * position is at the end of the buffer
+     */
+    public boolean doneReading() {
+        return pos == BUFFER_SIZE;
+    }
+    
+    /**
+     * @return true if buffer is full, else false
      */
     public boolean full() {
-        return size * 16 == BUFFER_SIZE;
+        return numRecords * RECORD_SIZE == BUFFER_SIZE;
     }
     
     /**
-     * @return true if array is empty, else false
+     * @return true if buffer is empty, else false
      */
     public boolean empty() {
-        return size == 0;
+        return numRecords == 0;
     }
     
+    /**
+     * @return the current position from which
+     * a record will be read/written
+     */
     public int pos() {
         return pos;
     }
     
     /**
-     * @return the byte array (for writing)
+     * @return the byte array (for reloading)
      */
     public byte[] array() {
         return byteArray;
     }
-
-    /**
-     * @return the size of the byte array
-     */
-    public int size() {
-        return size;
-    }
     
     /**
-     * The constant size for both input and output buffers
+     * The constant size of the byte array
      */
     private static final int BUFFER_SIZE = 8192;
 
     /**
-     * byte array storing records
+     * The constant number of bytes per record
+     */
+    private static int RECORD_SIZE = 16;
+    
+    /**
+     * byte array storing max BUFFER_SIZE/RECORD_SIZE 
+     * number of records
      */
     private byte[] byteArray;
+    
     /**
-     * number of records in array
+     * number of records currently in the array
      */
-    private int size;
+    private int numRecords;
+    
     /**
      * current position in the array
      */
     private int pos;
-    /**
-     * Keeps track of what has been read from the array
-     */
-    private int readPos;
-
+    
 }

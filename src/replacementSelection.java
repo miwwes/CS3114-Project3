@@ -63,7 +63,7 @@ public class replacementSelection {
                 long before = inFile.getFilePointer();
                 inFile.read(inBuffer.array());
                 long after = inFile.getFilePointer();
-                inBuffer.update((int)(after - before));
+                inBuffer.loadBlock((int)(after - before));
                 
                 
                 while( !inBuffer.doneReading() ) {
@@ -90,7 +90,7 @@ public class replacementSelection {
                     }
                     
                     byte[] minVal = recordHeap.getRecord(0);    //get the minimum
-                    outBuffer.insert(minVal);
+                    outBuffer.write(minVal);
                     byte[] buf = inBuffer.read();
                     if (comparerecordHeap(buf, minVal) > 0 ) {
                         recordHeap.modify(0, buf);
@@ -117,7 +117,7 @@ public class replacementSelection {
                     outBuffer.clear();
                     
                 }
-                outBuffer.insert(recordHeap.removemin());
+                outBuffer.write(recordHeap.removemin());
             }
             
             if( !outBuffer.empty() ) {
@@ -145,7 +145,7 @@ public class replacementSelection {
                     //out.write(outBuffer.array());
                     outBuffer.clear();
                 }
-                outBuffer.insert(recordHeap.removemin());
+                outBuffer.write(recordHeap.removemin());
             }
             
             if( !outBuffer.empty() ) {
