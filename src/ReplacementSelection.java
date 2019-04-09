@@ -21,7 +21,7 @@ public class ReplacementSelection {
      *          corresponding to sorting
      * @throws IOException 
      */
-    ReplacementSelection(SortContainer c) throws IOException{
+    ReplacementSelection(SortContainer c) throws IOException {
         runs = c.l;
         recordHeap = c.h;
         inFile = c.in;
@@ -32,7 +32,6 @@ public class ReplacementSelection {
             //out = new FileOutputStream("afterRepSel.bin");
             //out = new FileOutputStream("afterc.bin");
         //} catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
         //    e.printStackTrace();
         //}
     }
@@ -44,8 +43,8 @@ public class ReplacementSelection {
         try {
             boolean test = inFile.getFilePointer() != inFile.length();
             return test;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+        } 
+        catch (IOException e) {
             e.printStackTrace();
         }
         return false;
@@ -56,13 +55,12 @@ public class ReplacementSelection {
      */
     public void execute() {
         try {
-            
             // initialize helper variables
             long runStart = outFile.getFilePointer();
             int numRuns = 0;
             int addCount = 0;
         
-            while ( canRead() ) { 
+            while (canRead()) { 
                 inBuffer.clear();
                 long before = inFile.getFilePointer();
                 inFile.read(inBuffer.array());
@@ -70,9 +68,9 @@ public class ReplacementSelection {
                 inBuffer.loadBlock((int)(after - before));
                 
                 
-                while( !inBuffer.doneReading() ) {
+                while (!inBuffer.doneReading()) {
                 
-                    if( recordHeap.empty() ) {
+                    if (recordHeap.empty()) {
                         outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                         //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                         outBuffer.clear();
@@ -87,7 +85,7 @@ public class ReplacementSelection {
                         recordHeap.buildHeap(MAX_REC_HEAP);
                         
                     }
-                    else if ( outBuffer.full() ) {
+                    else if (outBuffer.full()) {
                         outFile.write(outBuffer.array());
                         //out.write(outBuffer.array());
                         outBuffer.clear();
@@ -108,14 +106,14 @@ public class ReplacementSelection {
                 
             } // inFile is empty
             // could still be stuff in the heap and outBuffer
-            if( !outBuffer.empty() ) {
+            if (!outBuffer.empty()) {
                 outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
-            while( !recordHeap.empty() ) {
-                if ( outBuffer.full() ) {
+            while (!recordHeap.empty()) {
+                if (outBuffer.full()) {
                     outFile.write(outBuffer.array());
                     //out.write(outBuffer.array());
                     outBuffer.clear();
@@ -124,7 +122,7 @@ public class ReplacementSelection {
                 outBuffer.write(recordHeap.removemin());
             }
             
-            if( !outBuffer.empty() ) {
+            if (!outBuffer.empty()) {
                 outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 outBuffer.clear();
@@ -132,19 +130,19 @@ public class ReplacementSelection {
             
             long end = outFile.getFilePointer();
             
-            if(runStart != end) {
+            if (runStart != end) {
                 RunNode n = new RunNode(numRuns, runStart, end, false);
                 runs.add(n);
                 numRuns++;
                 runStart = end;
             }
             
-            if(addCount > 0) {
+            if (addCount > 0) {
                 recordHeap.buildHeap(addCount);
             }
             
-            while( !recordHeap.empty() ) {
-                if ( outBuffer.full() ) {
+            while (!recordHeap.empty()) {
+                if (outBuffer.full()) {
                     outFile.write(outBuffer.array());
                     //out.write(outBuffer.array());
                     outBuffer.clear();
@@ -152,14 +150,14 @@ public class ReplacementSelection {
                 outBuffer.write(recordHeap.removemin());
             }
             
-            if( !outBuffer.empty() ) {
+            if (!outBuffer.empty()) {
                 outFile.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 //out.write(Arrays.copyOfRange(outBuffer.array(), 0, outBuffer.pos()));
                 outBuffer.clear();
             }
             
             end = outFile.getFilePointer();
-            if(runStart != end) {
+            if (runStart != end) {
                 RunNode n2 = new RunNode(numRuns, runStart, end, false);
                 runs.add(n2);     
             }
