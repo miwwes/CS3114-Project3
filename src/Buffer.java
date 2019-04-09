@@ -17,14 +17,14 @@ import java.util.Arrays;
  *  remove, etc.
  *
  */
-public class buffer {
+public class Buffer {
     
     /**
      *  Default constructor: declares a constant
      *  numRecords byte array and initializes helper variables
      *  to zero.
      */
-    public buffer() {
+    public Buffer() {
         byteArray = new byte[BUFFER_SIZE];
         numRecords = 0;
         pos = 0;

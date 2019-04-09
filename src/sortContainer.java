@@ -30,8 +30,8 @@ public class sortContainer {
     }
     
     sortContainer(String s){
-        ib = new buffer();
-        ob = new buffer();
+        ib = new Buffer();
+        ob = new Buffer();
         l = new LinkedList<runNode>();
         try {
             in = new RandomAccessFile(s, "rw");
@@ -57,8 +57,8 @@ public class sortContainer {
     public RandomAccessFile runs;
     public minHeap h;
     public LinkedList<runNode> l;
-    public buffer ib;
-    public buffer ob;
+    public Buffer ib;
+    public Buffer ob;
     
     private static final int HEAP_SIZE = 8*8192;
     private static final int MAX_REC_HEAP = 4096;

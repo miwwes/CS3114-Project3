@@ -11,7 +11,11 @@ import java.util.Comparator;
  * @author abbym1
  * @version 2019-04-10
  *
- *  ~description~
+ *  This is a node class for the priority queue used in 
+ *  multiwayMerge. Each node stores information corresponding
+ *  to one of the eight blocks of the byte array such as 
+ *  start, end, and current positions within the block,
+ *  as well as a block ID number.
  */
 class blockNode {
     

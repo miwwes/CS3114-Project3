@@ -317,6 +317,6 @@ public class multiwayMerge {
     private RandomAccessFile readFile;
     private RandomAccessFile originalInputFile;
     private RandomAccessFile printFile;
-    private buffer outputBuffer;
+    private Buffer outputBuffer;
 }
  
