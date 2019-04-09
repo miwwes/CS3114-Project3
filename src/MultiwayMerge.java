@@ -35,24 +35,19 @@ public class MultiwayMerge {
      * @throws IOException
      */
     MultiwayMerge(SortContainer c) throws IOException {
-        runs = c.l;
-        heap = c.h;
-        readFile = c.runs;
-        //long val = readFile.length();
-        printFile = c.in;
-        //long b = printFile.length();
-        originalInputFile = c.in;
-        c.ib.clear();
+        runs = c.getRunsList();
+        heap = c.getHeap();
+        readFile = c.getRunsFile();
+        printFile = c.getInFile();
+        originalInputFile = c.getInFile();
+        c.getInputBuffer().clear();
         //printFile = new RandomAccessFile("test.bin", "rw");
         numberOfRuns = runs.size();
-        outputBuffer = c.ob;
+        outputBuffer = c.getOutputBuffer();
         curRuns = new LinkedList<Integer>();
         readFile.seek(0);
-        printFile.seek(0);
-        
-        
+        printFile.seek(0);   
     }
-    
 
     /**
      * Primary method for performing the merge operation
@@ -62,14 +57,6 @@ public class MultiwayMerge {
         
         if (numberOfRuns == 1) {
             printToStandardOutput(readFile);
-            if (printFile != originalInputFile) {
-                originalInputFile.seek(0);
-                int length;
-                while ((length = printFile.read(heap.arr())) > 0) {
-                    originalInputFile.write(heap.arr(), 0, length);
-                }
-            }
-            //System.out.print(originalInputFile.getFilePointer());
         }
         else {
             int numOfRuns = 8;
@@ -85,7 +72,7 @@ public class MultiwayMerge {
      * @param numOfRuns the number of runs for which to load blocks
      * @throws IOException
      */
-    public void loadBlocks(int numOfRuns) throws IOException {
+    private void loadBlocks(int numOfRuns) throws IOException {
         pq = new PriorityQueue<BlockNode>(numOfRuns, new BlockNodeComparator());
         for (int i = 0; i < numOfRuns; i++) {
             curRuns.add(i);
@@ -95,32 +82,13 @@ public class MultiwayMerge {
         merge(numOfRuns);
     }
     
-    /**
-<<<<<<< HEAD
-=======
-     * @throws IOException
-     */
-    /*public void makePriorityQueue() throws IOException {
-        for (int i = 0; i < 2; i++) { //get first record from each block
-            //each run would start from a specified point in heap
-            int end = (i + 1) * BLOCK_LENGTH;
-            RunNode f = runs.get(i);
-            long runLength = f.getEndPos() - f.getCurPos();
-            if (runLength < BLOCK_LENGTH) {
-                end = (int)((i *  BLOCK_LENGTH) + runLength);
-            }
-            loadRecordFromHeap(i, BLOCK_LENGTH*i, end);
-        }
-        // priority queue is now full with the first record from 8 runs
-        //merge(pq, numOfRuns);
-    }*/
-    
+
     /**
      * Merges multiple blocks together in the working memory
      * @param nRuns the number of runs for which to merge
      * @throws IOException
      */
-    public void merge(int nRuns) throws IOException {
+    private void merge(int nRuns) throws IOException {
         long nextStartPos = printFile.getFilePointer();
         outputBuffer.clear();
         //int k = 0;
@@ -189,7 +157,7 @@ public class MultiwayMerge {
      *          created merged run
      * @throws IOException
      */
-    public void checkIfFinished(long nextStart) throws IOException {
+    private void checkIfFinished(long nextStart) throws IOException {
         // print whats left in the output buffer
         if (!outputBuffer.empty()) {
             printFile.write(Arrays.copyOfRange(
@@ -225,7 +193,7 @@ public class MultiwayMerge {
      * @param n the newly created merged node
      * @throws IOException
      */
-    public void multipleRunsLeft(RunNode n) throws IOException {
+    private void multipleRunsLeft(RunNode n) throws IOException {
         int numberOfRunsLeft = 0;
         Iterator<RunNode> j = runs.iterator(); 
         int i = 0;
@@ -276,7 +244,7 @@ public class MultiwayMerge {
      * @param end the end position of the data in the block
      * @throws IOException
      */
-    public void loadRecordFromHeap(int runNum, int cur, int end) 
+    private void loadRecordFromHeap(int runNum, int cur, int end) 
             throws IOException {
         // need to remove that record from the heap
         // get the current location of the record removed from working memory
@@ -300,7 +268,7 @@ public class MultiwayMerge {
      * @param fileNode the node containing the run data
      * @throws IOException
      */
-    public void loadNextBlock(RunNode fileNode) throws IOException {
+    private void loadNextBlock(RunNode fileNode) throws IOException {
         // need to check if you can load the next block
         // need to reset the curPos for the next block that is read in
         long runLength = fileNode.getEndPos() - fileNode.getCurPos();
@@ -332,7 +300,7 @@ public class MultiwayMerge {
      * @param endFile the sorted data will be printed
      * @throws IOException
      */
-    public void printToStandardOutput(RandomAccessFile endFile) 
+    private void printToStandardOutput(RandomAccessFile endFile) 
             throws IOException {
         endFile.seek(0);
         int i = 0;
@@ -371,7 +339,7 @@ public class MultiwayMerge {
      * @param key the key to turn into a byte array
      * @return the key value
      */
-    public byte[] toByteArray(long id, double key) {
+    /*private byte[] toByteArray(long id, double key) {
         byte[] bytes1 = new byte[8];
         byte[] bytes2 = new byte[8];
         ByteBuffer.wrap(bytes1).putLong(id);
@@ -380,45 +348,45 @@ public class MultiwayMerge {
         System.arraycopy( bytes1, 0, record, 0, 8);
         System.arraycopy( bytes2, 0, record, 8, 8);
         return record;
-    }
+    }*/
     
     /**
      * priority queue used to sort 8 records at a time
      */
-    private PriorityQueue<BlockNode> pq;
+    protected PriorityQueue<BlockNode> pq;
     /**
      * number of runs left to merge
      */
-    private int numberOfRuns;
+    protected int numberOfRuns;
 
     /**
      * Linked list storing run information
      */
-    private LinkedList<RunNode> runs;
+    protected LinkedList<RunNode> runs;
     /**
      * Linked list storing current run information
      */
 
-    private LinkedList<Integer> curRuns;
+    protected LinkedList<Integer> curRuns;
     /**
      * The heap which contains the 8 block array
      */
-    private MinHeap heap;
+    protected MinHeap heap;
     /**
      * file runs are read from
      */
-    private RandomAccessFile readFile;
+    protected RandomAccessFile readFile;
     /**
      * reference to original input file
      */
-    private RandomAccessFile originalInputFile;
+    protected RandomAccessFile originalInputFile;
     /**
      * The file results are printed to
      */
-    private RandomAccessFile printFile;
+    protected RandomAccessFile printFile;
     /**
      * The output 1 block byte array
      */
-    private Buffer outputBuffer;
+    protected Buffer outputBuffer;
 }
  

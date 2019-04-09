@@ -23,9 +23,9 @@ public class ExternalsortTest extends TestCase {
         String[] args = {"src//b.bin"};
         Externalsort.main(args);
         SortContainer sc = Externalsort.getSortContainer();
-        assertTrue(sc.h.empty());
-        assertTrue(sc.ib.empty());
-        assertTrue(sc.ob.empty());
+        assertTrue(sc.getHeap().empty());
+        assertTrue(sc.getInputBuffer().empty());
+        assertTrue(sc.getOutputBuffer().empty());
     }
 
 }
