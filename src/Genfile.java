@@ -60,13 +60,13 @@ public class Genfile {
     
         for (int i = 0; i < filesize; i++) {
             for (int j = 0; j < NUM_RECS; j++) {
-          	    val = (long)(randLong());
-          	    file.writeLong(val);
-          	    val2 = (double)(randDouble());
-          	    file.writeDouble(val2);
+                val = (long)(randLong());
+                file.writeLong(val);
+                val2 = (double)(randDouble());
+                file.writeDouble(val2);
             }
         }
-    
+
         file.flush();
         file.close();
     }
